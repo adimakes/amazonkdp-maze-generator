@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://maze-book.local/schemas/book.schema.json",
+  "title": "Book package contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "book", "print", "generation", "layout", "assets", "content", "outputs"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "extensions": { "type": "object" },
+    "book": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "locale", "seed", "mazeCount", "profileId"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "minLength": 1, "maxLength": 100 },
+        "title": { "type": "string", "minLength": 1 },
+        "subtitle": { "type": ["string", "null"] },
+        "locale": { "type": "string", "pattern": "^[a-z]{2}(-[A-Z]{2})?$" },
+        "seed": { "type": "integer", "minimum": 0 },
+        "mazeCount": { "type": "integer", "minimum": 1, "maximum": 2000 },
+        "profileId": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+        "contentOrigin": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "text": { "type": "string" },
+            "images": { "type": "string" },
+            "translations": { "type": "string" }
+          }
+        }
+      }
+    },
+    "print": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["trimWidthIn", "trimHeightIn", "interiorBleed", "colorMode", "paper", "safeMarginsIn", "gutterIn"],
+      "properties": {
+        "trimWidthIn": { "type": "number", "exclusiveMinimum": 0 },
+        "trimHeightIn": { "type": "number", "exclusiveMinimum": 0 },
+        "interiorBleed": { "const": false },
+        "colorMode": { "enum": ["black-and-white"] },
+        "paper": { "enum": ["white", "cream"] },
+        "safeMarginsIn": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["inside", "outside", "top", "bottom"],
+          "properties": {
+            "inside": { "type": "number", "minimum": 0 },
+            "outside": { "type": "number", "minimum": 0 },
+            "top": { "type": "number", "minimum": 0 },
+            "bottom": { "type": "number", "minimum": 0 }
+          }
+        },
+        "gutterIn": { "type": "number", "minimum": 0 }
+      }
+    },
+    "generation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["startRegion", "finishRegion", "maxAttemptsPerMaze", "baseGenerator", "exactRouteEnumeration"],
+      "properties": {
+        "startRegion": { "$ref": "#/$defs/region" },
+        "finishRegion": { "$ref": "#/$defs/region" },
+        "maxAttemptsPerMaze": { "type": "integer", "minimum": 1, "maximum": 100000 },
+        "baseGenerator": { "type": "string", "minLength": 1 },
+        "exactRouteEnumeration": { "type": "boolean" }
+      }
+    },
+    "layout": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["frontMatterPdf", "storyPageSide", "mazePageSide", "mazeSquareIn", "tallyPosition",
+                   "showMazeNumber", "showBestPossibleScore", "solutionsPerPage", "solutionsStartSide",
+                   "insertEndPage", "insertBlankPagesForParity"],
+      "properties": {
+        "frontMatterPdf": { "type": ["string", "null"] },
+        "storyPageSide": { "enum": ["left", "right"] },
+        "mazePageSide": { "enum": ["left", "right"] },
+        "mazeSquareIn": { "type": "number", "exclusiveMinimum": 0 },
+        "tallyPosition": { "enum": ["below", "right"] },
+        "showMazeNumber": { "type": "boolean" },
+        "showBestPossibleScore": { "type": "boolean" },
+        "solutionsPerPage": { "type": "integer", "minimum": 1, "maximum": 64 },
+        "solutionsStartSide": { "enum": ["left", "right"] },
+        "insertEndPage": { "type": "boolean" },
+        "insertBlankPagesForParity": { "type": "boolean" },
+        "expectedPageCount": { "type": ["integer", "null"], "minimum": 1 }
+      }
+    },
+    "assets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["beginningVectorsDir", "endingVectorsDir", "deadEndVectorsDir", "collectibleVectorsDir",
+                   "startAsset", "finishAsset", "deadEndAssetPolicy", "collectibleAssetPolicy"],
+      "properties": {
+        "beginningVectorsDir": { "$ref": "#/$defs/relPath" },
+        "endingVectorsDir": { "$ref": "#/$defs/relPath" },
+        "deadEndVectorsDir": { "$ref": "#/$defs/relPath" },
+        "collectibleVectorsDir": { "$ref": "#/$defs/relPath" },
+        "pageVectorsDir": { "oneOf": [{ "$ref": "#/$defs/relPath" }, { "type": "null" }] },
+        "startAsset": { "$ref": "#/$defs/svgName" },
+        "finishAsset": { "$ref": "#/$defs/svgName" },
+        "deadEndAssetPolicy": { "enum": ["random-from-folder", "first-in-folder", "cycle-folder"] },
+        "collectibleAssetPolicy": { "enum": ["random-from-folder", "first-in-folder", "cycle-folder"] }
+      }
+    },
+    "content": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scenes"],
+      "properties": {
+        "scenes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["number", "title", "text"],
+            "properties": {
+              "number": { "type": "integer", "minimum": 1 },
+              "title": { "type": "string", "minLength": 1 },
+              "text": { "type": "string", "minLength": 1 },
+              "pageVector": { "oneOf": [{ "$ref": "#/$defs/svgName" }, { "type": "null" }] }
+            }
+          }
+        }
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["writeMazeJson", "writeAnalysisJson", "writeMazeSvg", "writeStandaloneMazePdf",
+                   "writeBookPdf", "writeContactSheet", "writePreflightReport", "writeEditableProofPdf"],
+      "properties": {
+        "writeMazeJson": { "type": "boolean" },
+        "writeAnalysisJson": { "type": "boolean" },
+        "writeMazeSvg": { "type": "boolean" },
+        "writeStandaloneMazePdf": { "type": "boolean" },
+        "writeBookPdf": { "type": "boolean" },
+        "writeContactSheet": { "type": "boolean" },
+        "writePreflightReport": { "type": "boolean" },
+        "writeEditableProofPdf": { "type": "boolean" }
+      }
+    }
+  },
+  "$defs": {
+    "region": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rowMin", "rowMax", "colMin", "colMax"],
+      "properties": {
+        "rowMin": { "type": "integer" },
+        "rowMax": { "type": "integer" },
+        "colMin": { "type": "integer" },
+        "colMax": { "type": "integer" }
+      }
+    },
+    "relPath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(^|/)\\.\\.(/|$)).*[^/]$"
+    },
+    "svgName": {
+      "type": "string",
+      "minLength": 5,
+      "pattern": "^(?!/)(?!.*(^|/)\\.\\.(/|$))[^/]+\\.svg$"
+    }
+  }
+}

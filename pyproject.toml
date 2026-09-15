@@ -1,0 +1,42 @@
+[project]
+name = "maze-book"
+version = "1.0.0"
+description = "Deterministic, data-driven generator for KDP-ready maze puzzle book interiors"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Aditya Bhatia" }]
+dependencies = [
+    "mazelib>=0.9.16",
+    "numpy>=1.26",
+    "reportlab>=4.0",
+    "pypdf>=4.0",
+    "pillow>=10.0",
+    "jsonschema>=4.20",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-timeout>=2.2",
+]
+
+[project.scripts]
+maze-book = "maze_book.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/maze_book"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "slow: long-running tests (full 50-maze generation, full book build)",
+]
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.uv]
+package = true

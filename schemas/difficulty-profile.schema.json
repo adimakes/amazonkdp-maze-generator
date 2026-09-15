@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://maze-book.local/schemas/difficulty-profile.schema.json",
+  "title": "Difficulty profile contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "profileId", "bands"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "profileId": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+    "description": { "type": "string" },
+    "ageLabel": { "type": "string" },
+    "defaults": { "$ref": "#/$defs/bandBody" },
+    "bands": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "allOf": [
+          {
+            "type": "object",
+            "required": ["mazeIndexMin", "mazeIndexMax"],
+            "properties": {
+              "mazeIndexMin": { "type": "integer", "minimum": 1 },
+              "mazeIndexMax": { "type": "integer", "minimum": 1 },
+              "actName": { "type": "string" }
+            }
+          },
+          { "$ref": "#/$defs/bandBody" }
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "range": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["min", "max"],
+      "properties": {
+        "min": { "type": "integer" },
+        "max": { "type": "integer" }
+      }
+    },
+    "bandBody": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mazeIndexMin": { "type": "integer" },
+        "mazeIndexMax": { "type": "integer" },
+        "actName": { "type": "string" },
+        "rows": { "type": "integer", "minimum": 2, "maximum": 18 },
+        "cols": { "type": "integer", "minimum": 2, "maximum": 18 },
+        "loops": { "$ref": "#/$defs/range" },
+        "deadEnds": { "$ref": "#/$defs/range" },
+        "deadEndDepth": { "$ref": "#/$defs/range" },
+        "candies": { "$ref": "#/$defs/range" },
+        "simpleRoutes": { "$ref": "#/$defs/range" },
+        "minLoopLength": { "type": "integer", "minimum": 3 },
+        "minMargin": { "type": "integer", "minimum": 0 },
+        "shortestMayBeBest": { "type": "boolean" },
+        "maxBestOverShortest": { "type": "number", "minimum": 1 },
+        "minTemptingRoutes": { "type": "integer", "minimum": 0 },
+        "temptingFraction": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
+        "maxRoutes": { "type": "integer", "minimum": 1 },
+        "maxSearchNodes": { "type": "integer", "minimum": 1 },
+        "timeBudgetSeconds": { "type": "number", "exclusiveMinimum": 0 },
+        "candyPlacementTrials": { "type": "integer", "minimum": 1 },
+        "frequencyBand": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["min", "max"],
+          "properties": {
+            "min": { "type": "number", "minimum": 0, "maximum": 1 },
+            "max": { "type": "number", "minimum": 0, "maximum": 1 }
+          }
+        },
+        "explorationShare": { "type": "number", "minimum": 0, "maximum": 1 },
+        "wallWidthPt": { "type": "number", "exclusiveMinimum": 0 },
+        "solutionWallWidthPt": { "type": "number", "exclusiveMinimum": 0 },
+        "solutionRouteWidthPt": { "type": "number", "exclusiveMinimum": 0 },
+        "collectibleScale": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
+        "deadEndScale": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
+        "startScale": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
+        "finishScale": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
+        "cellClearanceFraction": { "type": "number", "minimum": 0, "maximum": 0.5 },
+        "candySpacingPolicy": { "enum": ["no-adjacent-in-corridor-run", "no-adjacent", "none"] },
+        "maxBorderHugFraction": { "type": "number", "minimum": 0, "maximum": 1 },
+        "maxUnreachableFraction": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    }
+  }
+}

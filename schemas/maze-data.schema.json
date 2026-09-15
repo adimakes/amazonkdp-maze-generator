@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://maze-book.local/schemas/maze-data.schema.json",
+  "title": "Canonical maze data",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "mazeId", "bookId", "mazeIndex", "seed", "grid", "start", "finish",
+               "openEdges", "blockedCells", "assets", "metadata"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "mazeId": { "type": "string", "minLength": 1 },
+    "bookId": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "mazeIndex": { "type": "integer", "minimum": 1 },
+    "seed": { "type": "integer", "minimum": 0 },
+    "grid": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rows", "cols", "coordinateSystem"],
+      "properties": {
+        "rows": { "type": "integer", "minimum": 2 },
+        "cols": { "type": "integer", "minimum": 2 },
+        "coordinateSystem": { "const": "row-major-top-left" }
+      }
+    },
+    "start": { "$ref": "#/$defs/cell" },
+    "finish": { "$ref": "#/$defs/cell" },
+    "openEdges": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 2,
+        "items": { "$ref": "#/$defs/cell" }
+      }
+    },
+    "blockedCells": { "type": "array", "items": { "$ref": "#/$defs/cell" } },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["assetId", "role", "cell"],
+        "properties": {
+          "assetId": { "type": "string", "minLength": 1 },
+          "role": { "enum": ["start", "finish", "dead-end", "collectible"] },
+          "cell": { "$ref": "#/$defs/cell" },
+          "value": { "type": ["integer", "null"] },
+          "scale": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
+          "rotationDeg": { "type": "number" }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profileId", "attempt", "generatorId"],
+      "properties": {
+        "profileId": { "type": "string" },
+        "attempt": { "type": "integer", "minimum": 1 },
+        "generatorId": { "type": "string" },
+        "generatorVersion": { "type": "string" }
+      }
+    }
+  },
+  "$defs": {
+    "cell": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": { "type": "integer", "minimum": 0 }
+    }
+  }
+}
