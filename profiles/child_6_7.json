@@ -1,21 +1,27 @@
 {
   "schemaVersion": "1.0",
   "profileId": "child_6_7",
-  "description": "Gentle three-act ramp for early readers, ages 6 to 7. Smaller grids, fewer loops, and fewer routes than halloween_6_10; the shortest route is allowed to be the best route so a child who simply walks to the finish is not punished.",
+  "description": "Three-act ramp for a 30-maze book, ages 6 to 7: 6x6 to 10x10, small candy counts, and a gentle loop budget. Two numbers here are load-bearing and were corrected after the profile was measured rather than read. deadEndDepth.min is 1 in every band, as in halloween_6_10: braiding creates a dead end by opening an edge at a degree-1 cell, which naturally leaves depth-1 stubs, and a band demanding depth 2 rejected about 85% of shapes for a property the generator cannot produce on request. temptingFraction is 0.7, not 0.9: a decoy counts as tempting at fraction x best, and with best totals under 10 candies a 0.9 threshold rounds up to the best score itself -- which C1's uniqueness rule forbids, making C5 arithmetically unsatisfiable. With both corrected the profile accepts 30 of 30 mazes, worst case 6 attempts of the 50 allowed.",
   "ageLabel": "6-7",
   "defaults": {
-    "simpleRoutes": { "min": 4, "max": 50000 },
+    "simpleRoutes": {
+      "min": 4,
+      "max": 50000
+    },
     "minLoopLength": 4,
     "minMargin": 1,
     "shortestMayBeBest": true,
     "maxBestOverShortest": 1.8,
     "minTemptingRoutes": 1,
-    "temptingFraction": 0.9,
+    "temptingFraction": 0.7,
     "maxRoutes": 50000,
     "maxSearchNodes": 1000000,
     "timeBudgetSeconds": 15.0,
     "candyPlacementTrials": 300,
-    "frequencyBand": { "min": 0.3, "max": 0.75 },
+    "frequencyBand": {
+      "min": 0.3,
+      "max": 0.75
+    },
     "explorationShare": 0.3,
     "wallWidthPt": 3.5,
     "solutionWallWidthPt": 1.6,
@@ -36,11 +42,26 @@
       "actName": "First Steps",
       "rows": 6,
       "cols": 6,
-      "loops": { "min": 2, "max": 3 },
-      "deadEnds": { "min": 3, "max": 4 },
-      "deadEndDepth": { "min": 1, "max": 4 },
-      "candies": { "min": 3, "max": 5 },
-      "simpleRoutes": { "min": 3, "max": 50000 },
+      "loops": {
+        "min": 2,
+        "max": 3
+      },
+      "deadEnds": {
+        "min": 3,
+        "max": 4
+      },
+      "deadEndDepth": {
+        "min": 1,
+        "max": 4
+      },
+      "candies": {
+        "min": 3,
+        "max": 5
+      },
+      "simpleRoutes": {
+        "min": 3,
+        "max": 50000
+      },
       "minMargin": 1
     },
     {
@@ -49,11 +70,26 @@
       "actName": "Getting Braver",
       "rows": 8,
       "cols": 8,
-      "loops": { "min": 3, "max": 4 },
-      "deadEnds": { "min": 4, "max": 5 },
-      "deadEndDepth": { "min": 2, "max": 5 },
-      "candies": { "min": 5, "max": 7 },
-      "simpleRoutes": { "min": 5, "max": 50000 },
+      "loops": {
+        "min": 3,
+        "max": 4
+      },
+      "deadEnds": {
+        "min": 4,
+        "max": 5
+      },
+      "deadEndDepth": {
+        "min": 1,
+        "max": 5
+      },
+      "candies": {
+        "min": 5,
+        "max": 7
+      },
+      "simpleRoutes": {
+        "min": 5,
+        "max": 50000
+      },
       "minMargin": 1,
       "wallWidthPt": 3.25
     },
@@ -63,11 +99,26 @@
       "actName": "All The Way",
       "rows": 10,
       "cols": 10,
-      "loops": { "min": 3, "max": 5 },
-      "deadEnds": { "min": 4, "max": 6 },
-      "deadEndDepth": { "min": 2, "max": 6 },
-      "candies": { "min": 6, "max": 8 },
-      "simpleRoutes": { "min": 6, "max": 50000 },
+      "loops": {
+        "min": 3,
+        "max": 5
+      },
+      "deadEnds": {
+        "min": 4,
+        "max": 6
+      },
+      "deadEndDepth": {
+        "min": 1,
+        "max": 6
+      },
+      "candies": {
+        "min": 6,
+        "max": 8
+      },
+      "simpleRoutes": {
+        "min": 6,
+        "max": 50000
+      },
       "minMargin": 1,
       "shortestMayBeBest": false,
       "wallWidthPt": 3.0

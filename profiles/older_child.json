@@ -1,10 +1,13 @@
 {
   "schemaVersion": "1.0",
   "profileId": "older_child",
-  "description": "Four-act ramp for confident solvers, ages 8 to 12. Larger grids and a tighter best-score margin than halloween_6_10, so the answer key is unique but only just.",
+  "description": "Four acts for a 48-maze book, ages 8 to 11: 10x10 to 16x16 with a steeper loop ramp than halloween_6_10 and six to ten dead ends throughout. deadEndDepth.min is 1 in every band, corrected from 2 for the same reason as the other profiles: braiding leaves depth-1 stubs, so a floor above 1 rejects shapes for a property that cannot be requested. The 0.85 tempting fraction stands -- at 8 to 16 candies a decoy scoring ceil(0.85 x best) still lands strictly below the best, so C5 and C1 can both be satisfied.",
   "ageLabel": "8-12",
   "defaults": {
-    "simpleRoutes": { "min": 10, "max": 200000 },
+    "simpleRoutes": {
+      "min": 10,
+      "max": 200000
+    },
     "minLoopLength": 6,
     "minMargin": 1,
     "shortestMayBeBest": false,
@@ -15,7 +18,10 @@
     "maxSearchNodes": 6000000,
     "timeBudgetSeconds": 45.0,
     "candyPlacementTrials": 600,
-    "frequencyBand": { "min": 0.25, "max": 0.7 },
+    "frequencyBand": {
+      "min": 0.25,
+      "max": 0.7
+    },
     "explorationShare": 0.4,
     "wallWidthPt": 2.5,
     "solutionWallWidthPt": 1.2,
@@ -36,11 +42,26 @@
       "actName": "Warm Up",
       "rows": 10,
       "cols": 10,
-      "loops": { "min": 4, "max": 6 },
-      "deadEnds": { "min": 5, "max": 7 },
-      "deadEndDepth": { "min": 2, "max": 6 },
-      "candies": { "min": 8, "max": 10 },
-      "simpleRoutes": { "min": 8, "max": 200000 },
+      "loops": {
+        "min": 4,
+        "max": 6
+      },
+      "deadEnds": {
+        "min": 5,
+        "max": 7
+      },
+      "deadEndDepth": {
+        "min": 1,
+        "max": 6
+      },
+      "candies": {
+        "min": 8,
+        "max": 10
+      },
+      "simpleRoutes": {
+        "min": 8,
+        "max": 200000
+      },
       "wallWidthPt": 3.0
     },
     {
@@ -49,11 +70,26 @@
       "actName": "Picking Up Speed",
       "rows": 12,
       "cols": 12,
-      "loops": { "min": 6, "max": 8 },
-      "deadEnds": { "min": 6, "max": 8 },
-      "deadEndDepth": { "min": 2, "max": 7 },
-      "candies": { "min": 10, "max": 12 },
-      "simpleRoutes": { "min": 12, "max": 200000 },
+      "loops": {
+        "min": 6,
+        "max": 8
+      },
+      "deadEnds": {
+        "min": 6,
+        "max": 8
+      },
+      "deadEndDepth": {
+        "min": 1,
+        "max": 7
+      },
+      "candies": {
+        "min": 10,
+        "max": 12
+      },
+      "simpleRoutes": {
+        "min": 12,
+        "max": 200000
+      },
       "wallWidthPt": 2.75
     },
     {
@@ -62,11 +98,26 @@
       "actName": "The Real Thing",
       "rows": 14,
       "cols": 14,
-      "loops": { "min": 7, "max": 9 },
-      "deadEnds": { "min": 7, "max": 9 },
-      "deadEndDepth": { "min": 2, "max": 8 },
-      "candies": { "min": 12, "max": 14 },
-      "simpleRoutes": { "min": 16, "max": 200000 }
+      "loops": {
+        "min": 7,
+        "max": 9
+      },
+      "deadEnds": {
+        "min": 7,
+        "max": 9
+      },
+      "deadEndDepth": {
+        "min": 1,
+        "max": 8
+      },
+      "candies": {
+        "min": 12,
+        "max": 14
+      },
+      "simpleRoutes": {
+        "min": 16,
+        "max": 200000
+      }
     },
     {
       "mazeIndexMin": 37,
@@ -74,11 +125,26 @@
       "actName": "No Mercy",
       "rows": 16,
       "cols": 16,
-      "loops": { "min": 9, "max": 12 },
-      "deadEnds": { "min": 8, "max": 10 },
-      "deadEndDepth": { "min": 2, "max": 9 },
-      "candies": { "min": 14, "max": 16 },
-      "simpleRoutes": { "min": 20, "max": 200000 },
+      "loops": {
+        "min": 9,
+        "max": 12
+      },
+      "deadEnds": {
+        "min": 8,
+        "max": 10
+      },
+      "deadEndDepth": {
+        "min": 1,
+        "max": 9
+      },
+      "candies": {
+        "min": 14,
+        "max": 16
+      },
+      "simpleRoutes": {
+        "min": 20,
+        "max": 200000
+      },
       "timeBudgetSeconds": 60.0
     }
   ]

@@ -285,3 +285,148 @@ def test_halloween_6_10_loop_budget_stays_within_3_to_12(repo_root: Path) -> Non
         band = profile.band_for(band_raw["mazeIndexMin"])
         assert 3 <= band.loops.min, band.act_name
         assert band.loops.max <= 12, band.act_name
+
+
+# ---------------------------------------------------------------------------
+# Satisfiability: a profile is a promise the generator has to be able to keep
+# ---------------------------------------------------------------------------
+
+
+def _stub_catalog():
+    """A catalog of fictional assets: satisfiability is a property of the
+    numbers, and loading real SVGs would only slow it down."""
+    from pathlib import Path
+
+    from maze_book.assets.catalog import AssetCatalog, AssetFile
+
+    def asset(name: str) -> AssetFile:
+        return AssetFile(asset_id=name, path=Path("/stub") / name)
+
+    return AssetCatalog(
+        start=asset("start.svg"),
+        finish=asset("finish.svg"),
+        dead_ends=[asset(f"dead_{i}.svg") for i in range(4)],
+        collectibles=[asset(f"candy_{i}.svg") for i in range(6)],
+        page_vectors={},
+        dead_end_policy="random-from-folder",
+        collectible_policy="random-from-folder",
+    )
+
+
+def _generate_one(repo_root: Path, profile: Profile, maze_index: int):
+    import dataclasses
+
+    from maze_book.generation import pipeline
+    from maze_book.model.book_config import load_book_config
+
+    config = load_book_config(
+        repo_root / "tests" / "fixtures" / "books" / "tiny-child-book", require_assets=False
+    )
+    band = profile.band_for(maze_index)
+    config = dataclasses.replace(
+        config,
+        book=dataclasses.replace(
+            config.book,
+            maze_count=max(b["mazeIndexMax"] for b in profile.raw["bands"]),
+            profile_id=profile.profile_id,
+        ),
+    )
+    return pipeline.generate_maze(
+        config=config, profile=profile, catalog=_stub_catalog(), maze_index=maze_index
+    ), band
+
+
+@pytest.mark.slow
+def test_every_band_of_every_shipped_profile_can_actually_produce_a_maze(
+    repo_root: Path,
+) -> None:
+    """A profile is a set of promises the generator has to be able to keep.
+
+    This is the check that was missing when ``child_6_7`` shipped with
+    ``deadEndDepth.min = 2`` (braiding leaves depth-1 stubs, so ~85% of shapes
+    were rejected for a property the generator cannot produce on request) and
+    ``temptingFraction = 0.9`` (with best totals under 10 candies, "tempting"
+    rounds up to the best score itself, which C1's uniqueness forbids). Every
+    band's numbers validated against the schema and every unit test passed; the
+    profile still could not make a single maze.
+    """
+    failures: list[str] = []
+    for path in _profile_paths(repo_root):
+        profile = Profile.load(path)
+        for band_raw in profile.raw["bands"]:
+            index = band_raw["mazeIndexMin"]
+            try:
+                result, band = _generate_one(repo_root, profile, index)
+            except Exception as exc:  # noqa: BLE001 - the message is the report
+                failures.append(
+                    f"{profile.profile_id}/{band_raw['actName']} (maze {index}): "
+                    f"{type(exc).__name__}: {exc}"
+                )
+                continue
+            if not (band.loops.min <= result.analysis.loop_count <= band.loops.max):
+                failures.append(
+                    f"{profile.profile_id}/{band.act_name}: accepted k="
+                    f"{result.analysis.loop_count} outside {band.loops}"
+                )
+    assert failures == []
+
+
+@pytest.mark.slow
+def test_child_6_7_produces_its_whole_book(repo_root: Path) -> None:
+    """The second shipped profile, end to end. Books are the unit that matters:
+    a profile that satisfies band 1 and stalls at band 3 ships nothing."""
+    profile = load_profile(repo_root / "profiles", "child_6_7")
+    failures = []
+    for index in range(1, 31):
+        try:
+            _generate_one(repo_root, profile, index)
+        except Exception as exc:  # noqa: BLE001
+            failures.append(f"maze {index}: {exc}")
+    assert failures == []
+
+
+def test_no_band_sets_a_tempting_fraction_its_candy_count_cannot_reach(
+    repo_root: Path,
+) -> None:
+    """C5 asks for a route scoring at least ``temptingFraction * best``, and C1
+    requires the best to be unique. So a tempting route needs a score in
+    ``[ceil(fraction * best), best)`` -- and when the fraction is high and the
+    candy count low, that interval is empty and no placement can ever satisfy
+    both. This is arithmetic, so it is checked without generating anything."""
+    import math
+
+    problems = []
+    for path in _profile_paths(repo_root):
+        profile = Profile.load(path)
+        for band_raw in profile.raw["bands"]:
+            band = profile.band_for(band_raw["mazeIndexMin"])
+            if band.min_tempting_routes < 1:
+                continue
+            best = band.candies.max  # the most generous case for the profile
+            lowest_tempting = math.ceil(band.tempting_fraction * best)
+            if lowest_tempting >= best:
+                problems.append(
+                    f"{profile.profile_id}/{band.act_name}: temptingFraction "
+                    f"{band.tempting_fraction:g} x best {best} needs a decoy scoring "
+                    f">= {lowest_tempting}, but the best is {best} and must be unique"
+                )
+    assert problems == []
+
+
+def test_no_band_demands_a_dead_end_depth_the_generator_cannot_create(
+    repo_root: Path,
+) -> None:
+    """Braiding creates a dead end by opening an edge at a degree-1 cell, which
+    leaves a depth-1 stub. A band whose minimum depth exceeds 1 is asking the
+    rebalancer for something it has no move to produce."""
+    problems = []
+    for path in _profile_paths(repo_root):
+        profile = Profile.load(path)
+        for band_raw in profile.raw["bands"]:
+            band = profile.band_for(band_raw["mazeIndexMin"])
+            if band.dead_end_depth is not None and band.dead_end_depth.min > 1:
+                problems.append(
+                    f"{profile.profile_id}/{band.act_name}: deadEndDepth.min is "
+                    f"{band.dead_end_depth.min}"
+                )
+    assert problems == []

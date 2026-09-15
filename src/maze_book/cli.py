@@ -24,6 +24,7 @@ means the page proofed and the page printed came from different mazes.
 from __future__ import annotations
 
 import argparse
+import dataclasses
 import sys
 import time
 from pathlib import Path
@@ -72,7 +73,12 @@ class Context:
         self.config: BookConfig = load_book_config(self.book_dir, require_assets=True)
 
         if getattr(args, "seed", None) is not None:
-            self.config.book.seed = args.seed
+            # BookMeta is frozen so that a loaded config cannot drift under the
+            # code that validated it; an override rebuilds it instead.
+            self.config = dataclasses.replace(
+                self.config,
+                book=dataclasses.replace(self.config.book, seed=args.seed),
+            )
         profile_id = getattr(args, "profile", None) or self.config.book.profile_id
         self.profile: Profile = load_profile(self.root / "profiles", profile_id)
         self.profile.covers(self.config.book.maze_count)
