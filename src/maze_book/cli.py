@@ -293,9 +293,19 @@ def cmd_book_generate_mazes(context: Context) -> int:
         _say(f"rejections by stage: {ordered}")
 
     if context.config.outputs.write_contact_sheet:
-        entries = [(loaded_all[i].maze, loaded_all[i].analysis) for i in sorted(loaded_all)]
-        render_contact_sheet(entries, context.paths.contact_sheet)
-        _say(f"contact sheet -> {context.paths.contact_sheet}")
+        # The contact sheet is a whole-book artifact: it exists so a human can
+        # judge variety and difficulty progression across the book at a glance.
+        # Rewriting it from a --only subset would silently replace a 50-maze
+        # sheet with a 3-maze one, which looks like the book got smaller.
+        if len(indices) == context.config.book.maze_count:
+            entries = [(loaded_all[i].maze, loaded_all[i].analysis) for i in sorted(loaded_all)]
+            render_contact_sheet(entries, context.paths.contact_sheet)
+            _say(f"contact sheet -> {context.paths.contact_sheet}")
+        else:
+            _say(
+                f"contact sheet skipped: --only covered {len(indices)} of "
+                f"{context.config.book.maze_count} mazes"
+            )
 
     if context.config.outputs.write_maze_svg:
         from .rendering.svg import AssetGeometryCache

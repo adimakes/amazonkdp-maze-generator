@@ -289,3 +289,23 @@ def test_the_halloween_book_builds_and_passes_every_preflight_check(
 
     assert len(PdfReader(str(base / "book-interior.pdf")).pages) == 112
     assert len(list((base / "mazes").glob("*.json"))) == 100  # maze + analysis each
+
+
+def test_a_partial_run_does_not_overwrite_the_whole_book_contact_sheet(
+    tiny_copy: Path, tmp_path: Path, capsys
+) -> None:
+    """The contact sheet exists so a human can judge variety and difficulty
+    across the *book*. Rewriting it from an --only subset would silently replace
+    a full sheet with a partial one, which looks like the book got smaller."""
+    from PIL import Image
+
+    run("book", "generate-mazes", str(tiny_copy), "--output", str(tmp_path))
+    sheet = tmp_path / "tiny-child-book" / "contact-sheet.png"
+    with Image.open(sheet) as image:
+        full_size = image.size
+
+    capsys.readouterr()
+    run("book", "generate-mazes", str(tiny_copy), "--only", "1", "--output", str(tmp_path))
+    assert "contact sheet skipped" in capsys.readouterr().out
+    with Image.open(sheet) as image:
+        assert image.size == full_size
