@@ -1,6 +1,3 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <path d="M20 90 L20 42 A30 30 0 0 1 80 42 L80 90 L66 78 L50 90 L34 78 Z" fill="none" stroke="#000000" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="38" cy="44" r="6" fill="#000000"/>
-  <circle cx="62" cy="44" r="6" fill="#000000"/>
-  <ellipse cx="50" cy="64" rx="9" ry="7" fill="none" stroke="#000000" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path fill="#000000" fill-rule="evenodd" d="M18 92 L18 42 C18 24.33 32.33 10 50 10 C67.67 10 82 24.33 82 42 L82 92 L74 92 L68 80 L58 92 L42 92 L32 80 L26 92 Z M45 40 C45 43.87 41.87 47 38 47 C34.13 47 31 43.87 31 40 C31 36.13 34.13 33 38 33 C41.87 33 45 36.13 45 40 Z M69 40 C69 43.87 65.87 47 62 47 C58.13 47 55 43.87 55 40 C55 36.13 58.13 33 62 33 C65.87 33 69 36.13 69 40 Z M58 64 C58 68.42 54.42 72 50 72 C45.58 72 42 68.42 42 64 C42 59.58 45.58 56 50 56 C54.42 56 58 59.58 58 64 Z"/>
 </svg>
