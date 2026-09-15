@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0",
   "profileId": "child_6_7",
-  "description": "Three-act ramp for a 30-maze book, ages 6 to 7: 6x6 to 10x10, small candy counts, and a gentle loop budget. Two numbers here are load-bearing and were corrected after the profile was measured rather than read. deadEndDepth.min is 1 in every band, as in halloween_6_10: braiding creates a dead end by opening an edge at a degree-1 cell, which naturally leaves depth-1 stubs, and a band demanding depth 2 rejected about 85% of shapes for a property the generator cannot produce on request. temptingFraction is 0.7, not 0.9: a decoy counts as tempting at fraction x best, and with best totals under 10 candies a 0.9 threshold rounds up to the best score itself -- which C1's uniqueness rule forbids, making C5 arithmetically unsatisfiable. With both corrected the profile accepts 30 of 30 mazes, worst case 6 attempts of the 50 allowed.",
+  "description": "Three-act ramp for a 30-maze book, ages 6 to 7: 6x6 to 10x10, small candy counts, and a gentle loop budget. Two numbers here are load-bearing and were corrected after the profile was measured rather than read. deadEndDepth.min is 1 in every band, as in halloween_6_10: braiding creates a dead end by opening an edge at a degree-1 cell, which naturally leaves depth-1 stubs, and a band demanding depth 2 rejected about 85% of shapes for a property the generator cannot produce on request. temptingFraction is 0.7, not 0.9: a decoy counts as tempting at fraction x best, and with best totals under 10 candies a 0.9 threshold rounds up to the best score itself -- which C1's uniqueness rule forbids, making C5 arithmetically unsatisfiable. With both corrected the profile accepts 30 of 30 mazes, worst case 6 attempts of the 50 allowed. finishScale is 0.7, not 0.75: an asset is centred in its cell and must stay inside the safe inset, so cellClearanceFraction 0.14 caps every scale at 1 - 2 x 0.14 = 0.72, and the finish marker was asking for more room than the cell has.",
   "ageLabel": "6-7",
   "defaults": {
     "simpleRoutes": {
@@ -29,7 +29,7 @@
     "collectibleScale": 0.65,
     "deadEndScale": 0.6,
     "startScale": 0.7,
-    "finishScale": 0.75,
+    "finishScale": 0.7,
     "cellClearanceFraction": 0.14,
     "candySpacingPolicy": "no-adjacent",
     "maxBorderHugFraction": 0.6,

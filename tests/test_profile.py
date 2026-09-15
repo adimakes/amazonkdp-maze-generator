@@ -430,3 +430,33 @@ def test_no_band_demands_a_dead_end_depth_the_generator_cannot_create(
                     f"{band.dead_end_depth.min}"
                 )
     assert problems == []
+
+
+def test_no_band_scales_an_asset_past_its_own_cell_clearance(repo_root: Path) -> None:
+    """An asset is centred in its cell and must stay inside the safe inset, so
+    ``cellClearanceFraction`` caps every scale at ``1 - 2 * clearance``. A band
+    that asks for more is a profile the renderer will refuse at placement time,
+    on the first page it draws -- which is a long way from where the number is.
+
+    child_6_7 shipped a finishScale of 0.75 against a 0.14 clearance, a ceiling
+    of 0.72, and the whole book failed to assemble.
+    """
+    problems = []
+    for path in _profile_paths(repo_root):
+        profile = Profile.load(path)
+        for band_raw in profile.raw["bands"]:
+            band = profile.band_for(band_raw["mazeIndexMin"])
+            ceiling = 1.0 - 2.0 * band.cell_clearance_fraction
+            for role, scale in (
+                ("start", band.start_scale),
+                ("finish", band.finish_scale),
+                ("collectible", band.collectible_scale),
+                ("dead-end", band.dead_end_scale),
+            ):
+                if scale > ceiling + 1e-9:
+                    problems.append(
+                        f"{profile.profile_id}/{band.act_name}: {role}Scale {scale:g} "
+                        f"exceeds the {ceiling:.3g} ceiling set by cellClearanceFraction "
+                        f"{band.cell_clearance_fraction:g}"
+                    )
+    assert problems == []
