@@ -154,6 +154,26 @@ class Scene:
 
 
 @dataclass(frozen=True)
+class EndPage:
+    """Wording for the optional end page (``layout.insertEndPage``).
+
+    It lives in ``book.json`` rather than in ``src/`` because it is book content:
+    "Now go and count your candy" is right for a Halloween candy book and wrong
+    for anything else, and the engine is theme-agnostic by contract (17.2). A
+    null ``content.endPage`` selects the neutral built-in wording.
+    """
+
+    title: str
+    text: str = ""
+
+
+def _end_page(raw: Any) -> "EndPage | None":
+    if raw is None:
+        return None
+    return EndPage(title=raw["title"], text=raw.get("text", ""))
+
+
+@dataclass(frozen=True)
 class OutputsSpec:
     write_maze_json: bool
     write_analysis_json: bool
@@ -175,6 +195,7 @@ class BookConfig:
     layout: LayoutSpec
     assets: AssetsSpec
     scenes: list[Scene]
+    end_page: EndPage | None
     outputs: OutputsSpec
     raw: dict[str, Any] = field(default_factory=dict)
 
@@ -473,6 +494,7 @@ def load_book_config(
             )
             for scene in obj["content"]["scenes"]
         ],
+        end_page=_end_page(obj["content"]["endPage"]),
         outputs=OutputsSpec(
             write_maze_json=bool(outputs["writeMazeJson"]),
             write_analysis_json=bool(outputs["writeAnalysisJson"]),

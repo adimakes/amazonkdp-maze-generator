@@ -79,9 +79,10 @@ def _canvas(target, page_size) -> Canvas:
     )
 
 
-#: Printed on the end page. Kept here rather than in a book package because it is
-#: furniture, not content: a book with no end page simply does not plan one.
-END_PAGE_LINES = ("THE END", "Now go and count your candy.")
+#: Used when ``content.endPage`` is null. Deliberately theme-free: anything more
+#: specific would be book content living in the engine, and 17.2 makes the engine
+#: theme-agnostic. A book that wants its own wording sets ``content.endPage``.
+DEFAULT_END_PAGE = ("THE END", "")
 
 
 @dataclass(slots=True)
@@ -174,15 +175,20 @@ class BookAssembler:
         draw_solutions_page(frame, entries, layout)
 
     def _draw_end(self, frame: PdfFrame, record: PageRecord) -> None:
-        live_x0, live_y0, live_x1, live_y1 = self.metrics.live_box(record.side)
+        end_page = self.config.end_page
+        title = end_page.title if end_page else DEFAULT_END_PAGE[0]
+        text = end_page.text if end_page else DEFAULT_END_PAGE[1]
+
+        live_x0, live_y0, live_x1, _ = self.metrics.live_box(record.side)
         centre_x = (live_x0 + live_x1) / 2.0
         canvas = frame.canvas
         canvas.saveState()
         canvas.setFillGray(0.0)
         canvas.setFont("Vera-Bold", 34.0)
-        canvas.drawCentredString(centre_x, frame.y(live_y0 + 230.0), END_PAGE_LINES[0])
-        canvas.setFont("Vera", 16.0)
-        canvas.drawCentredString(centre_x, frame.y(live_y0 + 290.0), END_PAGE_LINES[1])
+        canvas.drawCentredString(centre_x, frame.y(live_y0 + 230.0), title)
+        if text:
+            canvas.setFont("Vera", 16.0)
+            canvas.drawCentredString(centre_x, frame.y(live_y0 + 290.0), text)
         canvas.restoreState()
 
     # -- whole book ---------------------------------------------------------
@@ -206,22 +212,46 @@ class BookAssembler:
         canvas.save()
         return buffer.getvalue()
 
-    def write_page_pdfs(self, records: Sequence[PageRecord] | None = None) -> list[Path]:
+    def write_page_pdfs(
+        self,
+        records: Sequence[PageRecord] | None = None,
+        *,
+        front_matter: Path | None = None,
+    ) -> list[Path]:
         """One single-page PDF per planned page (17.14 ``pages/page-NNN.pdf``).
 
         These are the inspection artifact: a reviewer who needs page 63 should not
-        have to open a 112-page file to find it.
+        have to open a 112-page file to find it. That argument applies just as
+        much to page 3, so the supplied front matter is split into its own pages
+        here rather than skipped -- 17.14's tree starts at ``page-001.pdf``, and
+        a run of missing low numbers makes a reviewer wonder what went wrong.
         """
         written: list[Path] = []
         self.paths.pages.mkdir(parents=True, exist_ok=True)
+
+        source_pages = []
+        if front_matter is not None and Path(front_matter).is_file():
+            from pypdf import PdfReader
+
+            source_pages = PdfReader(str(front_matter)).pages
+
         for record in records or self.plan.pages:
-            if record.kind == KIND_FRONT_MATTER:
-                continue
             path = self.paths.page_pdf(record.page_number)
-            canvas = _canvas(str(path), self.metrics.page_size)
-            self.draw_page(canvas, record)
-            canvas.showPage()
-            canvas.save()
+            if record.kind == KIND_FRONT_MATTER:
+                index = record.page_number - 1
+                if index >= len(source_pages):
+                    continue
+                from pypdf import PdfWriter
+
+                writer = PdfWriter()
+                writer.add_page(source_pages[index])
+                with path.open("wb") as handle:
+                    writer.write(handle)
+            else:
+                canvas = _canvas(str(path), self.metrics.page_size)
+                self.draw_page(canvas, record)
+                canvas.showPage()
+                canvas.save()
             written.append(path)
         return written
 
@@ -294,7 +324,7 @@ def assemble(
     if write_pages:
         if on_progress:
             on_progress("writing per-page PDFs")
-        page_files = assembler.write_page_pdfs()
+        page_files = assembler.write_page_pdfs(front_matter=front_matter)
 
     return AssemblyResult(
         page_count=plan.total_pages,
@@ -315,8 +345,10 @@ def write_maze_svg(
     with_solution: bool = False,
 ) -> None:
     """The per-maze inspection SVG of 17.14 (``mazes/NNN.svg``)."""
+    # A solved maze is drawn at full size, so it takes the profile's *solution*
+    # weights: thinner walls than an unsolved page, to let the answer line lead.
     options = MazeRenderOptions(
-        wall_width=band.wall_width_pt,
+        wall_width=band.solution_wall_width_pt if with_solution else band.wall_width_pt,
         route_width=band.solution_route_width_pt,
         margin=band.wall_width_pt * 2.0,
         scales={

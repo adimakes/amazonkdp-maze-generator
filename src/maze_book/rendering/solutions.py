@@ -29,6 +29,13 @@ from .svg_to_pdf import PdfFrame
 THUMBNAIL_IN = 2.1
 CAPTION_GAP_PT = 13.0
 CAPTION_SIZE = 9.5
+#: 18.6's thumbnail weights. They are *not* the profile's solutionWallWidthPt /
+#: solutionRouteWidthPt, and the difference is deliberate: those size a
+#: full-size solution, where the maze is 6.75 in. Rendered at 2.1 in an 18x18
+#: cell is under 3 mm, and the profile's 1.2-1.4 pt wall against its 1.8-1.9 pt
+#: route leaves the answer line barely heavier than the maze it runs through,
+#: with the candy dots lost in the ink. 18.6 requires these to be defaults and
+#: to be overridable, which is what the draw functions' parameters are for.
 WALL_WIDTH_PT = 0.75
 ROUTE_WIDTH_PT = 1.5
 COLUMNS = 3
@@ -92,10 +99,12 @@ def draw_solution_thumbnail(
     slot: SolutionSlot,
     *,
     caption_font: str = "Vera",
+    wall_width: float = WALL_WIDTH_PT,
+    route_width: float = ROUTE_WIDTH_PT,
 ) -> None:
     geometry = MazeGeometry.fitted(maze.rows, maze.cols, box=slot.box)
 
-    frame.segments(wall_segments(maze, geometry), WALL_WIDTH_PT)
+    frame.segments(wall_segments(maze, geometry), wall_width)
 
     route = list(analysis.best_route)
     if route:
@@ -108,7 +117,7 @@ def draw_solution_thumbnail(
                 (geometry.cell_centre(cell) for cell in on_route),
                 max(0.9, geometry.cell * 0.17),
             )
-        frame.polyline(route_polyline(route, geometry), ROUTE_WIDTH_PT)
+        frame.polyline(route_polyline(route, geometry), route_width)
 
     canvas = frame.canvas
     canvas.saveState()
@@ -127,9 +136,14 @@ def draw_solutions_page(
     layout: SolutionPageLayout,
     *,
     caption_font: str = "Vera",
+    wall_width: float = WALL_WIDTH_PT,
+    route_width: float = ROUTE_WIDTH_PT,
 ) -> None:
     for (maze, analysis), slot in zip(entries, layout.slots):
-        draw_solution_thumbnail(frame, maze, analysis, slot, caption_font=caption_font)
+        draw_solution_thumbnail(
+            frame, maze, analysis, slot, caption_font=caption_font,
+            wall_width=wall_width, route_width=route_width,
+        )
 
 
 def solution_page_count(maze_count: int, per_page: int = COLUMNS * ROWS) -> int:

@@ -533,3 +533,30 @@ def test_fonts_must_be_present_rather_than_falling_back(tmp_path: Path) -> None:
 
     with pytest.raises(RenderingError, match=r"bundled font file\(s\) missing"):
         register_fonts(tmp_path)
+
+
+def test_thumbnail_widths_default_to_18_6_and_are_overridable() -> None:
+    """18.6 gives the thumbnail its own weights and requires them to be defaults
+    that config can override. They are deliberately not the profile's
+    solutionWallWidthPt / solutionRouteWidthPt, which size a *full-size* solution
+    where the maze is 6.75 in rather than 2.1 in: at thumbnail scale the
+    profile's 1.2-1.4 pt wall against its 1.8-1.9 pt route leaves the answer line
+    barely heavier than the maze it runs through.
+    """
+    import inspect
+
+    assert (sol.WALL_WIDTH_PT, sol.ROUTE_WIDTH_PT) == (0.75, 1.5)
+    for function in (sol.draw_solution_thumbnail, sol.draw_solutions_page):
+        parameters = inspect.signature(function).parameters
+        assert parameters["wall_width"].default == sol.WALL_WIDTH_PT
+        assert parameters["route_width"].default == sol.ROUTE_WIDTH_PT
+
+
+def test_the_profile_solution_widths_are_not_dead_config(repo_root: Path) -> None:
+    """Every profile field should reach something. solutionWallWidthPt reached
+    nothing at all until the full-size solution renderer used it."""
+    source = (repo_root / "src" / "maze_book" / "book" / "assemble.py").read_text(
+        encoding="utf-8"
+    )
+    assert "band.solution_wall_width_pt" in source
+    assert "band.solution_route_width_pt" in source

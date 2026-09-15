@@ -374,3 +374,34 @@ def test_copying_a_book_and_editing_only_its_config_makes_a_different_book(
     assert first["grid"]["rows"] == 6  # child_6_7's first band, not halloween's 8x8
     if original is not None:
         assert first["openEdges"] != original["openEdges"]
+
+
+def test_every_planned_page_gets_its_own_pdf_including_front_matter(
+    tiny_copy: Path, tmp_path: Path
+) -> None:
+    """17.14's tree starts at page-001.pdf. The per-page files are the artifact a
+    reviewer opens to look at one page, and that argument applies to the front
+    matter too -- a run of missing low numbers just makes them wonder what broke.
+    """
+    run("book", "build", str(tiny_copy), "--output", str(tmp_path))
+    plan = json.loads(
+        (tmp_path / "tiny-child-book" / "page-plan.json").read_text(encoding="utf-8")
+    )
+    pages = sorted((tmp_path / "tiny-child-book" / "pages").glob("page-*.pdf"))
+    assert [p.name for p in pages] == [
+        f"page-{record['pageNumber']:03d}.pdf" for record in plan["pages"]
+    ]
+    assert all(p.stat().st_size > 0 for p in pages)
+
+
+@pytest.mark.slow
+def test_front_matter_pages_are_split_out_verbatim(halloween: Path, tmp_path: Path) -> None:
+    from pypdf import PdfReader
+
+    run("book", "generate-mazes", str(halloween), "--output", str(tmp_path))
+    run("book", "assemble", str(halloween), "--output", str(tmp_path))
+
+    pages = tmp_path / "jims-halloween-maze-adventure" / "pages"
+    assert (pages / "page-001.pdf").is_file()
+    assert len(PdfReader(str(pages / "page-001.pdf")).pages) == 1
+    assert len(list(pages.glob("page-*.pdf"))) == 112

@@ -372,7 +372,11 @@
         "text": "Jim's own porch light glows warm and yellow. Help him reach the steps, then dump out the bucket and count the candy.",
         "pageVector": "jim_head.svg"
       }
-    ]
+    ],
+    "endPage": {
+      "title": "THE END",
+      "text": "Now go and count your candy."
+    }
   },
   "outputs": {
     "writeMazeJson": true,

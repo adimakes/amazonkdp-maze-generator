@@ -86,7 +86,8 @@
         "title": "Scene Three",
         "text": "Third scene text."
       }
-    ]
+    ],
+    "endPage": null
   },
   "outputs": {
     "writeMazeJson": true,
