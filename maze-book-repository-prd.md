@@ -1213,11 +1213,16 @@ The first implementation MUST expose a generator interface similar to:
 
 ```python
 class BaseMazeGenerator(Protocol):
-    def generate(self, rows: int, cols: int, seed: int) -> BaseGrid:
+    generator_id: str
+    generator_version: str
+
+    def carve(self, rows: int, cols: int, seed: int) -> list[Edge]:
         ...
 ```
 
-`generation/adapter_mazelib.py` MUST implement this interface using the `john-science/mazelib` package. The package MAY change its internal API or be replaced later; no other module may import it directly.
+The return type MUST be the repository's own canonical edge list, not a library grid object. Returning a `BaseGrid` would put the third-party representation on both sides of the seam, so every consumer would learn mazelib's `(2*rows+1, 2*cols+1)` wall convention and swapping carvers would stop being a config change. The adapter MUST also carry `generator_id` and `generator_version` so a maze artifact records which carver produced it.
+
+`generation/adapter_mazelib.py` MUST implement this interface using the `john-science/mazelib` package. The package MAY change its internal API or be replaced later; no other module may import it directly. The adapter MUST validate the result as a spanning tree — in bounds, four-neighbour adjacency, exactly `rows * cols - 1` distinct edges, one connected component — before returning it, so a library change surfaces as a rejected attempt rather than a mis-shaped maze.
 
 The full generator MUST execute this deterministic pipeline:
 
@@ -1225,13 +1230,44 @@ The full generator MUST execute this deterministic pipeline:
 2. Generate a connected base spanning-tree maze through the adapter. If the adapter returns an invalid or disconnected grid, reject the attempt.
 3. Convert the adapter grid to the canonical open-edge graph.
 4. Select start and finish from configured regions, resolving negative region bounds against the grid dimensions. Reject if they are equal or fail minimum-distance rules.
-5. Add openings between currently adjacent-but-closed cells until the profile's loop target is reached. The loop/cycle count is calculated as:
+5. Reshape the spanning tree until its loop count, dead-end count and dead-end depths all sit inside the band. The loop/cycle count is calculated as:
 
    ```text
    cyclomatic_number = E - V + C
    ```
 
    where `E` is the number of open edges, `V` the number of traversable cells, and `C` the number of connected components. For a connected grid, `C = 1`. The implementation MUST measure the result rather than assume each wall removal adds a useful loop.
+
+   Reshaping MUST be driven by four independent controls, each of which moves one
+   measurement in one direction, applied until the graph stops changing:
+
+   | condition | move | effect on `k` |
+   |---|---|---|
+   | too many dead ends, or one too deep | open an edge at a dead-end tip; or, to keep the dead end and only shorten it, open an edge from the corridor cell `j` steps from the tip so that cell becomes a junction and the depth becomes `j` | `+1` |
+   | too few dead ends | close a cycle edge next to a junction | `-1` |
+   | too many loops | close a cycle edge whose **both** endpoints are junctions, so no dead end appears | `-1` |
+   | too few loops | open an edge between two cells that both already have two or more neighbours | `+1` |
+
+   Two consequences follow from the arithmetic and MUST inform the profile bands.
+   First, a dead end can only be removed by *adding* an edge, so driving the census
+   from the `D` dead ends a recursive-backtracker tree arrives with down to a target
+   `t` costs about `D - t` loops; a band whose loop ceiling is below `D - t` is
+   infeasible, and the implementation MUST bound its target by `D - loops.max` rather
+   than discover this as a late rejection. Second, dead-end *density* should rise with
+   grid size, not fall: `D` grows with area, so a large grid asked for few dead ends is
+   the expensive case.
+
+   Closing an edge MUST be guarded on depth as well as degree. A cut demotes a
+   degree-three endpoint to degree two, and any dead end that was measuring its depth to
+   that junction then measures to a further one — observed jumping from inside a 1-5 band
+   to seventeen. Every close MUST therefore be applied speculatively and reverted unless
+   all dead-end depths remain inside the band.
+
+   Girth needs no separate check, and the implementation MUST NOT add one. Every cycle in
+   the finished graph contains a last-added edge; when it was added the rest of the cycle
+   already existed, because closing an edge never creates a cycle. So the cycle is at
+   least `1 + dist(a, b)` long at that moment, and opening an edge is permitted only when
+   that reaches `minLoopLength`. The local rule delivers the global guarantee.
 6. Run graph analysis and reject attempts outside connectivity, dead-end, distance, or density constraints.
 7. Enumerate all simple start-to-finish paths using depth-first search with a visited bitset.
 8. Reject the attempt if exact enumeration exceeds the profile's route, node, or time limits.
@@ -1361,6 +1397,12 @@ ReportLab is the v1 PDF renderer. It MUST:
 For v1, fonts MUST be embedded in the editable and production PDFs. Text-to-outline conversion is deferred because it makes proofreading and text preflight harder and is not required by the repository contract. A future production profile MAY add outlining.
 
 The repository MUST either bundle licensed fonts under `fonts/` or require a configured font path that passes a preflight check. It MUST NOT silently fall back to an unconfigured system font.
+
+v1 bundles the Bitstream Vera family (`fonts/Vera.ttf`, `VeraBd.ttf`, `VeraIt.ttf`,
+`VeraBI.ttf`) with `fonts/bitstream-vera-license.txt`. That licence permits bundling,
+redistribution and embedding, which is exactly the set of rights a KDP interior needs. The
+renderer MUST register these by absolute path and MUST raise rather than fall back when a
+face is missing, so a stripped checkout fails loudly instead of shipping Helvetica.
 
 ### 17.12 Caching and reproducibility
 
@@ -1654,7 +1696,7 @@ failure:
 |---|---|
 | Page count | Equals `layout.expectedPageCount` and is even |
 | Page size | Every page exactly `trimWidthIn × 72` × `trimHeightIn × 72` pt (612 × 792 for 8.5 × 11), no rotation flags |
-| Fonts | Zero embedded fonts in the outlined interior (`book-interior.pdf`) |
+| Fonts | Every font used is embedded and subset in **both** PDFs; zero unembedded or system-substituted fonts. The prior PRD required zero embedded fonts in an outlined interior; §17.11 defers outlining for v1 because it makes proofreading and text preflight harder, so the v1 check is "all embedded", not "none present" |
 | Color space | DeviceGray only — no RGB, CMYK or spot colors |
 | Ink | Pure black `0.0` gray; no tint below 100% anywhere |
 | Transparency | Fully flattened; no transparency groups |

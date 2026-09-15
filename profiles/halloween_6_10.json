@@ -1,21 +1,27 @@
 {
   "schemaVersion": "1.0",
   "profileId": "halloween_6_10",
-  "description": "Five-act difficulty ramp for a 50-maze candy-collecting book, ages 6 to 10. Grids grow 8x8 to 18x18; the 0.375 in cell floor at 18x18 is the practical minimum for a child drawing with a pencil.",
+  "description": "Six-act difficulty ramp for a 50-maze candy-collecting book, ages 6 to 10. Grids grow 8x8 to 18x18; the 0.375 in cell floor at 18x18 is the practical minimum for a child drawing with a pencil. Dead-end density rises with grid size (roughly 7% of cells throughout) so later mazes hold more wrong turns, each of them short: the depth ceiling stays under seven steps everywhere.",
   "ageLabel": "6-10",
   "defaults": {
-    "simpleRoutes": { "min": 8, "max": 200000 },
+    "simpleRoutes": {
+      "min": 8,
+      "max": 200000
+    },
     "minLoopLength": 6,
     "minMargin": 1,
     "shortestMayBeBest": false,
-    "maxBestOverShortest": 2.0,
+    "maxBestOverShortest": 1.6,
     "minTemptingRoutes": 2,
-    "temptingFraction": 0.85,
+    "temptingFraction": 0.6,
     "maxRoutes": 200000,
     "maxSearchNodes": 4000000,
     "timeBudgetSeconds": 20.0,
     "candyPlacementTrials": 400,
-    "frequencyBand": { "min": 0.3, "max": 0.7 },
+    "frequencyBand": {
+      "min": 0.3,
+      "max": 0.7
+    },
     "explorationShare": 0.35,
     "wallWidthPt": 3.0,
     "solutionWallWidthPt": 1.4,
@@ -36,11 +42,26 @@
       "actName": "Getting Ready",
       "rows": 8,
       "cols": 8,
-      "loops": { "min": 3, "max": 4 },
-      "deadEnds": { "min": 4, "max": 5 },
-      "deadEndDepth": { "min": 2, "max": 5 },
-      "candies": { "min": 5, "max": 7 },
-      "simpleRoutes": { "min": 6, "max": 200000 },
+      "loops": {
+        "min": 3,
+        "max": 4
+      },
+      "deadEnds": {
+        "min": 4,
+        "max": 6
+      },
+      "deadEndDepth": {
+        "min": 1,
+        "max": 3
+      },
+      "candies": {
+        "min": 5,
+        "max": 7
+      },
+      "simpleRoutes": {
+        "min": 6,
+        "max": 200000
+      },
       "minLoopLength": 6,
       "minMargin": 2,
       "minTemptingRoutes": 2,
@@ -55,11 +76,26 @@
       "actName": "The Neighborhood",
       "rows": 10,
       "cols": 10,
-      "loops": { "min": 4, "max": 5 },
-      "deadEnds": { "min": 5, "max": 6 },
-      "deadEndDepth": { "min": 2, "max": 6 },
-      "candies": { "min": 7, "max": 9 },
-      "simpleRoutes": { "min": 8, "max": 200000 },
+      "loops": {
+        "min": 4,
+        "max": 5
+      },
+      "deadEnds": {
+        "min": 6,
+        "max": 8
+      },
+      "deadEndDepth": {
+        "min": 1,
+        "max": 4
+      },
+      "candies": {
+        "min": 7,
+        "max": 9
+      },
+      "simpleRoutes": {
+        "min": 8,
+        "max": 200000
+      },
       "minLoopLength": 6,
       "minMargin": 2,
       "minTemptingRoutes": 3,
@@ -74,11 +110,26 @@
       "actName": "The Dark End of the Street",
       "rows": 12,
       "cols": 12,
-      "loops": { "min": 5, "max": 6 },
-      "deadEnds": { "min": 6, "max": 7 },
-      "deadEndDepth": { "min": 2, "max": 7 },
-      "candies": { "min": 9, "max": 11 },
-      "simpleRoutes": { "min": 10, "max": 200000 },
+      "loops": {
+        "min": 5,
+        "max": 7
+      },
+      "deadEnds": {
+        "min": 8,
+        "max": 11
+      },
+      "deadEndDepth": {
+        "min": 1,
+        "max": 4
+      },
+      "candies": {
+        "min": 9,
+        "max": 11
+      },
+      "simpleRoutes": {
+        "min": 10,
+        "max": 200000
+      },
       "minLoopLength": 6,
       "minMargin": 2,
       "minTemptingRoutes": 3,
@@ -93,11 +144,26 @@
       "actName": "The Haunted Half Hour",
       "rows": 14,
       "cols": 14,
-      "loops": { "min": 6, "max": 8 },
-      "deadEnds": { "min": 7, "max": 8 },
-      "deadEndDepth": { "min": 2, "max": 8 },
-      "candies": { "min": 11, "max": 13 },
-      "simpleRoutes": { "min": 12, "max": 200000 },
+      "loops": {
+        "min": 6,
+        "max": 9
+      },
+      "deadEnds": {
+        "min": 10,
+        "max": 14
+      },
+      "deadEndDepth": {
+        "min": 1,
+        "max": 5
+      },
+      "candies": {
+        "min": 11,
+        "max": 13
+      },
+      "simpleRoutes": {
+        "min": 12,
+        "max": 200000
+      },
       "minLoopLength": 6,
       "minMargin": 1,
       "minTemptingRoutes": 4,
@@ -113,11 +179,26 @@
       "actName": "The Long Way Home",
       "rows": 16,
       "cols": 16,
-      "loops": { "min": 8, "max": 10 },
-      "deadEnds": { "min": 8, "max": 9 },
-      "deadEndDepth": { "min": 2, "max": 9 },
-      "candies": { "min": 13, "max": 15 },
-      "simpleRoutes": { "min": 16, "max": 200000 },
+      "loops": {
+        "min": 8,
+        "max": 11
+      },
+      "deadEnds": {
+        "min": 13,
+        "max": 18
+      },
+      "deadEndDepth": {
+        "min": 1,
+        "max": 5
+      },
+      "candies": {
+        "min": 13,
+        "max": 15
+      },
+      "simpleRoutes": {
+        "min": 16,
+        "max": 200000
+      },
       "minLoopLength": 6,
       "minMargin": 1,
       "minTemptingRoutes": 4,
@@ -134,11 +215,26 @@
       "actName": "Finale",
       "rows": 18,
       "cols": 18,
-      "loops": { "min": 10, "max": 12 },
-      "deadEnds": { "min": 9, "max": 10 },
-      "deadEndDepth": { "min": 2, "max": 10 },
-      "candies": { "min": 16, "max": 18 },
-      "simpleRoutes": { "min": 20, "max": 200000 },
+      "loops": {
+        "min": 10,
+        "max": 13
+      },
+      "deadEnds": {
+        "min": 16,
+        "max": 22
+      },
+      "deadEndDepth": {
+        "min": 1,
+        "max": 6
+      },
+      "candies": {
+        "min": 16,
+        "max": 18
+      },
+      "simpleRoutes": {
+        "min": 20,
+        "max": 200000
+      },
       "minLoopLength": 6,
       "minMargin": 1,
       "minTemptingRoutes": 5,
