@@ -1735,3 +1735,54 @@ surfaced by the tooling even though the judgement stays human: the contact sheet
 (`output/<book-id>/contact-sheet.png`) exists so the eyeball review is possible, and the
 asset validator exists so the 5.5 mm test is only ever needed on files that already pass
 the mechanical rules.
+
+### 18.11 Profile satisfiability constraints (established by measurement)
+
+§17.4 specifies what a difficulty profile *contains*. It does not say which combinations
+of those numbers the generator can actually satisfy, and three of the four shipped
+profiles were written to combinations it cannot. Each validated against the schema and
+passed every unit test; between them they could not produce a single maze. The following
+are therefore normative, and each is enforced by a test rather than by convention.
+
+**`deadEndDepth.min` MUST be 1.** Braiding creates a dead end by opening an edge at a
+degree-one cell, which by construction leaves a depth-one stub, and the rebalancer has no
+move that deepens an existing one on request. A floor above 1 therefore rejects shapes for
+a property that cannot be asked for: at `min = 2` it accounted for 43 of 50 rejected
+attempts on one band. Difficulty is shaped by the depth *ceiling* — how far a child walks
+before a mistake is obvious — not by the floor.
+
+**`temptingFraction` MUST leave a non-empty interval under the best score.** C5 requires a
+decoy scoring at least `temptingFraction × best`; C1 requires the best score to be unique.
+A tempting route therefore needs a score in `[ceil(temptingFraction × best), best)`, and
+when the fraction is high and the candy count low that interval is empty — at 0.9 with
+five candies, `ceil(4.5) = 5`, which *is* the best score. The constraint pair is then
+arithmetically unsatisfiable rather than merely tight, and no amount of placement search
+will find a way. Profiles MUST satisfy `ceil(temptingFraction × candies.max) < candies.max`
+whenever `minTemptingRoutes >= 1`.
+
+**Every `*Scale` MUST be at most `1 − 2 × cellClearanceFraction`.** §17.9 requires an
+asset's footprint to stay inside its cell's safe inset, and an asset is centred in its
+cell, so the clearance fraction caps every scale directly. A profile violating this fails
+at placement time on the first page drawn, a long way from the number that caused it.
+
+**Corollary on method.** Each of these was found by generating against a patched copy of
+the profile and counting acceptances, not by reading the numbers. A profile is a set of
+promises the generator has to be able to keep, so the test that matters is whether it can
+keep them: §17.16 is extended to require that every band of every shipped profile is shown
+to produce a maze inside its own loop band, and that at least one profile is shown to
+produce its whole book.
+
+### 18.12 Candy placement concentrates on the best route (recorded behaviour)
+
+The candy placer seeds its target best route with cells exclusive to that route and then
+adds shared cells to lift decoys, with the consequence that **every** collectible lands on
+the intended best route. `bestCandyTotal` therefore always equals the number of candies
+printed on the page, and the tally strip's tick-box count equals its own "Best possible"
+number.
+
+This satisfies every rule in §8.5 and is not a defect. It is recorded because it changes
+the puzzle on the page: with no candy off the best route there is no "which sweets do I
+give up?" decision, only "find the one route that collects them all". A future profile
+knob could reserve a configurable share of candies for cells the target route misses,
+which would make the second-best score a genuine trade-off rather than a near-miss. That
+is a product decision, not a correctness one, and is deliberately left open.
