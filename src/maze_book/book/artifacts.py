@@ -206,6 +206,19 @@ class MazeStore:
         self.fingerprint = fingerprint or BookFingerprint.build(config, profile, catalog)
 
     def seed_for(self, maze_index: int) -> int:
+        """The cache key's seed component for one maze.
+
+        Deliberately derived at ``attempt=0``, which is never a real attempt.
+        The key has to be computable *before* generating -- that is what decides
+        whether to generate at all -- but a maze's own recorded seed uses the
+        attempt that actually succeeded, which is unknowable in advance and
+        varies between runs of identical inputs.
+
+        So this is a stable proxy rather than the maze's seed, and the two differ
+        in the written JSON. It still does the one job a key needs: it is a pure
+        function of ``(book.seed, book.id, mazeIndex)``, so changing any of them
+        invalidates the entry, and changing none of them never does.
+        """
         return derive_seed(
             self.config.book.seed, self.config.book.id, maze_index, 0, "topology"
         )

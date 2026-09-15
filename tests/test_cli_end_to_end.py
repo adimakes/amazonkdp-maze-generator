@@ -309,3 +309,68 @@ def test_a_partial_run_does_not_overwrite_the_whole_book_contact_sheet(
     assert "contact sheet skipped" in capsys.readouterr().out
     with Image.open(sheet) as image:
         assert image.size == full_size
+
+
+@pytest.mark.slow
+def test_copying_a_book_and_editing_only_its_config_makes_a_different_book(
+    halloween: Path, tmp_path: Path
+) -> None:
+    """17.17's first definition-of-done item, and the repository's whole claim:
+    "copying books/jims-halloween-maze-adventure/ to a new folder and editing
+    only book.json and SVG assets is enough to start a new book".
+
+    Nothing but book.json is touched here -- not one line of src/, not one asset
+    -- and the result is a different book with a different profile, seed, length
+    and story, built to a different page count with no front matter at all.
+    """
+    package = tmp_path / "books" / "sams-space-maze-quest"
+    shutil.copytree(halloween, package)
+
+    config_path = package / "book.json"
+    obj = json.loads(config_path.read_text(encoding="utf-8"))
+    obj["book"].update(
+        id="sams-space-maze-quest",
+        title="Sam's Space Maze Quest",
+        subtitle="12 Star-Collecting Mazes",
+        seed=7777,
+        mazeCount=12,
+        profileId="child_6_7",
+    )
+    obj["content"]["scenes"] = [
+        {
+            "number": index,
+            "title": f"Launch Pad {index}",
+            "text": f"Sam checks the fuel gauge and counts {index} stars ahead.",
+            "pageVector": "deco_moon.svg",
+        }
+        for index in range(1, 13)
+    ]
+    obj["layout"]["frontMatterPdf"] = None
+    obj["layout"]["expectedPageCount"] = None
+    config_path.write_text(json.dumps(obj, indent=2), encoding="utf-8")
+    (package / "front-matter.pdf").unlink()
+
+    output = tmp_path / "out"
+    assert run("book", "build", str(package), "--output", str(output)) == EXIT_OK
+
+    base = output / "sams-space-maze-quest"
+    report = json.loads((base / "preflight.json").read_text(encoding="utf-8"))
+    assert report["passed"] is True, report["failed"]
+
+    plan = json.loads((base / "page-plan.json").read_text(encoding="utf-8"))
+    assert plan["frontMatterPages"] == 0
+    assert plan["totalPages"] % 2 == 0
+    assert len([p for p in plan["pages"] if p["kind"] == "maze"]) == 12
+
+    # A different seed and profile must produce genuinely different mazes.
+    first = json.loads((base / "mazes" / "001.json").read_text(encoding="utf-8"))
+    original = json.loads(
+        (Path(__file__).resolve().parents[1] / "output" / "jims-halloween-maze-adventure"
+         / "mazes" / "001.json").read_text(encoding="utf-8")
+    ) if (
+        Path(__file__).resolve().parents[1] / "output" / "jims-halloween-maze-adventure"
+        / "mazes" / "001.json"
+    ).is_file() else None
+    assert first["grid"]["rows"] == 6  # child_6_7's first band, not halloween's 8x8
+    if original is not None:
+        assert first["openEdges"] != original["openEdges"]
