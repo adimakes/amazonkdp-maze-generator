@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0",
   "profileId": "halloween_6_10",
-  "description": "Six-act difficulty ramp for a 50-maze candy-collecting book, ages 6 to 10. Grids grow 8x8 to 18x18; the 0.375 in cell floor at 18x18 is the practical minimum for a child drawing with a pencil. Dead-end density rises with grid size (roughly 7% of cells throughout) so later mazes hold more wrong turns, each of them short: the depth ceiling stays under seven steps everywhere.",
+  "description": "Six-act difficulty ramp for a 50-maze candy-collecting book, ages 6 to 10. Loop and dead-end ranges are PRD 17.4's normative table verbatim. Grids grow 8x8 to 18x18; the 0.375 in cell floor at 18x18 is the practical minimum for a child drawing with a pencil. Dead-end count rises only gently, 4-5 to 9-10, so dead-end density *falls* with grid size, from about 7% of cells at 8x8 to about 3% at 18x18: later mazes get their difficulty from the loop budget and the sheer distance to the finish, not from a proliferation of wrong turns, and every wrong turn stays short because the depth ceiling stays under seven steps everywhere.",
   "ageLabel": "6-10",
   "defaults": {
     "simpleRoutes": {
@@ -48,7 +48,7 @@
       },
       "deadEnds": {
         "min": 4,
-        "max": 6
+        "max": 5
       },
       "deadEndDepth": {
         "min": 1,
@@ -81,8 +81,8 @@
         "max": 5
       },
       "deadEnds": {
-        "min": 6,
-        "max": 8
+        "min": 5,
+        "max": 6
       },
       "deadEndDepth": {
         "min": 1,
@@ -112,11 +112,11 @@
       "cols": 12,
       "loops": {
         "min": 5,
-        "max": 7
+        "max": 6
       },
       "deadEnds": {
-        "min": 8,
-        "max": 11
+        "min": 6,
+        "max": 7
       },
       "deadEndDepth": {
         "min": 1,
@@ -146,11 +146,11 @@
       "cols": 14,
       "loops": {
         "min": 6,
-        "max": 9
+        "max": 8
       },
       "deadEnds": {
-        "min": 10,
-        "max": 14
+        "min": 7,
+        "max": 8
       },
       "deadEndDepth": {
         "min": 1,
@@ -181,11 +181,11 @@
       "cols": 16,
       "loops": {
         "min": 8,
-        "max": 11
+        "max": 10
       },
       "deadEnds": {
-        "min": 13,
-        "max": 18
+        "min": 8,
+        "max": 9
       },
       "deadEndDepth": {
         "min": 1,
@@ -217,11 +217,11 @@
       "cols": 18,
       "loops": {
         "min": 10,
-        "max": 13
+        "max": 12
       },
       "deadEnds": {
-        "min": 16,
-        "max": 22
+        "min": 9,
+        "max": 10
       },
       "deadEndDepth": {
         "min": 1,

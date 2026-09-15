@@ -11,7 +11,8 @@
     "book": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "title", "locale", "seed", "mazeCount", "profileId"],
+      "required": ["id", "title", "subtitle", "locale", "seed", "mazeCount", "profileId",
+                   "contentOrigin"],
       "properties": {
         "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "minLength": 1, "maxLength": 100 },
         "title": { "type": "string", "minLength": 1 },
@@ -23,6 +24,7 @@
         "contentOrigin": {
           "type": "object",
           "additionalProperties": false,
+          "required": ["text", "images", "translations"],
           "properties": {
             "text": { "type": "string" },
             "images": { "type": "string" },
@@ -92,7 +94,8 @@
       "type": "object",
       "additionalProperties": false,
       "required": ["beginningVectorsDir", "endingVectorsDir", "deadEndVectorsDir", "collectibleVectorsDir",
-                   "startAsset", "finishAsset", "deadEndAssetPolicy", "collectibleAssetPolicy"],
+                   "pageVectorsDir", "startAsset", "finishAsset", "deadEndAssetPolicy",
+                   "collectibleAssetPolicy"],
       "properties": {
         "beginningVectorsDir": { "$ref": "#/$defs/relPath" },
         "endingVectorsDir": { "$ref": "#/$defs/relPath" },

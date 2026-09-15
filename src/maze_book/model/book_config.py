@@ -5,6 +5,16 @@ typed objects. Everything downstream may assume a ``BookConfig`` is valid: paths
 resolve inside the package, scene numbers are exactly ``1..mazeCount``, and page
 sides are opposite. The three defences that matter are schema validation
 (shape), cross-field checks (coherence), and path containment (safety).
+
+Fields this module reads with a bare subscript are listed in the schema's
+``required`` arrays, so a missing one is reported as a ``ConfigError`` by schema
+validation before the read happens. Two of them are required *and* nullable --
+``book.subtitle`` and ``assets.pageVectorsDir`` -- because ``null`` states that
+the book has no subtitle and no page vectors, which is a decision, whereas an
+absent key is only an omission. ``book.contentOrigin`` and all three of its keys
+are required for the same reason in a stronger form: it is the KDP AI-disclosure
+record, and a defaulted authorship claim on a published book is worse than a
+failed build.
 """
 
 from __future__ import annotations
@@ -70,7 +80,7 @@ class ContentOrigin:
 class BookMeta:
     id: str
     title: str
-    subtitle: str
+    subtitle: str | None
     locale: str
     seed: int
     maze_count: int

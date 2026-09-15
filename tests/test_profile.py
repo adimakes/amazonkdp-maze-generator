@@ -237,7 +237,10 @@ _HALLOWEEN_PRD_GRID_CANDY_MARGIN_WALL: dict[str, tuple[int, int, IntRange, int, 
     "Finale": (18, 18, IntRange(16, 18), 1, 2.25),
 }
 
-# (loops range, deadEnds range) as printed in PRD 17.4 -- see the xfail below.
+# (loops range, deadEnds range) as printed in PRD 17.4. The shipped profile drifted
+# from these two columns; a 50-maze run against a probe profile carrying the PRD's
+# numbers verbatim accepted every maze (worst case 14 attempts, slowest 1.5 s), so
+# the profile was corrected to the PRD rather than the reverse.
 _HALLOWEEN_PRD_LOOPS_DEADENDS: dict[str, tuple[IntRange, IntRange]] = {
     "Getting Ready": (IntRange(3, 4), IntRange(4, 5)),
     "The Neighborhood": (IntRange(4, 5), IntRange(5, 6)),
@@ -264,28 +267,6 @@ def test_halloween_6_10_grid_candy_margin_wall_match_prd_17_4_table(repo_root: P
         assert band.wall_width_pt == wall, act_name
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason=(
-        "profiles/halloween_6_10.json's loop and dead-end ranges do not match "
-        "the normative six-act table in PRD 17.4 (identically repeated in "
-        "PRD 7.3). PRD says, per act: Getting Ready loops 3-4/deadEnds 4-5; "
-        "The Neighborhood loops 4-5/deadEnds 5-6; The Dark End of the Street "
-        "loops 5-6/deadEnds 6-7; The Haunted Half Hour loops 6-8/deadEnds "
-        "7-8; The Long Way Home loops 8-10/deadEnds 8-9; Finale loops "
-        "10-12/deadEnds 9-10. The shipped JSON instead has: Getting Ready "
-        "deadEnds 4-6; The Neighborhood deadEnds 6-8; The Dark End of the "
-        "Street loops 5-7/deadEnds 8-11; The Haunted Half Hour loops "
-        "6-9/deadEnds 10-14; The Long Way Home loops 8-11/deadEnds 13-18; "
-        "Finale loops 10-13/deadEnds 16-22. Grid size, candy range, margin, "
-        "and wall stroke all match the PRD table exactly (see "
-        "test_halloween_6_10_grid_candy_margin_wall_match_prd_17_4_table), so "
-        "this is a targeted drift in only the loop/dead-end columns of "
-        "profiles/halloween_6_10.json -- a data file this suite may not "
-        "modify. Needs a human decision: fix the JSON to match PRD 17.4, or "
-        "update PRD 17.4 if the wider ranges are the intended design."
-    ),
-)
 def test_halloween_6_10_loops_and_deadends_match_prd_17_4_table(repo_root: Path) -> None:
     profile = load_profile(repo_root / "profiles", "halloween_6_10")
     mismatches = []
@@ -298,17 +279,6 @@ def test_halloween_6_10_loops_and_deadends_match_prd_17_4_table(repo_root: Path)
     assert mismatches == []
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason=(
-        "PRD 17.4 states the cyclomatic loop budget k 'MUST stay within 3-12 "
-        "across all acts' of halloween_6_10 -- above 12 the simple-route "
-        "count explodes combinatorially and the maze reads as an open field. "
-        "profiles/halloween_6_10.json's Finale band sets loops.max=13, one "
-        "over this documented ceiling -- a data file this suite may not "
-        "modify."
-    ),
-)
 def test_halloween_6_10_loop_budget_stays_within_3_to_12(repo_root: Path) -> None:
     profile = load_profile(repo_root / "profiles", "halloween_6_10")
     for band_raw in profile.raw["bands"]:
