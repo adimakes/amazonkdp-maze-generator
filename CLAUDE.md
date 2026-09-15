@@ -118,8 +118,31 @@ pages are inserted to preserve parity. `book/page_plan.py` emits an auditable
 `page-plan.json`; parity is asserted in preflight, not hoped for.
 
 **10. Two PDFs, on purpose.** `book-interior-editable.pdf` keeps live text (proofreading,
-spellcheck); `book-interior.pdf` converts text to outlines (removes every font-embedding
-and licensing question at KDP preflight). Both are byte-deterministic for a fixed input.
+spellcheck, and the `pdftotext` markers preflight looks for); `book-interior.pdf` is the
+production file. For v1 **both embed their fonts rather than outlining text** — §17.11
+defers outlining because it makes proofreading and text preflight harder, and §18.8
+restates the check accordingly as "every font embedded", not "no fonts present". The two
+files are therefore identical today; keeping them separate is what lets a future
+production profile add outlining to one without touching the other's contract. Both are
+byte-deterministic for a fixed input.
+
+## Preflight is the gate
+
+`preflight/` reads the answer back out of the finished PDF rather than trusting
+what the renderer was handed — comparing inputs would only prove the renderer
+agrees with itself. The mandatory cross-check (§18.8) extracts every printed
+"Best possible" with `pdftotext` and compares it to the analysis JSON. Safe area
+is measured by rasterizing and looking, because the layout arithmetic is exactly
+what would be wrong if the check were needed.
+
+A missing external tool is a **failure** in production mode, never a skip; a skip
+that reads as a pass is how an unchecked PDF gets announced as print-ready.
+`--lenient` is the local diagnostic mode and reports skips explicitly.
+
+ReportLab writes `initialFontName` into every page preamble whether or not
+anything draws with it, so canvases must be created with a bundled face — the
+Helvetica default puts an unembeddable base-14 font in a file that never drew a
+character, and fails the font check.
 
 ## SVG asset contract
 
@@ -134,6 +157,29 @@ subpaths, no text, no background rect, no raster, no gradients, no opacity.
 Public folder names are part of the contract and case-sensitive:
 `beginning-vectors/`, `ending-vectors/`, `maze-vectors/dead-end/`,
 `maze-vectors/collectibles/`, `page-vectors/` (optional).
+
+## Profile traps
+
+A profile is a set of promises the generator has to be able to keep, and three
+numbers will quietly make one unsatisfiable while every schema and unit test
+still passes. Three shipped profiles were broken this way. `tests/test_profile.py`
+guards all three; know them before writing a profile:
+
+- **`deadEndDepth.min` must be 1.** Braiding creates a dead end by opening an edge
+  at a degree-1 cell, which leaves a depth-1 stub. The rebalancer has no move that
+  deepens one on request, so a floor above 1 rejects shapes for a property that
+  cannot be asked for. It dominated rejections at 43 of 50 attempts.
+- **`temptingFraction x candies` must leave room under the best score.** C5 wants a
+  decoy scoring `>= fraction x best`; C1 requires the best to be unique. So a
+  tempting route needs a score in `[ceil(fraction x best), best)`, and at 0.9 with
+  five candies that interval is empty — arithmetically unsatisfiable, not tight.
+- **Every `*Scale` must be `<= 1 - 2 x cellClearanceFraction`.** Assets are centred
+  in their cell and must stay inside the safe inset; a larger scale fails at
+  placement time on the first page drawn, far from the number that caused it.
+
+Settle profile questions by measuring, not by arguing: generate against a patched
+copy and count acceptances. That is how the PRD §17.4 drift and all three broken
+profiles were resolved.
 
 ## Failure behaviour
 
