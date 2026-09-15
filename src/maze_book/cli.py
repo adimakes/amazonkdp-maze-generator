@@ -46,9 +46,8 @@ from .book.page_plan import PagePlan, front_matter_page_count, plan_pages
 from .errors import (
     EXIT_OK,
     ConfigError,
+    GenerationError,
     MazeBookError,
-    PreflightError,
-    RenderingError,
 )
 from .model.book_config import BookConfig, load_book_config, repo_root
 from .model.json_io import read_json
@@ -206,7 +205,7 @@ def cmd_maze_render(context: Context) -> int:
     from .rendering.svg import AssetGeometryCache
 
     cache = AssetGeometryCache()
-    written = 0
+    written: list[Path] = []
     for index in indices:
         loaded = store.require(index)  # 17.13: never silently regenerates
         band = context.profile.band_for(index)
@@ -216,13 +215,24 @@ def cmd_maze_render(context: Context) -> int:
                 path, loaded.maze, loaded.analysis,
                 catalog=context.catalog, band=band, cache=cache,
             )
-            written += 1
-        if "json" in formats:
-            written += 1  # already written by generate; presence is the artifact
+            written.append(path)
         if "pdf" in formats:
             _write_maze_pdf(context, loaded, band)
-            written += 1
-    _say(f"rendered {written} artifact(s) for {len(indices)} maze(s) into {context.paths.mazes}")
+            written.append(context.paths.maze_pdf(index))
+
+    if written:
+        _say(f"wrote {len(written)} file(s) for {len(indices)} maze(s) into {context.paths.mazes}")
+
+    if "json" in formats:
+        # The canonical JSON *is* the cached artifact `require()` just loaded and
+        # validated, so there is nothing to re-render. Saying so beats counting a
+        # file this command did not write.
+        missing = [i for i in indices if not context.paths.maze_json(i).is_file()]
+        if missing:
+            raise GenerationError(
+                f"{len(missing)} maze JSON artifact(s) missing", details=[str(i) for i in missing]
+            )
+        _say(f"json: {len(indices)} canonical artifact(s) already present and valid")
     return EXIT_OK
 
 
