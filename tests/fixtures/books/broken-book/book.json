@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "1.0",
+  "book": {
+    "id": "broken-book",
+    "title": "Tiny Child Book",
+    "subtitle": "A tiny fixture book for tests",
+    "locale": "en-US",
+    "seed": 1,
+    "mazeCount": 3,
+    "profileId": "child_6_7",
+    "contentOrigin": {
+      "text": "human",
+      "images": "human",
+      "translations": "not-applicable"
+    }
+  },
+  "print": {
+    "trimWidthIn": 8.5,
+    "trimHeightIn": 11.0,
+    "interiorBleed": false,
+    "colorMode": "black-and-white",
+    "paper": "white",
+    "safeMarginsIn": {
+      "inside": 0.625,
+      "outside": 0.5,
+      "top": 0.5,
+      "bottom": 0.5
+    },
+    "gutterIn": 0.625
+  },
+  "generation": {
+    "startRegion": {
+      "rowMin": 0,
+      "rowMax": 1,
+      "colMin": 0,
+      "colMax": 1
+    },
+    "finishRegion": {
+      "rowMin": -2,
+      "rowMax": -1,
+      "colMin": -2,
+      "colMax": -1
+    },
+    "maxAttemptsPerMaze": 50,
+    "baseGenerator": "mazelib_recursive_backtracker",
+    "exactRouteEnumeration": true
+  },
+  "layout": {
+    "frontMatterPdf": null,
+    "storyPageSide": "left",
+    "mazePageSide": "right",
+    "mazeSquareIn": 6.0,
+    "tallyPosition": "below",
+    "showMazeNumber": true,
+    "showBestPossibleScore": true,
+    "solutionsPerPage": 4,
+    "solutionsStartSide": "right",
+    "insertEndPage": true,
+    "insertBlankPagesForParity": true
+  },
+  "assets": {
+    "beginningVectorsDir": "assets/beginning-vectors",
+    "endingVectorsDir": "assets/ending-vectors",
+    "deadEndVectorsDir": "assets/maze-vectors/dead-end",
+    "collectibleVectorsDir": "assets/maze-vectors/collectibles",
+    "pageVectorsDir": null,
+    "startAsset": "start.svg",
+    "finishAsset": "finish.svg",
+    "deadEndAssetPolicy": "random-from-folder",
+    "collectibleAssetPolicy": "random-from-folder"
+  },
+  "content": {
+    "scenes": [
+      {
+        "number": 1,
+        "title": "Scene One",
+        "text": "First scene text."
+      },
+      {
+        "number": 2,
+        "title": "Scene Two",
+        "text": "Second scene text."
+      },
+      {
+        "number": 3,
+        "title": "Scene Three",
+        "text": "Third scene text."
+      }
+    ]
+  },
+  "outputs": {
+    "writeMazeJson": true,
+    "writeAnalysisJson": true,
+    "writeMazeSvg": true,
+    "writeStandaloneMazePdf": true,
+    "writeBookPdf": true,
+    "writeContactSheet": true,
+    "writePreflightReport": true,
+    "writeEditableProofPdf": true
+  }
+}

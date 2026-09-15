@@ -130,7 +130,14 @@ class RouteSet:
             return 0.0
         return self.reachable_cells / self.traversable_cells
 
+    @property
     def shortest_indices(self) -> list[int]:
+        """Indices of every joint-shortest route.
+
+        A property like its sibling accessors: ``count``, ``lengths``,
+        ``shortest_length`` and ``reachable_fraction`` are all properties, and a
+        lone method among them reads as an attribute at every call site.
+        """
         best = self.shortest_length
         return [i for i, route in enumerate(self.routes) if route.length == best]
 
