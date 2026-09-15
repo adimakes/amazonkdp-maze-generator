@@ -1560,6 +1560,14 @@ In addition to the existing `maxRoutes` ceiling, a profile MUST define `minSimpl
 as "too closed" and retried with the next attempt seed, in the same way a cap breach is
 rejected as "too open".
 
+A band MAY lower the floor below the default when its loop budget makes the default
+unreachable. A maze with `k` independent cycles admits at most about `2^k` simple
+start-to-finish routes, and only cycles that lie on a start-to-finish route contribute at
+all, so the smallest act (`k` in 3-4) cannot be held to the same floor as the finale
+(`k` in 10-12) without forcing every single loop onto the solution corridor. The supplied
+`halloween_6_10` profile therefore sets the floor to 6 for act 1 and raises it per act
+thereafter. The floor is still a hard reject, not a warning, in every band.
+
 ### 18.3 Candy-placement weighting
 
 `simulation/candy.py` MUST weight candidate cells by *route frequency* — the fraction of

@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "1.0",
+  "profileId": "adult",
+  "description": "Two-act ramp at the maximum printable grid for adults. Loops sit at the top of the 3-12 window and the best-score margin is 1, so every route decision matters.",
+  "ageLabel": "adult",
+  "defaults": {
+    "simpleRoutes": { "min": 24, "max": 200000 },
+    "minLoopLength": 6,
+    "minMargin": 1,
+    "shortestMayBeBest": false,
+    "maxBestOverShortest": 2.5,
+    "minTemptingRoutes": 6,
+    "temptingFraction": 0.8,
+    "maxRoutes": 200000,
+    "maxSearchNodes": 8000000,
+    "timeBudgetSeconds": 60.0,
+    "candyPlacementTrials": 800,
+    "frequencyBand": { "min": 0.25, "max": 0.65 },
+    "explorationShare": 0.45,
+    "wallWidthPt": 2.0,
+    "solutionWallWidthPt": 1.0,
+    "solutionRouteWidthPt": 1.6,
+    "collectibleScale": 0.48,
+    "deadEndScale": 0.42,
+    "startScale": 0.55,
+    "finishScale": 0.62,
+    "cellClearanceFraction": 0.08,
+    "candySpacingPolicy": "no-adjacent-in-corridor-run",
+    "maxBorderHugFraction": 0.4,
+    "maxUnreachableFraction": 0.35
+  },
+  "bands": [
+    {
+      "mazeIndexMin": 1,
+      "mazeIndexMax": 25,
+      "actName": "Opening",
+      "rows": 16,
+      "cols": 16,
+      "loops": { "min": 9, "max": 11 },
+      "deadEnds": { "min": 9, "max": 11 },
+      "deadEndDepth": { "min": 3, "max": 10 },
+      "candies": { "min": 15, "max": 18 },
+      "simpleRoutes": { "min": 24, "max": 200000 }
+    },
+    {
+      "mazeIndexMin": 26,
+      "mazeIndexMax": 50,
+      "actName": "Endgame",
+      "rows": 18,
+      "cols": 18,
+      "loops": { "min": 10, "max": 12 },
+      "deadEnds": { "min": 10, "max": 12 },
+      "deadEndDepth": { "min": 3, "max": 11 },
+      "candies": { "min": 18, "max": 21 },
+      "simpleRoutes": { "min": 28, "max": 200000 },
+      "timeBudgetSeconds": 90.0
+    }
+  ]
+}
