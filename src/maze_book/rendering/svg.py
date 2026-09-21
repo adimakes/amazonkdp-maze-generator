@@ -31,9 +31,10 @@ from ..model.geometry import Cell
 from ..model.maze_data import MazeData, PlacedAsset
 from .geometry import (
     MazeGeometry,
+    marker_margins,
     Point,
     Segment,
-    asset_footprint,
+    asset_footprints,
     route_polyline,
     wall_segments,
 )
@@ -129,6 +130,9 @@ class MazeRenderOptions:
     route: tuple[Cell, ...] | None = None
     candy_dot_radius: float = 0.0
     margin: float = 0.0
+    #: Side of the endpoint markers drawn outside the grid, in the
+    #: geometry's own units. 0 keeps them inside their cells.
+    marker_size: float = 0.0
 
 
 # --------------------------------------------------------------------------- #
@@ -184,6 +188,7 @@ def asset_elements(
     catalog: AssetCatalog,
     cache: AssetGeometryCache,
     scales: dict[str, float],
+    marker_size: float = 0.0,
 ) -> list[str]:
     """Every placed asset, inlined as geometry in placement order.
 
@@ -191,9 +196,11 @@ def asset_elements(
     upstream, so the output is byte-stable for a fixed maze.
     """
     out: list[str] = []
-    for asset in maze.assets:
+    for footprint in asset_footprints(
+        maze, geometry, scales=scales, marker_size=marker_size
+    ):
+        asset = footprint.asset
         document = cache.get(catalog.path_for(asset.asset_id))
-        footprint = asset_footprint(asset, geometry, scale=scales.get(asset.role, asset.scale))
         vb_x, vb_y, vb_w, vb_h = document.view_box
         scale = footprint.width / vb_w if vb_w else 0.0
         offset = (footprint.rect[0] - vb_x * scale, footprint.rect[1] - vb_y * scale)
@@ -227,6 +234,7 @@ def maze_body(
             asset_elements(
                 maze, geometry,
                 catalog=catalog, cache=cache or AssetGeometryCache(), scales=options.scales,
+                marker_size=options.marker_size,
             )
         )
 
@@ -265,12 +273,19 @@ def render_maze_svg(
     ``height``: the file scales to whatever it is placed in, which is the same
     contract 18.5 imposes on the assets it contains.
     """
+    # The standalone SVG has no page to fit, so it grows its own viewBox rather
+    # than shrinking the grid: the markers are drawn outside the walls either
+    # way, and a file that is only ever placed by its viewBox loses nothing by
+    # being a little taller.
     margin = options.margin
+    reserved = marker_margins(maze, size=options.marker_size) if options.marker_size else {}
+    left = margin + reserved.get("W", 0.0)
+    top = margin + reserved.get("N", 0.0)
     geometry = MazeGeometry(
-        rows=maze.rows, cols=maze.cols, origin=(margin, margin), cell=cell_units
+        rows=maze.rows, cols=maze.cols, origin=(left, top), cell=cell_units
     )
-    width = geometry.width + 2 * margin
-    height = geometry.height + 2 * margin
+    width = geometry.width + left + margin + reserved.get("E", 0.0)
+    height = geometry.height + top + margin + reserved.get("S", 0.0)
     body = maze_body(maze, geometry, options, catalog=catalog, cache=cache)
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" '

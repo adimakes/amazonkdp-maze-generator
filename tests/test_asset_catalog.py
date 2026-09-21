@@ -281,8 +281,19 @@ def test_load_catalog_picks_up_page_vectors_when_the_folder_is_configured(
 
 def test_the_halloween_package_catalog_loads_and_every_file_validates(repo_root: Path) -> None:
     """The integration the pipeline actually depends on: real config, real
-    folders, real SVGs, and every discovered file inside the 18.5 subset."""
-    from maze_book.assets.validate import raise_for_reports, validate_svg
+    folders, real SVGs, and every discovered file inside the 18.5 subset.
+
+    Each file is judged by the profile its *printed size* earns, exactly as
+    ``book validate`` does. Holding a 0.6 in page decoration to the finale
+    collectible's minimum feature would fail artwork that prints perfectly.
+    """
+    from maze_book.assets.validate import (
+        profiles_for_roles,
+        raise_for_reports,
+        validate_svg,
+    )
+    from maze_book.model.profile import load_profile
+    from maze_book.rendering.story_page import VECTOR_SIZE_IN
 
     config = load_book_config(repo_root / "books" / "jims-halloween-maze-adventure")
     catalog = load_catalog(config)
@@ -291,5 +302,14 @@ def test_the_halloween_package_catalog_loads_and_every_file_validates(repo_root:
     assert len(catalog.collectibles) >= 4
     assert len(catalog.page_vectors) >= 1
 
-    reports = [validate_svg(asset.path) for asset in catalog.all_files()]
+    by_role = profiles_for_roles(
+        bands=load_profile(repo_root / "profiles", config.book.profile_id).bands,
+        maze_square_in=config.layout.maze_square_in,
+        page_vector_in=VECTOR_SIZE_IN,
+    )
+    roles = catalog.roles()
+    reports = [
+        validate_svg(asset.path, profile=by_role[roles[str(asset.path)]])
+        for asset in catalog.all_files()
+    ]
     raise_for_reports(reports, label="halloween")

@@ -72,6 +72,11 @@ class Band:
     max_border_hug_fraction: float
     max_unreachable_fraction: float
     dead_end_depth: IntRange | None = None
+    #: Side of the start/finish marker drawn outside the grid, as a share of the
+    #: maze square. Absolute rather than a share of a cell so the marker is the
+    #: same size on the 8x8 opener as on the 18x18 finale. 0 keeps the markers
+    #: inside their cells, which is the pre-18.6 behaviour.
+    outside_marker_fraction: float = 0.0
 
 
 _REQUIRED = (
@@ -123,6 +128,12 @@ class Profile:
             raw=obj,
             _bands=bands,
         )
+
+    @property
+    def bands(self) -> list[Band]:
+        """Every band, built. For questions about the profile as a whole --
+        how small a cell ever gets, how large a marker ever is."""
+        return [self._build(band) for band in self._bands]
 
     def band_for(self, maze_index: int) -> Band:
         """Resolve the band covering ``maze_index``.
@@ -194,6 +205,7 @@ class Profile:
             candy_spacing_policy=str(band["candySpacingPolicy"]),
             max_border_hug_fraction=float(band["maxBorderHugFraction"]),
             max_unreachable_fraction=float(band["maxUnreachableFraction"]),
+            outside_marker_fraction=float(band.get("outsideMarkerFraction", 0.0)),
         )
 
 

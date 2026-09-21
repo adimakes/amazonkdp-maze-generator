@@ -33,7 +33,8 @@
     "cellClearanceFraction": 0.12,
     "candySpacingPolicy": "no-adjacent-in-corridor-run",
     "maxBorderHugFraction": 0.5,
-    "maxUnreachableFraction": 0.35
+    "maxUnreachableFraction": 0.35,
+    "outsideMarkerFraction": 0.085
   },
   "bands": [
     {

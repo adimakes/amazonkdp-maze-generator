@@ -31,7 +31,7 @@ from pathlib import Path
 from typing import Any, Callable, Sequence
 
 from .assets.catalog import AssetCatalog, load_catalog
-from .assets.validate import raise_for_reports, validate_svg
+from .assets.validate import profiles_for_roles, raise_for_reports, validate_svg
 from .book.artifacts import (
     BookFingerprint,
     LoadedMaze,
@@ -119,6 +119,21 @@ def _say(message: str) -> None:
 # --------------------------------------------------------------------------- #
 
 
+def _asset_profiles(context: "Context") -> list[tuple[object, object]]:
+    """Pair every asset with the profile its printed size earns."""
+    from .rendering.story_page import VECTOR_SIZE_IN
+
+    by_role = profiles_for_roles(
+        bands=context.profile.bands,
+        maze_square_in=context.config.layout.maze_square_in,
+        page_vector_in=VECTOR_SIZE_IN,
+    )
+    roles = context.catalog.roles()
+    return [
+        (asset, by_role[roles[str(asset.path)]]) for asset in context.catalog.all_files()
+    ]
+
+
 def cmd_book_validate(context: Context) -> int:
     config, profile = context.config, context.profile
     _say(f"book        {config.book.id} -- {config.book.title}")
@@ -126,7 +141,7 @@ def cmd_book_validate(context: Context) -> int:
     _say(f"mazes       {config.book.maze_count}, seed {config.book.seed}")
 
     assets = context.catalog.all_files()
-    reports = [validate_svg(asset.path) for asset in assets]
+    reports = [validate_svg(asset.path, profile=p) for asset, p in _asset_profiles(context)]
     raise_for_reports(reports, label=config.book.id)
     _say(f"assets      {len(assets)} SVG(s) pass the 18.5 subset")
 
@@ -258,6 +273,7 @@ def _write_maze_pdf(context: Context, loaded: LoadedMaze, band) -> None:
         maze_square_in=context.config.layout.maze_square_in,
         tally_position=context.config.layout.tally_position,
         show_maze_number=context.config.layout.show_maze_number,
+        outside_marker_fraction=band.outside_marker_fraction,
     )
     draw_maze_page(
         frame, loaded.maze, loaded.analysis, layout,

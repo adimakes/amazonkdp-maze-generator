@@ -98,7 +98,7 @@ def test_book_validate_reports_the_shape_of_the_book(
     assert run("book", "validate", str(halloween), "--output", str(tmp_path)) == EXIT_OK
     out = capsys.readouterr().out
     assert "jims-halloween-maze-adventure" in out
-    assert "22 SVG(s) pass" in out
+    assert "SVG(s) pass the 18.5 subset" in out
     assert "50 scene(s) fit" in out
     assert "112" in out
 

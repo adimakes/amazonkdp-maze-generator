@@ -74,6 +74,35 @@ class MazeGeometry:
             cell=cell,
         )
 
+    @staticmethod
+    def fitted_with_margins(
+        rows: int,
+        cols: int,
+        *,
+        box: tuple[float, float, float, float],
+        margins: "dict[str, float]",
+    ) -> "MazeGeometry":
+        """Fit the grid into ``box`` less the room its outside markers need.
+
+        Markers drawn outside the grid come out of the same 6.75 in square as
+        the grid, or they would sit in the page margin and fail the safe-area
+        check. The margins are absolute, not a share of a cell, because an
+        endpoint marker is not a cell: it should be the same size on the 8x8
+        opener as on the 18x18 finale, and a child should recognise it without
+        first working out which maze they are on.
+
+        Only the sides that carry a marker are charged for, so a maze whose
+        endpoints open north and south keeps its full width.
+        """
+        x0, y0, x1, y1 = box
+        inner = (
+            x0 + margins.get("W", 0.0), y0 + margins.get("N", 0.0),
+            x1 - margins.get("E", 0.0), y1 - margins.get("S", 0.0),
+        )
+        if inner[2] - inner[0] <= 0.0 or inner[3] - inner[1] <= 0.0:
+            raise ValueError("marker margins leave no room for the grid")
+        return MazeGeometry.fitted(rows, cols, box=inner)
+
     @property
     def width(self) -> float:
         return self.cell * self.cols
@@ -264,6 +293,83 @@ def asset_footprint(
     return Footprint(asset=asset, rect=(cx - half, cy - half, cx + half, cy + half))
 
 
+#: How far outside the grid a marker sits, as a fraction of one cell. Wide
+#: enough that the marker reads as standing *beside* the opening rather than
+#: plugging it, narrow enough that it still reads as attached to this maze.
+MARKER_GAP_FRACTION = 0.14
+
+
+def marker_footprint(
+    asset: PlacedAsset, side: str, geometry: MazeGeometry, *, size: float
+) -> Footprint:
+    """The square an endpoint marker occupies *outside* the grid, by its opening.
+
+    Drawn inside its cell, the start marker sits in a corridor a child is meant
+    to walk through, and on an interior cell it is simply lost in the middle of
+    the maze. Outside, it says the thing the page is for: here is where Jim
+    stands, and the gap in the wall next to him is the way in.
+
+    ``size`` is absolute, in the geometry's own units, and the square is centred
+    on the opening's axis so marker and gap line up however large the grid is.
+    """
+    x0, y0, x1, y1 = geometry.bounds
+    cx, cy = geometry.cell_centre(asset.cell)
+    half = size / 2.0
+    gap = size * MARKER_GAP_FRACTION
+
+    if side == "N":
+        rect = (cx - half, y0 - gap - size, cx + half, y0 - gap)
+    elif side == "S":
+        rect = (cx - half, y1 + gap, cx + half, y1 + gap + size)
+    elif side == "W":
+        rect = (x0 - gap - size, cy - half, x0 - gap, cy + half)
+    elif side == "E":
+        rect = (x1 + gap, cy - half, x1 + gap + size, cy + half)
+    else:  # pragma: no cover - border_opening only ever returns the four sides
+        raise ValueError(f"{side!r} is not one of N, E, S, W")
+    return Footprint(asset=asset, rect=rect)
+
+
+def marker_margins(maze: MazeData, *, size: float) -> dict[str, float]:
+    """Room to reserve outside each side of the grid, in the geometry's units."""
+    if size <= 0.0:
+        return {}
+    allowance = size * (1.0 + MARKER_GAP_FRACTION)
+    openings = border_opening(maze)
+    margins: dict[str, float] = {}
+    for asset in maze.assets:
+        if asset.role in (ROLE_START, ROLE_FINISH) and asset.cell in openings:
+            margins[openings[asset.cell]] = allowance
+    return margins
+
+
+def asset_footprints(
+    maze: MazeData,
+    geometry: MazeGeometry,
+    *,
+    scales: dict[str, float],
+    marker_size: float = 0.0,
+) -> list[Footprint]:
+    """Where every asset is drawn, decided once for all renderers.
+
+    Both the PDF page and the SVG draw from this list. Letting each work out on
+    its own whether an endpoint marker goes inside or outside its cell is the
+    same mistake as letting each infer walls: two answers to one question, and
+    the one that is wrong is whichever the reader is not looking at.
+    """
+    openings = border_opening(maze) if marker_size > 0.0 else {}
+    placements: list[Footprint] = []
+    for asset in maze.assets:
+        side = openings.get(asset.cell) if asset.role in (ROLE_START, ROLE_FINISH) else None
+        if side is None:
+            placements.append(
+                asset_footprint(asset, geometry, scale=scales.get(asset.role, asset.scale))
+            )
+        else:
+            placements.append(marker_footprint(asset, side, geometry, size=marker_size))
+    return placements
+
+
 def safe_inset_rect(
     cell: Cell, geometry: MazeGeometry, clearance_fraction: float
 ) -> tuple[float, float, float, float]:
@@ -278,6 +384,7 @@ def validate_placements(
     *,
     clearance_fraction: float,
     geometry: MazeGeometry | None = None,
+    marker_size: float = 0.0,
 ) -> list[str]:
     """Check every placement against 17.9. Returns violations, does not raise.
 
@@ -294,6 +401,7 @@ def validate_placements(
     """
     geometry = geometry or MazeGeometry.normalized(maze.rows, maze.cols)
     problems: list[str] = []
+    openings = border_opening(maze) if marker_size > 0.0 else {}
 
     traversable = set(maze.traversable_cells())
     adjacency = maze.adjacency()
@@ -319,6 +427,21 @@ def validate_placements(
 
         if asset.scale <= 0.0:
             problems.append(f"{label} has non-positive scale {asset.scale}")
+            continue
+
+        # An endpoint marker that is drawn outside the grid is not competing for
+        # room with a corridor, so the safe inset is not the rule it has to
+        # keep. What it does have to keep is being outside: a marker that
+        # reached back over the grid would cover the opening it is pointing at.
+        if asset.cell in openings and asset.role in (ROLE_START, ROLE_FINISH):
+            size = marker_size if marker_size > 0.0 else geometry.cell * asset.scale
+            rect = marker_footprint(asset, openings[asset.cell], geometry, size=size).rect
+            gx0, gy0, gx1, gy1 = geometry.bounds
+            if not (rect[2] <= gx0 + 1e-9 or rect[0] >= gx1 - 1e-9
+                    or rect[3] <= gy0 + 1e-9 or rect[1] >= gy1 - 1e-9):
+                problems.append(
+                    f"{label} is drawn outside the grid but its square still overlaps it"
+                )
             continue
 
         footprint = asset_footprint(asset, geometry)
@@ -352,10 +475,21 @@ def validate_placements(
     return problems
 
 
-def raise_for_placements(maze: MazeData, *, clearance_fraction: float) -> None:
+def raise_for_placements(
+    maze: MazeData,
+    *,
+    clearance_fraction: float,
+    marker_size: float = 0.0,
+    geometry: MazeGeometry | None = None,
+) -> None:
     from ..errors import RenderingError
 
-    problems = validate_placements(maze, clearance_fraction=clearance_fraction)
+    problems = validate_placements(
+        maze,
+        clearance_fraction=clearance_fraction,
+        marker_size=marker_size,
+        geometry=geometry,
+    )
     if problems:
         raise RenderingError(
             f"maze {maze.maze_index} has {len(problems)} asset placement violation(s)",

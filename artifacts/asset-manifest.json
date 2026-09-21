@@ -1,0 +1,128 @@
+{
+  "comment": [
+    "Maps supplied artwork to book-package assets. Source art is raster; the",
+    "package contract is SVG (PRD 17.9), so tools/import_artifacts.py traces each",
+    "entry through tools/vectorize.py into the 18.5 subset.",
+    "",
+    "mode 'solid' is for anything drawn inside a maze cell, where a finale",
+    "collectible prints at about 5.5 mm and an outline would close up on press.",
+    "mode 'outline' is for story-page decoration, which prints at 0.6 in and up.",
+    "",
+    "'cover' entries are not assets at all: a KDP cover is a separate colour PDF,",
+    "and the interior pipeline never reads them."
+  ],
+  "assets": [
+    {
+      "source": "Black_and_white_candy_corn_2K_20260917235811.jpeg",
+      "target": "maze-vectors/collectibles/candy_corn.svg",
+      "mode": "solid",
+      "options": {
+        "keep_knockouts": false
+      }
+    },
+    {
+      "source": "Black_and_white_gummy_worm_2K_20260918000426.jpeg",
+      "target": "maze-vectors/collectibles/gummy_worm.svg",
+      "mode": "solid",
+      "options": {
+        "keep_knockouts": true
+      }
+    },
+    {
+      "source": "Black_and_white_lollipop_icon_2K_20260917235852.jpeg",
+      "target": "maze-vectors/collectibles/lollipop.svg",
+      "mode": "solid",
+      "options": {
+        "keep_knockouts": false
+      }
+    },
+    {
+      "source": "Black_and_white_sweet_icon_2K_20260917235849.jpeg",
+      "target": "maze-vectors/collectibles/wrapped_sweet.svg",
+      "mode": "solid",
+      "options": {
+        "keep_knockouts": true
+      }
+    },
+    {
+      "source": "Chocolate_bar_icon_2K_20260917235800.jpeg",
+      "target": "maze-vectors/collectibles/chocolate_bar.svg",
+      "mode": "solid",
+      "options": {
+        "keep_knockouts": false
+      }
+    },
+    {
+      "source": "Black_and_white_ghost_icon_2K_20260918000303.jpeg",
+      "target": "maze-vectors/dead-end/ghost.svg",
+      "mode": "solid",
+      "options": {
+        "keep_knockouts": true
+      }
+    },
+    {
+      "source": "Black_and_white_gravestone_icon_2K_20260918000415.jpeg",
+      "target": "maze-vectors/dead-end/gravestone.svg",
+      "mode": "solid",
+      "options": {
+        "keep_knockouts": false
+      }
+    },
+    {
+      "source": "Black_and_white_spider_icon_2K_20260917235823.jpeg",
+      "target": "maze-vectors/dead-end/spider.svg",
+      "mode": "solid",
+      "options": {
+        "keep_knockouts": true
+      }
+    },
+    {
+      "source": "Black_and_white_spooky_tree_2K_20260917235831.jpeg",
+      "target": "maze-vectors/dead-end/bare_tree.svg",
+      "mode": "solid",
+      "options": {
+        "keep_knockouts": false
+      }
+    },
+    {
+      "source": "Kid_in_ghost_sheet_icon_2K_20260917235730.jpeg",
+      "target": "beginning-vectors/jim_start.svg",
+      "mode": "outline"
+    },
+    {
+      "source": "Black_and_white_pumpkin_bucket_2K_20260917235804.jpeg",
+      "target": "ending-vectors/candy_bucket.svg",
+      "mode": "outline"
+    },
+    {
+      "source": "Kid_in_ghost_sheet_icon_2K_20260917235730.jpeg",
+      "target": "page-vectors/jim_in_sheet.svg",
+      "mode": "outline"
+    },
+    {
+      "source": "Spooky_tree_vector_icon_2K_20260918000406.jpeg",
+      "target": "page-vectors/spooky_tree.svg",
+      "mode": "outline"
+    },
+    {
+      "source": "Spooky_Halloween_mansion_art_2K_20260918000956.jpeg",
+      "target": "page-vectors/haunted_house.svg",
+      "mode": "outline"
+    },
+    {
+      "source": "Spider_web_icon_2K_20260917235834.jpeg",
+      "target": "page-vectors/web_corner.svg",
+      "mode": "outline"
+    }
+  ],
+  "covers": [
+    {
+      "source": "Boy_running_from_Halloween_maze_2K_20260917223746.jpeg",
+      "face": "front"
+    },
+    {
+      "source": "BACK_COVER_\u2013__HALLOWEEN_MAZES_2K_20260917235030 (1).jpeg",
+      "face": "back"
+    }
+  ]
+}

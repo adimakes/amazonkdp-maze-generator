@@ -130,19 +130,35 @@ def min_endpoint_distance(rows: int, cols: int) -> int:
     return -(-((rows - 1) + (cols - 1)) // 2)
 
 
+def _on_border(cell: Cell, rows: int, cols: int) -> bool:
+    row, col = cell
+    return row in (0, rows - 1) or col in (0, cols - 1)
+
+
 def eligible_endpoint_pairs(
     rows: int,
     cols: int,
     start_region: dict[str, int],
     finish_region: dict[str, int],
+    *,
+    endpoints_on_border: bool = True,
 ) -> list[tuple[Cell, Cell]]:
     """Every (start, finish) pair the regions allow, in sorted order.
+
+    ``endpoints_on_border`` keeps both endpoints on an outer row or column. A
+    region is a rectangle, so a 3x3 corner region contains four interior cells,
+    and an endpoint landing on one of them leaves Jim standing in the middle of
+    the maze with no way in drawn. Only a border cell can carry an opening in
+    the outer wall, so only a border cell can say "start here" to a child.
 
     Raises ``ConfigError`` when the set is empty: that is a property of the
     config and the grid alone, so no number of attempts could fix it.
     """
     starts = resolve_region(start_region, rows, cols)
     finishes = resolve_region(finish_region, rows, cols)
+    if endpoints_on_border:
+        starts = [c for c in starts if _on_border(c, rows, cols)]
+        finishes = [c for c in finishes if _on_border(c, rows, cols)]
     floor = min_endpoint_distance(rows, cols)
     pairs = sorted(
         (s, f)
@@ -158,6 +174,7 @@ def eligible_endpoint_pairs(
                 "startCells": len(starts),
                 "finishCells": len(finishes),
                 "minDistance": floor,
+                "endpointsOnBorder": endpoints_on_border,
             },
         )
     return pairs
@@ -452,7 +469,8 @@ def generate_maze(
         generator = base_generator(config.generation.base_generator)
     attempts_allowed = max_attempts or config.generation.max_attempts_per_maze
     endpoint_pairs = eligible_endpoint_pairs(
-        band.rows, band.cols, config.generation.start_region, config.generation.finish_region
+        band.rows, band.cols, config.generation.start_region, config.generation.finish_region,
+        endpoints_on_border=config.generation.endpoints_on_border,
     )
 
     rejections: list[AttemptRecord] = []

@@ -147,7 +147,6 @@ class BookAssembler:
     def _draw_maze(self, frame: PdfFrame, record: PageRecord) -> None:
         loaded = self.mazes[record.maze_index]
         band = self.profile.band_for(record.maze_index)
-        raise_for_placements(loaded.maze, clearance_fraction=band.cell_clearance_fraction)
         layout = plan_maze_page(
             loaded.maze,
             metrics=self.metrics,
@@ -156,6 +155,13 @@ class BookAssembler:
             maze_square_in=self.config.layout.maze_square_in,
             tally_position=self.config.layout.tally_position,
             show_maze_number=self.config.layout.show_maze_number,
+            outside_marker_fraction=band.outside_marker_fraction,
+        )
+        raise_for_placements(
+            loaded.maze,
+            clearance_fraction=band.cell_clearance_fraction,
+            marker_size=layout.marker_size,
+            geometry=layout.geometry,
         )
         draw_maze_page(
             frame, loaded.maze, loaded.analysis, layout,
@@ -356,6 +362,7 @@ def write_maze_svg(
             "collectible": band.collectible_scale, "dead-end": band.dead_end_scale,
         },
         route=tuple(analysis.best_route) if with_solution else None,
+        marker_size=band.outside_marker_fraction * 72.0 * maze.cols,
     )
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(

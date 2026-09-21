@@ -43,7 +43,8 @@
     },
     "maxAttemptsPerMaze": 500,
     "baseGenerator": "mazelib_recursive_backtracker",
-    "exactRouteEnumeration": true
+    "exactRouteEnumeration": true,
+    "endpointsOnBorder": true
   },
   "layout": {
     "frontMatterPdf": "front-matter.pdf",
@@ -88,19 +89,19 @@
         "number": 3,
         "title": "Mirror Practice",
         "text": "Jim paints a white swirl on each cheek. Help him step past the toys and books to reach the tall mirror.",
-        "pageVector": "jim_head.svg"
+        "pageVector": "jim_in_sheet.svg"
       },
       {
         "number": 4,
         "title": "Soup Before Sweets",
         "text": "Mom says soup before sweets. Find a way through the busy kitchen so Jim can reach his warm bowl.",
-        "pageVector": "jim_head.svg"
+        "pageVector": "jim_in_sheet.svg"
       },
       {
         "number": 5,
         "title": "The Missing Flashlight",
         "text": "The flashlight rolled under the couch again. Help Jim wiggle past the pillows and boots to grab it.",
-        "pageVector": "jim_head.svg"
+        "pageVector": "jim_in_sheet.svg"
       },
       {
         "number": 6,
@@ -136,7 +137,7 @@
         "number": 11,
         "title": "The First Porch",
         "text": "The first house has a grinning pumpkin by the steps. Help Jim reach the doorbell and say trick or treat.",
-        "pageVector": "jim_head.svg"
+        "pageVector": "jim_in_sheet.svg"
       },
       {
         "number": 12,
@@ -166,7 +167,7 @@
         "number": 16,
         "title": "The Corner Store",
         "text": "The corner store window glows with orange lights. Find a path down the busy aisle to the candy counter.",
-        "pageVector": "jim_head.svg"
+        "pageVector": "jim_in_sheet.svg"
       },
       {
         "number": 17,
@@ -220,7 +221,7 @@
         "number": 25,
         "title": "The Quiet School Yard",
         "text": "The school yard is quiet and the swings sway in the breeze. Help Jim cross the blacktop to the open gate.",
-        "pageVector": "jim_head.svg"
+        "pageVector": "jim_in_sheet.svg"
       },
       {
         "number": 26,
@@ -370,7 +371,7 @@
         "number": 50,
         "title": "Home At Last",
         "text": "Jim's own porch light glows warm and yellow. Help him reach the steps, then dump out the bucket and count the candy.",
-        "pageVector": "jim_head.svg"
+        "pageVector": "jim_in_sheet.svg"
       }
     ],
     "endPage": {

@@ -21,6 +21,12 @@ from pathlib import Path
 from ..errors import AssetError
 from ..model.book_config import BookConfig
 
+ROLE_START = "start"
+ROLE_FINISH = "finish"
+ROLE_COLLECTIBLE = "collectible"
+ROLE_DEAD_END = "dead-end"
+ROLE_PAGE_VECTOR = "page-vector"
+
 #: The only extension a v1 book package may use (PRD 17.9).
 SVG_SUFFIX = ".svg"
 
@@ -111,6 +117,29 @@ class AssetCatalog:
         ):
             seen.setdefault(str(asset.path), asset)
         return sorted(seen.values(), key=lambda a: str(a.path))
+
+    def roles(self) -> dict[str, str]:
+        """Which role each asset file plays, keyed by path.
+
+        The role decides how big the artwork prints, and how big it prints
+        decides which rules it has to keep: a 0.6 in page decoration and a 5 mm
+        collectible are not the same job, and judging them by the same minimum
+        feature size rejects perfectly printable artwork for the decoration
+        while letting a hairline through on the icon.
+        """
+        assignment: dict[str, str] = {}
+        for asset in self.collectibles:
+            assignment[str(asset.path)] = ROLE_COLLECTIBLE
+        for asset in self.dead_ends:
+            assignment[str(asset.path)] = ROLE_DEAD_END
+        for asset in self.page_vectors.values():
+            assignment[str(asset.path)] = ROLE_PAGE_VECTOR
+        # Start and finish last: a file used both as a marker and as something
+        # else is held to the marker's rules, which are the stricter pairing of
+        # "printed large" and "must be recognised instantly".
+        assignment[str(self.start.path)] = ROLE_START
+        assignment[str(self.finish.path)] = ROLE_FINISH
+        return assignment
 
     def path_for(self, asset_id: str) -> Path:
         """Resolve an ``asset_id`` recorded in ``MazeData`` back to a file."""

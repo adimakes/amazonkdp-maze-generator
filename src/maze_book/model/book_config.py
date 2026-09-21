@@ -109,6 +109,9 @@ class PrintSpec:
 
 @dataclass(frozen=True)
 class GenerationSpec:
+    #: Keep both endpoints on an outer row or column, so each can carry an
+    #: opening in the border and a marker drawn outside it.
+    endpoints_on_border: bool
     start_region: dict[str, int]
     finish_region: dict[str, int]
     max_attempts_per_maze: int
@@ -452,6 +455,7 @@ def load_book_config(
             gutter_in=float(printing["gutterIn"]),
         ),
         generation=GenerationSpec(
+            endpoints_on_border=bool(generation.get("endpointsOnBorder", True)),
             start_region=dict(generation["startRegion"]),
             finish_region=dict(generation["finishRegion"]),
             max_attempts_per_maze=int(generation["maxAttemptsPerMaze"]),

@@ -23,6 +23,7 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import ClassVar, Sequence
 
 from ..errors import AssetError
 from . import svg_subset
@@ -72,6 +73,90 @@ class AssetProfile:
     #: 12 units long loses 78. The gap between those two is wide, and this
     #: threshold sits in it.
     lost_area_tolerance_units: float = 49.0
+
+    #: The thinnest line a print-on-demand press holds on cream stock. Every
+    #: other number in this class is a ratio; this one is the millimetre the
+    #: ratios are anchored to.
+    PRESS_LIMIT_MM: ClassVar[float] = 0.39
+
+    @classmethod
+    def for_print_size(
+        cls,
+        millimetres: float,
+        *,
+        max_subpaths: int | None = None,
+        **overrides: object,
+    ) -> "AssetProfile":
+        """The profile for artwork that prints at ``millimetres`` on the page.
+
+        7 units is not a property of SVG, it is 0.39 mm at the 5.5 mm size a
+        finale collectible prints at. Holding a 0.6 in page decoration to the
+        same 7 units asks it to be six times coarser than the press needs, which
+        is how a perfectly printable drawing gets rejected; holding a marker
+        drawn outside the grid to it is how a walking boy becomes a blob. So the
+        rule is stated once, in millimetres, and the units follow from the size.
+
+        The subpath budget is raised in step, because artwork with room for
+        finer strokes has room for more of them. 18.5's 12 is what the formula
+        gives at the finale size, so an icon-sized asset is judged exactly as
+        before.
+        """
+        millimetres = max(millimetres, 0.5)
+        units = cls.PRESS_LIMIT_MM / millimetres * 100.0
+        if max_subpaths is None:
+            # 12 subpaths at 5.5 mm, growing with the area the artwork has.
+            max_subpaths = max(12, int(round(12.0 * (millimetres / 5.5) ** 2)))
+        # A lost region is excused up to the area of a short limb at this width.
+        tolerance = max(4.0, units * units)
+        return cls(
+            min_feature_units=units,
+            max_subpaths=max_subpaths,
+            lost_area_tolerance_units=tolerance,
+            **overrides,  # type: ignore[arg-type]
+        )
+
+
+MM_PER_IN = 25.4
+
+
+def profiles_for_roles(
+    *,
+    bands: "Sequence[object]",
+    maze_square_in: float,
+    page_vector_in: float,
+) -> dict[str, AssetProfile]:
+    """The profile each asset role is judged by, from how big it actually prints.
+
+    Every number here is read off the book's own layout rather than assumed: the
+    smallest cell in the profile decides how small a collectible ever gets, the
+    marker fraction decides how big an endpoint marker is, and the story page
+    fixes the decoration. Artwork is then held to the rule its printed size
+    earns, which is the difference between rejecting a 0.6 in haunted house for
+    a hairline it does not have and catching a real one on a 5 mm sweet.
+    """
+    square_mm = maze_square_in * MM_PER_IN
+    cells_mm = [square_mm / max(b.rows, b.cols) for b in bands]  # type: ignore[attr-defined]
+    smallest_cell = min(cells_mm)
+    marker_mm = max(
+        (b.outside_marker_fraction * square_mm for b in bands),  # type: ignore[attr-defined]
+        default=0.0,
+    )
+    if marker_mm <= 0.0:
+        marker_mm = smallest_cell * min(
+            min(b.start_scale, b.finish_scale) for b in bands  # type: ignore[attr-defined]
+        )
+
+    return {
+        "collectible": AssetProfile.for_print_size(
+            smallest_cell * min(b.collectible_scale for b in bands)  # type: ignore[attr-defined]
+        ),
+        "dead-end": AssetProfile.for_print_size(
+            smallest_cell * min(b.dead_end_scale for b in bands)  # type: ignore[attr-defined]
+        ),
+        "start": AssetProfile.for_print_size(marker_mm),
+        "finish": AssetProfile.for_print_size(marker_mm),
+        "page-vector": AssetProfile.for_print_size(page_vector_in * MM_PER_IN),
+    }
 
 
 @dataclass

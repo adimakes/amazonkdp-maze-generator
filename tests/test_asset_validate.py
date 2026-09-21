@@ -468,12 +468,38 @@ def _shipped_svgs(repo_root: Path) -> list[Path]:
     return paths
 
 
-def test_every_shipped_asset_passes_the_full_18_5_rule_set(repo_root: Path) -> None:
+def test_every_shipped_asset_passes_the_rule_set_its_printed_size_earns(
+    repo_root: Path,
+) -> None:
+    """The sweep the build performs, over every shipped file.
+
+    Not one profile for all of them: 18.5's 7 units is 0.39 mm at the finale
+    collectible's size, and the same file blown up to a 0.6 in page decoration
+    or a marker drawn outside the grid has six times the room. Judging those by
+    the icon rule rejects drawings that print perfectly.
+    """
+    from maze_book.assets.catalog import load_catalog
+    from maze_book.assets.validate import profiles_for_roles
+    from maze_book.model.book_config import load_book_config
+    from maze_book.model.profile import load_profile
+    from maze_book.rendering.story_page import VECTOR_SIZE_IN
+
     failures = []
-    for path in _shipped_svgs(repo_root):
-        report = validate_svg(path)
-        if not report.passed:
-            failures.append(f"{path.relative_to(repo_root)}: {report.errors}")
+    for book in sorted((repo_root / "books").iterdir()):
+        if not (book / "book.json").is_file():
+            continue
+        config = load_book_config(book)
+        catalog = load_catalog(config)
+        by_role = profiles_for_roles(
+            bands=load_profile(repo_root / "profiles", config.book.profile_id).bands,
+            maze_square_in=config.layout.maze_square_in,
+            page_vector_in=VECTOR_SIZE_IN,
+        )
+        roles = catalog.roles()
+        for asset in catalog.all_files():
+            report = validate_svg(asset.path, profile=by_role[roles[str(asset.path)]])
+            if not report.passed:
+                failures.append(f"{asset.path.relative_to(repo_root)}: {report.errors}")
     assert failures == []
 
 

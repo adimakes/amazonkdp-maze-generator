@@ -22,7 +22,7 @@ from ..errors import RenderingError
 from ..model.analysis import MazeAnalysis
 from ..model.maze_data import MazeData
 from ..model.profile import Band
-from .geometry import MazeGeometry, asset_footprint, wall_segments
+from .geometry import MazeGeometry, asset_footprints, marker_margins, wall_segments
 from .page import PT_PER_IN, Box, PageMetrics
 from .svg import AssetGeometryCache
 from .svg_to_pdf import PdfFrame, place_document
@@ -57,6 +57,9 @@ class MazePageLayout:
     tick_label_origin: tuple[float, float]
     number_origin: tuple[float, float] | None
     geometry: MazeGeometry
+    #: Side of the endpoint markers drawn outside the grid, in points. 0 keeps
+    #: them inside their cells.
+    marker_size: float = 0.0
 
     def bounding_box(self) -> Box:
         boxes = [self.maze_box, self.tally_box]
@@ -75,6 +78,7 @@ def plan_maze_page(
     maze_square_in: float,
     tally_position: str = "below",
     show_maze_number: bool = True,
+    outside_marker_fraction: float = 0.0,
 ) -> MazePageLayout:
     if tally_position not in ("below", "right"):
         raise RenderingError(
@@ -107,6 +111,10 @@ def plan_maze_page(
             f"live area; reduce layout.mazeSquareIn or the margins"
         )
 
+    # The markers come out of the maze square, not out of the page margin:
+    # anything drawn beyond this box is outside the safe area preflight checks.
+    marker_size = outside_marker_fraction * square
+
     ticks, total_box, labels = _plan_tally(tally_box, candy_count, tally_position)
 
     number_origin = None
@@ -123,7 +131,11 @@ def plan_maze_page(
         best_label_origin=labels[1],
         tick_label_origin=labels[2],
         number_origin=number_origin,
-        geometry=MazeGeometry.fitted(maze.rows, maze.cols, box=maze_box),
+        geometry=MazeGeometry.fitted_with_margins(
+            maze.rows, maze.cols, box=maze_box,
+            margins=marker_margins(maze, size=marker_size),
+        ),
+        marker_size=marker_size,
     )
 
 
@@ -202,9 +214,10 @@ def draw_maze_page(
         "start": band.start_scale, "finish": band.finish_scale,
         "collectible": band.collectible_scale, "dead-end": band.dead_end_scale,
     }
-    for asset in maze.assets:
-        document = cache.get(catalog.path_for(asset.asset_id))
-        footprint = asset_footprint(asset, geometry, scale=scales.get(asset.role, asset.scale))
+    for footprint in asset_footprints(
+        maze, geometry, scales=scales, marker_size=layout.marker_size
+    ):
+        document = cache.get(catalog.path_for(footprint.asset.asset_id))
         place_document(frame, document, footprint.rect)
 
     _draw_tally(

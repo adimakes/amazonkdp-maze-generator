@@ -170,6 +170,7 @@
         "exactRouteEnumeration"
       ],
       "properties": {
+        "endpointsOnBorder": { "type": "boolean" },
         "startRegion": {
           "$ref": "#/$defs/region"
         },
