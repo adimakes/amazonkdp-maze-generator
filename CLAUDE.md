@@ -198,7 +198,30 @@ Two rules hold this together:
   on others -- two markers on one axis cost that axis twice, one per axis costs
   each once -- so the maze visibly grew and slid from page to page.
 
-## SVG asset contract
+## Two kinds of asset, one contract
+
+A book may ship vector assets or bitonal rasters, in the same folders. The
+contract is the folder name and the composition; the file format is not.
+
+Tracing a supplied drawing into the subset is how the artwork gets destroyed:
+thresholding, morphology and curve fitting each throw away detail, and the
+result validates cleanly because every rule it breaks is a rule about lines the
+drawing no longer has. `tools/import_rasters.py` thresholds and stops.
+
+Two things keep a raster book monochrome, and both are easy to undo by accident:
+
+- **`_GrayImageReader`** exists because ReportLab converts every image to 8-bit
+  DeviceRGB whatever it is handed, which declares a colour space for a press
+  that prints one ink.
+- **Assets are stored at 600 dpi for their own printed size.** A flat pixel
+  count makes an icon 2950 dpi at 5 mm, and the RIP resamples it back out with
+  averaging that shows as grey along every edge.
+
+Preflight measures rather than bans: `images-print-ready` reads the drawn size
+out of the content stream, so an asset stored for a 5 mm icon is not failed for
+being too small to be a title page.
+
+## SVG asset contract (vector assets)
 
 Assets are validated (`assets/validate.py`) against a hard subset, and the *same* subset
 definition drives the minimal internal SVG→ReportLab converter

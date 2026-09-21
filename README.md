@@ -297,6 +297,9 @@ drives the internal SVG→PDF converter. One subset, two consumers — never two
 dialects, because a second SVG code path is how the on-screen proof and the
 printed page diverge.
 
+**Vector assets** are validated against a hard subset, and the *same* subset
+definition drives the internal SVG→PDF converter:
+
 | Rule | Requirement |
 |---|---|
 | Format | SVG 1.1, `viewBox="0 0 100 100"`, no `width`/`height` |
@@ -306,6 +309,18 @@ printed page diverge.
 | Composition | centred within 12 units, ≥ 6 units of padding, ≤ 85% coverage |
 | Detail | no feature or gap thinner than the printed-size rule below, and a subpath budget that scales with it |
 | Forbidden | text, raster, gradients, opacity, filters, external references |
+
+**Raster assets** are judged on the two questions that decide whether a picture
+prints:
+
+| Rule | Requirement |
+|---|---|
+| Format | PNG, square, pure black and white — no level between 0 and 255 |
+| Composition | ≥ 4% padding, ink centred within 12%, ≤ 85% coverage |
+| Resolution | ≥ 300 dpi at the size it is *drawn*, which preflight reads out of the finished PDF |
+
+Grey is the one thing a monochrome press cannot take: it halftones. JPEG is
+rejected for the same reason — its artefacts around a hard black edge are grey.
 
 **No `<circle>`, `<rect>`, `<ellipse>` or `<line>`** — every shape is a `<path>`.
 
@@ -332,40 +347,25 @@ gap that wide, which is why icon art has to be chunky.
 
 ### Turning supplied artwork into assets
 
-`tools/vectorize.py` traces a raster drawing into the subset, and
-`tools/import_artifacts.py` does a whole folder from a manifest, validating each
-result **before** it writes it so a failed trace cannot leave an invalid asset in
-the package:
+If the artwork arrives as a picture, it ships as a picture:
 
 ```bash
-uv run python tools/import_artifacts.py books/my-new-book
+uv run python tools/import_rasters.py books/my-new-book
 ```
 
-The manifest (`artifacts/asset-manifest.json`) names a source image, a target
-path, and how to treat the drawing. That last choice is the one worth
-understanding:
+That thresholds each source with Otsu, crops to the ink, pads to a centred
+square, and writes a bitonal PNG sized at 600 dpi for the printed size that
+asset's role actually reaches.
 
-* `solid` rebuilds the drawing as a filled silhouette with its white interior
-  kept as holes. At icon size the white inside the black *is* the drawing —
-  filling it turns a ghost into a blob and a gravestone loses its cross.
-* `outline` keeps the drawn line as ink, widened until it prints. Only worth it
-  where the artwork is big on the page: at a 5 mm collectible, widening a
-  hairline to 0.39 mm welds the whole drawing shut.
-* `keep_knockouts: false` fills the body flat. Whether a drawing reads better
-  hollow or solid is a judgement about that one drawing, so it is recorded per
-  asset rather than guessed from a threshold.
+**Tracing artwork into the vector subset loses the drawing.** Thresholding,
+morphology and curve fitting each throw something away, and what comes out the
+far end validates cleanly while looking nothing like the source — a ghost with
+no eyes, a pumpkin bucket with no face. The subset is the right contract for
+artwork you are *drawing* as flat shapes. It is the wrong one for artwork that
+arrives as a picture.
 
-Not every drawing survives. A figure whose line is 0.73 units wide in a 100-unit
-box cannot be printed at 14 mm, because widening it to the 2.7 units the press
-needs welds arm to body. Render both treatments, look at them, and pick — or
-pick a different drawing.
-
-`tools/make_placeholder_assets.py` generates a placeholder set from a cubic-only
-primitive library and can check its own output:
-
-```bash
-uv run python tools/make_placeholder_assets.py books/my-new-book --check
-```
+A book may ship either, or both. The contract is the folder and the composition,
+not the file format.
 
 ---
 

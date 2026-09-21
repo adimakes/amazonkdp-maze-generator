@@ -33,7 +33,7 @@ uv run maze-book book validate books/<new-book-id>
 Then work in this order, because each step constrains the next:
 
 1. **Profile** — grid sizes decide how big every icon prints.
-2. **Assets** — printed size decides which drawings survive.
+2. **Assets** — printed size decides how they are stored and judged.
 3. **Scenes** — the asset roster decides what the story can refer to.
 4. **Front matter and cover** — the built interior decides the spine.
 5. **Review** — by looking at rendered pages, not by reading config.
@@ -76,76 +76,72 @@ to accept zero mazes.
 
 ---
 
-## 2. Assets: what survives, and how you find out
+## 2. Assets: place the artwork, do not trace it
 
-`tools/import_artifacts.py` traces a manifest of raster artwork into the subset,
-validating each result against the profile its printed size earns **before**
-writing it. The manifest records one judgement per drawing, and that judgement
-has to be made by looking.
-
-### Render both treatments and choose
+**If the artwork arrives as a picture, ship it as a picture.** This was learned
+the expensive way. Tracing a drawing into the SVG subset means thresholding,
+morphology and curve fitting, and each step throws away what the illustrator
+drew: the ghost lost its eyes, the pumpkin bucket its face, the spider its legs.
+Every traced file validated cleanly, because every rule it broke was a rule
+about lines the drawing no longer had.
 
 ```bash
-# trace one file both ways and compare
-uv run python tools/vectorize.py <source.jpeg> /tmp/a.svg --mode solid
-uv run python tools/vectorize.py <source.jpeg> /tmp/b.svg --mode solid --flat
+uv run python tools/import_rasters.py books/<book-id>
 ```
 
-Then rasterize both at the size they will print and put them side by side. A
-contact sheet of the whole folder is worth more than any single file:
+That thresholds with Otsu, crops to the ink, pads to a centred square and writes
+a bitonal PNG. It does the one unavoidable step and stops.
 
-```python
-from maze_book.assets.svg_subset import parse_svg
-from maze_book.assets.validate import rasterize
-mask = rasterize(parse_svg(path), samples_per_unit=150 / 100.0)
-```
+### When a vector asset is still right
 
-### What each treatment is for
+Draw the asset as flat shapes, in the subset, when *you* are making the artwork
+and it is geometric. Both kinds can live in one book; the contract is the folder
+and the composition, not the file format.
 
-| Mode | Use when | Why |
-|---|---|---|
-| `solid` | the drawing is an outline and prints small | a contour at 5 mm is 0.22 mm and closes up; the silhouette has to carry it |
-| `solid` + `keep_knockouts: false` | the white inside is just fill | candy corn reads as a cone; hollow it reads as an outline of a cone |
-| `outline` | the artwork prints large | keeps the drawn line, widened until it prints |
+### The two things that decide whether a picture prints
 
-**The knockouts are usually the drawing.** At icon size the white inside the
-black is what the eye reads: fill it and a ghost becomes a blob, a gravestone
-loses its cross, a web becomes a triangle. `solidify()` keeps them by default.
-Turn them off only when the white was never a feature.
+| Question | Where it is answered |
+|---|---|
+| Is every pixel pure black or white? | `check_raster` at validate time, and preflight on the finished PDF |
+| Are there enough pixels for the size it is drawn at? | both, and preflight reads the **drawn** size out of the content stream |
 
-### The arithmetic that decides whether a drawing can work at all
+Grey is the one thing a monochrome press cannot take: it halftones. That is why
+the importer re-thresholds after any resample, and why `load_raster` rejects a
+file with levels between 0 and 255.
 
-Measure the drawn line as a fraction of the drawing's width, in a 100-unit box.
-Compare it to what the press needs at the printed size:
+### Two traps worth knowing before you start
 
-```
-needed_units = 0.39 mm / printed_mm * 100
-```
+**Store each asset at 600 dpi for its own printed size, not at a flat pixel
+count.** An icon kept at 1400 px is 2950 dpi at 5 mm; the RIP resamples all of
+that back out again, and the averaging shows as grey along every edge. The
+importer computes the printed size per role and sizes accordingly.
 
-If the line is much thinner than that, widening it welds neighbouring strokes
-together before anything reads. A figure whose line is 0.73 units wide cannot
-print at 14 mm — that was true at 15, 20, 26 and 32 mm when tested. **No
-parameter fixes it. Pick a different drawing.**
+**ReportLab converts every image to 8-bit DeviceRGB whatever it is handed.** On
+a monochrome interior that declares a colour space for a press that prints one
+ink, which is the difference between a black-and-white book and a colour one at
+KDP's prices. `_GrayImageReader` in `rendering/svg_to_pdf.py` overrides the two
+members ReportLab actually reads. If you touch image placement, check the
+`color-space-devicegray` and `images-print-ready` checks still pass.
 
 ### Choosing the roster
 
-- **Candy must not look like scenery.** Both are black silhouettes of similar
-  weight, so size is the only signal: keep `collectibleScale` and
-  `deadEndScale` at least 1.3× apart. Don't push further than the finale cell
-  allows — an unreadable smudge is not a clearer signal than a small one.
-- **Print a key.** The how-to-play page shows the collectibles under one
-  heading and the decorations under another, **at the real size ratio**. Rows
-  drawn the same size teach the opposite of what the page says.
-- **One character.** The start marker, the story-page figure and any decoration
-  must not be three different drawings of the same person, and the character's
-  own drawing must not appear as page decoration (`assets.mazeDecorations`
-  excludes it) — a child reads that as a second protagonist standing somewhere
-  meaningless.
-- **Drop what does not read.** A corner-anchored web drawn centred in a cell
-  reads as floating arcs. Six good dead-end icons beat nine with three
-  passengers.
+Judge the assets by looking at them at the size they print:
 
----
+```python
+from PIL import Image
+Image.open(path).resize((140, 140))   # ~11.8 mm at 300 dpi
+```
+
+- **Candy must not look like scenery.** Size is the only signal when both are
+  black drawings of similar weight: keep `collectibleScale` and `deadEndScale`
+  at least 1.3x apart, and no further than the finale cell allows.
+- **Print a key** on the how-to-play page, at the real size ratio. Rows drawn
+  the same size teach the opposite of what the page says.
+- **One character.** The start marker, the story-page figure and any decoration
+  must not be three different drawings of the same person.
+- **Drop what does not read**, and check what the drawing *is*: a
+  corner-anchored cobweb drawn centred in a cell reads as floating arcs
+  wherever you put it.
 
 ## 3. Scenes: fifty of them, and they must not sound like fifty
 
