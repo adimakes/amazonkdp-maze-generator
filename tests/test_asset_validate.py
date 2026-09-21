@@ -463,9 +463,9 @@ def test_geometry_false_skips_the_rasterized_rules_only() -> None:
 
 
 def _shipped_svgs(repo_root: Path) -> list[Path]:
-    paths = sorted(repo_root.glob("books/*/assets/**/*.svg"))
-    assert paths, "expected the Halloween book package to ship SVG assets"
-    return paths
+    """Vector assets across every shipped package. May legitimately be empty:
+    a book whose artwork arrived as pictures ships rasters instead."""
+    return sorted(repo_root.glob("books/*/assets/**/*.svg"))
 
 
 def test_every_shipped_asset_passes_the_rule_set_its_printed_size_earns(
@@ -484,6 +484,8 @@ def test_every_shipped_asset_passes_the_rule_set_its_printed_size_earns(
     from maze_book.model.profile import load_profile
     from maze_book.rendering.story_page import VECTOR_SIZE_IN
 
+    from maze_book.assets.raster import check_raster, is_raster, load_raster
+
     failures = []
     for book in sorted((repo_root / "books").iterdir()):
         if not (book / "book.json").is_file():
@@ -497,15 +499,22 @@ def test_every_shipped_asset_passes_the_rule_set_its_printed_size_earns(
         )
         roles = catalog.roles()
         for asset in catalog.all_files():
+            if is_raster(asset.path):
+                problems = check_raster(load_raster(asset.path))
+                if problems:
+                    failures.append(f"{asset.path.relative_to(repo_root)}: {problems}")
+                continue
             report = validate_svg(asset.path, profile=by_role[roles[str(asset.path)]])
             if not report.passed:
                 failures.append(f"{asset.path.relative_to(repo_root)}: {report.errors}")
     assert failures == []
 
 
-def test_no_shipped_asset_contains_a_stroke_attribute(repo_root: Path) -> None:
+def test_no_shipped_svg_asset_contains_a_stroke_attribute(repo_root: Path) -> None:
     """Belt and braces alongside A1: a grep-level check states the 18.5 rule in
-    the form an illustrator will actually search for."""
+    the form an illustrator will actually search for. Vector assets only -- a
+    raster one has no strokes to carry, and reading a PNG as text is how this
+    test would start failing for a reason that has nothing to do with strokes."""
     offenders = [
         str(path.relative_to(repo_root))
         for path in _shipped_svgs(repo_root)
@@ -522,4 +531,6 @@ def test_the_halloween_package_ships_the_folders_the_contract_names(repo_root: P
     ):
         directory = book / folder
         assert directory.is_dir(), folder
-        assert list(directory.glob("*.svg")), f"{folder} is empty"
+        # The folder names are the contract; the file format is not.
+        assets = list(directory.glob("*.svg")) + list(directory.glob("*.png"))
+        assert assets, f"{folder} is empty"

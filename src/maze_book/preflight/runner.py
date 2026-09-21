@@ -33,6 +33,10 @@ from .checks import (
 )
 
 
+#: What a print-on-demand press resolves, in dots per inch.
+PRESS_DPI = 300.0
+
+
 def run_preflight(
     pdf: Path,
     *,
@@ -76,7 +80,7 @@ def run_preflight(
     check_pages(report, reader, expected_count=expected, width_pt=width_pt, height_pt=height_pt)
     check_fonts(report, reader)
     check_color_and_ink(report, reader)
-    check_raster_and_transparency(report, reader)
+    check_raster_and_transparency(report, reader, min_dpi=PRESS_DPI)
     check_parity(report, plan_obj)
 
     # `gutterIn` is recorded separately from `safeMarginsIn.inside` and is not

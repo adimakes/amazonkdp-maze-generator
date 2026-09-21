@@ -135,6 +135,74 @@ def _asset_profiles(context: "Context") -> list[tuple[object, object]]:
     ]
 
 
+def _validate_assets(context: "Context") -> tuple[int, int]:
+    """Judge every asset by the rules its *kind* and its printed size earn.
+
+    A vector asset is measured against the 18.5 subset; a raster one against the
+    bitonal rules, which ask the two questions that decide whether a picture
+    prints -- is every pixel pure black or white, and are there enough of them.
+    One sweep, so a book that mixes the two fails once with every file named.
+    """
+    from .assets.raster import check_raster, is_raster, load_raster
+    from .errors import AssetError
+    from .rendering.story_page import VECTOR_SIZE_IN
+
+    printed = _printed_inches(context, VECTOR_SIZE_IN)
+    roles = context.catalog.roles()
+    reports, problems = [], []
+    vectors = rasters = 0
+
+    for asset, profile in _asset_profiles(context):
+        if not is_raster(asset.path):
+            reports.append(validate_svg(asset.path, profile=profile))
+            vectors += 1
+            continue
+        rasters += 1
+        try:
+            measured = load_raster(asset.path)
+        except AssetError as error:
+            problems.append(str(error))
+            continue
+        role = roles[str(asset.path)]
+        problems.extend(
+            f"{asset.path.name}: {problem}"
+            for problem in check_raster(measured, printed_inches=printed.get(role))
+        )
+
+    raise_for_reports(reports, label=context.config.book.id)
+    if problems:
+        raise AssetError(
+            f"{len(problems)} raster asset problem(s) in {context.config.book.id}",
+            details=problems,
+        )
+    return vectors, rasters
+
+
+def _printed_inches(context: "Context", page_vector_in: float) -> dict[str, float]:
+    """The largest printed size each role reaches, in inches.
+
+    Largest, not smallest: a vector asset is judged at the size where its lines
+    get thinnest, but a raster one is judged at the size where its pixels get
+    biggest, and those are opposite ends of the book.
+    """
+    bands = context.profile.bands
+    square = context.config.layout.maze_square_in
+    largest_cell = max(square / max(band.rows, band.cols) for band in bands)
+    marker = max(band.outside_marker_fraction * square for band in bands)
+    return {
+        "collectible": largest_cell * max(b.collectible_scale for b in bands),
+        "dead-end": largest_cell * max(b.dead_end_scale for b in bands),
+        "start": max(marker, TITLE_FIGURE_IN),
+        "finish": max(marker, END_FIGURE_IN),
+        "page-vector": page_vector_in,
+    }
+
+
+#: The two places an endpoint asset is drawn larger than its marker.
+TITLE_FIGURE_IN = 2.4
+END_FIGURE_IN = 2.0
+
+
 def cmd_book_validate(context: Context) -> int:
     config, profile = context.config, context.profile
     _say(f"book        {config.book.id} -- {config.book.title}")
@@ -142,9 +210,11 @@ def cmd_book_validate(context: Context) -> int:
     _say(f"mazes       {config.book.maze_count}, seed {config.book.seed}")
 
     assets = context.catalog.all_files()
-    reports = [validate_svg(asset.path, profile=p) for asset, p in _asset_profiles(context)]
-    raise_for_reports(reports, label=config.book.id)
-    _say(f"assets      {len(assets)} SVG(s) pass the 18.5 subset")
+    vectors, rasters = _validate_assets(context)
+    _say(
+        f"assets      {len(assets)} file(s) pass "
+        f"({vectors} vector, {rasters} raster)"
+    )
 
     from .content.loader import prepare_scenes
     from .rendering.page import PageMetrics

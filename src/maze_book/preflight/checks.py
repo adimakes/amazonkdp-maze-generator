@@ -288,11 +288,40 @@ def check_color_and_ink(report: PreflightReport, reader) -> None:
     )
 
 
-def check_raster_and_transparency(report: PreflightReport, reader) -> None:
-    images: list[str] = []
+#: ReportLab draws an image as "q <w> 0 0 <h> <x> <y> cm /Name Do Q". The
+#: matrix carries the drawn size in points, which is the other half of the
+#: resolution question: pixels alone say nothing until you know how big they
+#: are printed.
+_IMAGE_DRAW_RE = re.compile(
+    rb"([-\d.]+)\s+0\s+0\s+([-\d.]+)\s+[-\d.]+\s+[-\d.]+\s+cm\s*/([A-Za-z0-9_.]+)\s+Do"
+)
+
+
+def check_raster_and_transparency(
+    report: PreflightReport, reader, *, min_dpi: float = 300.0
+) -> None:
+    """Embedded images must be print-ready; transparency must be flattened.
+
+    This check used to demand vector only. That was the right rule while every
+    asset was drawn as flat shapes, and the wrong one as soon as a book shipped
+    artwork that arrived as a picture: tracing a drawing into the subset throws
+    away what the illustrator drew, and the traced result passes every rule
+    about lines the drawing no longer has.
+
+    So images are allowed and inspected instead. A monochrome press needs two
+    things from one: no grey to halftone, and enough pixels for the size it is
+    drawn at. The second is measured rather than assumed -- the drawn size comes
+    out of the content stream, so an asset stored for a 5 mm icon is not failed
+    for being too small to be a title page.
+    """
+    problems: list[str] = []
     groups: list[str] = []
+    checked = 0
+    worst = float("inf")
+
     for index, page in enumerate(reader.pages, start=1):
         resources = page.get("/Resources")
+        images: dict[str, Any] = {}
         if resources is not None:
             xobjects = resources.get_object().get("/XObject")
             if xobjects is not None:
@@ -300,7 +329,11 @@ def check_raster_and_transparency(report: PreflightReport, reader) -> None:
                     obj = ref.get_object()
                     subtype = str(obj.get("/Subtype", ""))
                     if subtype == "/Image":
-                        images.append(f"page {index}: {name}")
+                        images[str(name).lstrip("/")] = obj
+                        problems.extend(
+                            f"page {index}: {name} {problem}"
+                            for problem in _image_problems(obj)
+                        )
                     elif "/Group" in obj:
                         groups.append(f"page {index}: {name}")
             if "/ExtGState" in resources.get_object():
@@ -311,16 +344,66 @@ def check_raster_and_transparency(report: PreflightReport, reader) -> None:
                             groups.append(f"page {index}: {name} {key}={state[key]}")
         if "/Group" in page:
             groups.append(f"page {index}: page group")
+
+        if not images:
+            continue
+        for width_pt, height_pt, name in _IMAGE_DRAW_RE.findall(_content_bytes(page)):
+            image = images.get(name.decode("latin-1"))
+            if image is None:
+                continue
+            checked += 1
+            inches = max(float(width_pt), float(height_pt)) / 72.0
+            pixels = max(int(image.get("/Width", 0)), int(image.get("/Height", 0)))
+            dpi = pixels / inches if inches > 0 else float("inf")
+            worst = min(worst, dpi)
+            if dpi < min_dpi:
+                problems.append(
+                    f"page {index}: /{name.decode('latin-1')} is {pixels} px drawn "
+                    f"at {inches:.2f} in, which is {dpi:.0f} dpi against {min_dpi:.0f}"
+                )
+
     report.add(
-        "no-raster-images",
-        not images,
-        ", ".join(images[:5]) if images else "vector only",
+        "images-print-ready",
+        not problems,
+        ", ".join(problems[:5])
+        if problems
+        else (
+            f"{checked} placement(s), bitonal, worst {worst:.0f} dpi"
+            if checked
+            else "vector only"
+        ),
     )
     report.add(
         "transparency-flattened",
         not groups,
         ", ".join(groups[:5]) if groups else "no transparency groups or soft alpha",
     )
+
+
+#: Colour spaces a monochrome interior may use for an image. Anything else puts
+#: separations on a press that prints one.
+_GRAY_SPACES = {"/DeviceGray", "/CalGray"}
+
+
+def _image_problems(image) -> list[str]:
+    """What is wrong with the image's data, independent of how big it is drawn."""
+    problems: list[str] = []
+    is_mask = bool(image.get("/ImageMask", False))
+    space = image.get("/ColorSpace")
+    if not is_mask and str(space) not in _GRAY_SPACES:
+        problems.append(f"is {space}, not DeviceGray")
+    if not is_mask and _has_grey_levels(image):
+        problems.append("carries grey levels between black and white")
+    return problems
+
+
+def _has_grey_levels(image) -> bool:
+    """Whether the image data holds any value that is not 0 or 255."""
+    try:
+        data = image.get_data()
+    except Exception:  # pragma: no cover - undecodable filter
+        return True
+    return any(byte not in (0, 255) for byte in data[:65536])
 
 
 def check_parity(report: PreflightReport, plan_obj: dict[str, Any]) -> None:

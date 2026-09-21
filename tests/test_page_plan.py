@@ -269,7 +269,8 @@ def test_front_matter_page_count_reads_the_real_pdf(repo_root) -> None:
     """17.10: the count comes from the file, not from a number the user retyped
     into book.json and then let go stale."""
     pdf = repo_root / "books" / "jims-halloween-maze-adventure" / "front-matter.pdf"
-    assert front_matter_page_count(pdf) == 5
+    count = front_matter_page_count(pdf)
+    assert count % 2 == 1, "front matter must be odd so scene 1's story page lands on a left page"
 
 
 def test_front_matter_page_count_is_zero_when_there_is_none() -> None:

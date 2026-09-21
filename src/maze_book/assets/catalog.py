@@ -20,6 +20,7 @@ from pathlib import Path
 
 from ..errors import AssetError
 from ..model.book_config import BookConfig
+from .raster import RASTER_SUFFIXES
 
 ROLE_START = "start"
 ROLE_FINISH = "finish"
@@ -29,6 +30,11 @@ ROLE_PAGE_VECTOR = "page-vector"
 
 #: The only extension a v1 book package may use (PRD 17.9).
 SVG_SUFFIX = ".svg"
+
+#: A book may ship vector assets, bitonal raster ones, or both. Artwork that
+#: arrives as a picture loses the drawing when it is traced into the subset,
+#: so the contract is the folder and the composition, not the file format.
+ASSET_SUFFIXES = (SVG_SUFFIX, *RASTER_SUFFIXES)
 
 POLICY_RANDOM = "random-from-folder"
 POLICY_FIRST = "first-in-folder"
@@ -58,11 +64,13 @@ def discover(directory: Path, *, field_name: str, require_nonempty: bool = True)
     if not directory.is_dir():
         raise AssetError(f"{field_name} is not a directory: {directory}")
     files = sorted(
-        (p for p in directory.iterdir() if p.is_file() and p.suffix.lower() == SVG_SUFFIX),
+        (p for p in directory.iterdir() if p.is_file() and p.suffix.lower() in ASSET_SUFFIXES),
         key=lambda p: p.name,
     )
     if require_nonempty and not files:
-        raise AssetError(f"{field_name} contains no {SVG_SUFFIX} files: {directory}")
+        raise AssetError(
+            f"{field_name} contains no {' or '.join(ASSET_SUFFIXES)} files: {directory}"
+        )
     return [AssetFile(asset_id=p.name, path=p) for p in files]
 
 
@@ -179,8 +187,10 @@ def load_catalog(config: BookConfig) -> AssetCatalog:
     for name, path in (("assets.startAsset", start_path), ("assets.finishAsset", finish_path)):
         if not path.is_file():
             raise AssetError(f"{name} does not exist: {path}")
-        if path.suffix.lower() != SVG_SUFFIX:
-            raise AssetError(f"{name} must be an {SVG_SUFFIX} file: {path.name}")
+        if path.suffix.lower() not in ASSET_SUFFIXES:
+            raise AssetError(
+                f"{name} must be one of {', '.join(ASSET_SUFFIXES)}: {path.name}"
+            )
 
     page_dir = config.page_vectors_dir
     page_vectors: dict[str, AssetFile] = {}

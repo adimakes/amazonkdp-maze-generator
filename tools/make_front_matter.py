@@ -365,22 +365,8 @@ def build_front_matter(book_dir: Path, out_path: Path) -> None:
     c.setTitle(title)
     c.setSubject(subtitle)
 
-    # ---- Page 1: title page (recto) ----
+    # ---- Page 1: copyright (recto) ----
     pw = PageWriter(c, 1)
-    y = PAGE_HEIGHT_PT * 0.40
-    y = pw.centred_wrapped(y, title, TITLE_FONT, 30, 36)
-    y -= 18
-    if subtitle:
-        y = pw.centred_wrapped(y, subtitle, BODY_FONT, 15, 21)
-    author = meta.get("author")
-    if author:
-        y -= 16
-        y = pw.centred_wrapped(y, author, BODY_FONT, 13, 19)
-    _draw_title_figure(c, book_dir, y + (62.0 if author else 46.0))
-    c.showPage()
-
-    # ---- Page 2: copyright page (verso) ----
-    pw = PageWriter(c, 2)
     y = pw.content_top - 220
     holder = meta.get("author") or title
     copyright_lines = [
@@ -398,8 +384,8 @@ def build_front_matter(book_dir: Path, out_path: Path) -> None:
         y -= 8
     c.showPage()
 
-    # ---- Page 3: how to play (recto) ----
-    pw = PageWriter(c, 3)
+    # ---- Page 2: how to play (verso) ----
+    pw = PageWriter(c, 2)
     y = pw.content_top - 20 * PageWriter.ASCENT_RATIO
     pw.centred(y, "HOW TO PLAY", TITLE_FONT, 20)
     y -= 38
@@ -415,25 +401,17 @@ def build_front_matter(book_dir: Path, out_path: Path) -> None:
     y = _draw_icon_key(c, pw, book_dir, y - 26)
     c.showPage()
 
-    # ---- Page 4: dedication / from-the-author page (verso) ----
-    pw = PageWriter(c, 4)
-    y = PAGE_HEIGHT_PT * 0.56
-    dedication_lines = book.get("content", {}).get("dedication") or DEFAULT_DEDICATION
-    for line in dedication_lines:
-        y = pw.centred_wrapped(y, line, BODY_FONT, 13, 20)
-    c.showPage()
-
-    # ---- Page 5: meet the character (recto) ----
-    # NOTE (PRD 18.7): front matter MUST change two pages at a time -- a
-    # one-page change flips every story/maze spread in the rest of the book.
-    # Pages 1-4 above are a natural 4-page core; this is the deliberate 5th page
-    # that makes the count ODD (so scene 1's story page lands on an even/left
-    # page). If it is ever dropped, drop or add one MORE page alongside it.
+    # ---- Page 3: meet the character (recto) ----
+    # NOTE (PRD 18.7): front matter MUST have an ODD page count and MUST
+    # change two pages at a time -- a one-page change flips every story/maze
+    # spread in the rest of the book. This is the third of three: copyright,
+    # how to play, meet the character.
     #
-    # It used to be a half title, which reprinted page 1 word for word. Amazon's
-    # preview opens on exactly this run of pages, so a browsing parent met three
-    # blank-looking pages and the title twice before anything happened.
-    pw = PageWriter(c, 5)
+    # There is no title page. KDP prints the cover from a separate file, so a
+    # title page inside the interior repeats the cover on the first page a
+    # reader turns to. It went with the dedication, two at a time, and the
+    # dedication's line moved here.
+    pw = PageWriter(c, 3)
     meet = book.get("content", {}).get("meetPage")
     if meet:
         y = PAGE_HEIGHT_PT * 0.30

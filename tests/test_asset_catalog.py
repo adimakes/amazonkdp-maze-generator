@@ -47,13 +47,17 @@ def test_discover_returns_svgs_sorted_by_filename(tmp_path: Path) -> None:
     ]
 
 
-def test_discover_ignores_non_svg_files_and_subdirectories(tmp_path: Path) -> None:
+def test_discover_ignores_unsupported_files_and_subdirectories(tmp_path: Path) -> None:
+    """A book may ship vector assets, raster ones, or both -- artwork that
+    arrives as a picture loses the drawing when it is traced into the subset --
+    so the contract is the folder, not the file format."""
     (tmp_path / "keep.svg").touch()
-    (tmp_path / "notes.txt").touch()
     (tmp_path / "art.png").touch()
+    (tmp_path / "notes.txt").touch()
+    (tmp_path / "photo.jpg").touch()
     (tmp_path / "nested").mkdir()
     (tmp_path / "nested" / "deep.svg").touch()
-    assert [a.asset_id for a in discover(tmp_path, field_name="f")] == ["keep.svg"]
+    assert [a.asset_id for a in discover(tmp_path, field_name="f")] == ["art.png", "keep.svg"]
 
 
 def test_discover_accepts_an_uppercase_extension(tmp_path: Path) -> None:
@@ -67,7 +71,7 @@ def test_discover_rejects_a_missing_directory(tmp_path: Path) -> None:
 
 
 def test_discover_rejects_an_empty_required_directory(tmp_path: Path) -> None:
-    with pytest.raises(AssetError, match=r"contains no \.svg files"):
+    with pytest.raises(AssetError, match=r"contains no \.svg or \.png files"):
         discover(tmp_path, field_name="assets.collectibleVectorsDir")
 
 
@@ -225,29 +229,29 @@ def test_load_catalog_rejects_a_missing_start_asset(mutated_book) -> None:
         load_catalog(load_book_config(path, require_assets=False))
 
 
-def test_a_non_svg_start_asset_never_reaches_the_catalog(mutated_book) -> None:
+def test_an_unsupported_start_asset_never_reaches_the_catalog(mutated_book) -> None:
     """``assets.startAsset`` is schema-constrained to ``*.svg``, so the loader
     rejects it first. ``catalog.py``'s own suffix check is therefore a second
     line of defence for a ``BookConfig`` built directly rather than parsed --
     tested on its own below."""
     from maze_book.errors import ConfigError
 
-    path = mutated_book(lambda obj: obj["assets"].update(startAsset="start.png"))
-    (path / "assets" / "beginning-vectors" / "start.png").write_text("x", encoding="utf-8")
+    path = mutated_book(lambda obj: obj["assets"].update(startAsset="start.gif"))
+    (path / "assets" / "beginning-vectors" / "start.gif").write_text("x", encoding="utf-8")
     with pytest.raises(ConfigError, match=r"schema validation") as excinfo:
         load_book_config(path, require_assets=False)
     assert any("startAsset" in detail for detail in excinfo.value.details)
 
 
-def test_load_catalog_rejects_a_non_svg_start_asset_on_a_hand_built_config(
+def test_load_catalog_rejects_an_unsupported_start_asset_on_a_hand_built_config(
     tiny_book_dir: Path, tmp_path: Path
 ) -> None:
     """The guard ``catalog.py`` owns, reached with a config object that never
     went through schema validation. ``load_catalog`` reads only these five
     members, so a stand-in is enough and keeps the test about the suffix."""
     config = load_book_config(tiny_book_dir, require_assets=True)
-    decoy = tmp_path / "start.png"
-    decoy.write_text("not an svg", encoding="utf-8")
+    decoy = tmp_path / "start.gif"
+    decoy.write_text("not an asset", encoding="utf-8")
 
     class ConfigStandIn:
         start_asset_path = decoy
@@ -257,7 +261,7 @@ def test_load_catalog_rejects_a_non_svg_start_asset_on_a_hand_built_config(
         collectible_vectors_dir = config.collectible_vectors_dir
         assets = config.assets
 
-    with pytest.raises(AssetError, match=r"must be an \.svg file"):
+    with pytest.raises(AssetError, match=r"must be one of \.svg, \.png"):
         load_catalog(ConfigStandIn())
 
 
@@ -281,12 +285,15 @@ def test_load_catalog_picks_up_page_vectors_when_the_folder_is_configured(
 
 def test_the_halloween_package_catalog_loads_and_every_file_validates(repo_root: Path) -> None:
     """The integration the pipeline actually depends on: real config, real
-    folders, real SVGs, and every discovered file inside the 18.5 subset.
+    folders, real assets, each judged by the rules its *kind* and its printed
+    size earn.
 
-    Each file is judged by the profile its *printed size* earns, exactly as
-    ``book validate`` does. Holding a 0.6 in page decoration to the finale
-    collectible's minimum feature would fail artwork that prints perfectly.
+    A vector asset is measured against the 18.5 subset. A raster one is measured
+    against the bitonal rules, which ask the two questions that decide whether a
+    picture prints: is every pixel pure black or white, and are there enough of
+    them for the size it is drawn at.
     """
+    from maze_book.assets.raster import check_raster, is_raster, load_raster
     from maze_book.assets.validate import (
         profiles_for_roles,
         raise_for_reports,
@@ -297,19 +304,27 @@ def test_the_halloween_package_catalog_loads_and_every_file_validates(repo_root:
 
     config = load_book_config(repo_root / "books" / "jims-halloween-maze-adventure")
     catalog = load_catalog(config)
-    assert catalog.start.asset_id.endswith(".svg")
     assert len(catalog.dead_ends) >= 4
     assert len(catalog.collectibles) >= 4
     assert len(catalog.page_vectors) >= 1
 
+    profile = load_profile(repo_root / "profiles", config.book.profile_id)
     by_role = profiles_for_roles(
-        bands=load_profile(repo_root / "profiles", config.book.profile_id).bands,
+        bands=profile.bands,
         maze_square_in=config.layout.maze_square_in,
         page_vector_in=VECTOR_SIZE_IN,
     )
     roles = catalog.roles()
-    reports = [
-        validate_svg(asset.path, profile=by_role[roles[str(asset.path)]])
-        for asset in catalog.all_files()
-    ]
+    reports, raster_problems = [], []
+    for asset in catalog.all_files():
+        if is_raster(asset.path):
+            raster_problems.extend(
+                f"{asset.path.name}: {problem}"
+                for problem in check_raster(load_raster(asset.path))
+            )
+        else:
+            reports.append(
+                validate_svg(asset.path, profile=by_role[roles[str(asset.path)]])
+            )
     raise_for_reports(reports, label="halloween")
+    assert raster_problems == []

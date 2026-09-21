@@ -27,6 +27,7 @@ from typing import Iterable, Sequence
 from ..assets.catalog import AssetCatalog
 from ..assets.svg_subset import Cubic, ParsedSvg, Subpath, parse_svg
 from ..errors import RenderingError
+from ..assets.raster import RasterAsset, is_raster, load_raster
 from ..model.geometry import Cell
 from ..model.maze_data import MazeData, PlacedAsset
 from .geometry import (
@@ -88,23 +89,31 @@ def document_to_paths(
 
 
 class AssetGeometryCache:
-    """Parse each asset file once per render run.
+    """Measure each asset file once per render run.
 
     A 50-maze book places on the order of a thousand assets drawn from a folder
     of six; re-parsing per placement is a thousand XML parses to learn six
     shapes.
+
+    Returns a ``ParsedSvg`` for vector assets and a ``RasterAsset`` for bitonal
+    ones. Callers do not branch on which: ``place_document`` is the single place
+    that knows the difference, for the same reason there is one wall-inference
+    site and one asset-footprint function.
     """
 
     def __init__(self) -> None:
-        self._parsed: dict[Path, ParsedSvg] = {}
+        self._parsed: dict[Path, "ParsedSvg | RasterAsset"] = {}
 
-    def get(self, path: Path) -> ParsedSvg:
+    def get(self, path: Path) -> "ParsedSvg | RasterAsset":
         resolved = Path(path).resolve()
         document = self._parsed.get(resolved)
         if document is None:
-            document = parse_svg(resolved)
-            if not document.paths:
-                raise RenderingError(f"asset has no drawable geometry: {resolved.name}")
+            if is_raster(resolved):
+                document = load_raster(resolved)
+            else:
+                document = parse_svg(resolved)
+                if not document.paths:
+                    raise RenderingError(f"asset has no drawable geometry: {resolved.name}")
             self._parsed[resolved] = document
         return document
 
@@ -201,6 +210,9 @@ def asset_elements(
     ):
         asset = footprint.asset
         document = cache.get(catalog.path_for(asset.asset_id))
+        if isinstance(document, RasterAsset):
+            out.append(raster_element(document, footprint.rect))
+            continue
         vb_x, vb_y, vb_w, vb_h = document.view_box
         scale = footprint.width / vb_w if vb_w else 0.0
         offset = (footprint.rect[0] - vb_x * scale, footprint.rect[1] - vb_y * scale)
@@ -212,6 +224,24 @@ def asset_elements(
             )
         out.extend(document_to_paths(document, scale=scale, offset=offset))
     return out
+
+
+def raster_element(asset: RasterAsset, box: tuple[float, float, float, float]) -> str:
+    """A bitonal asset as an inline ``<image>``.
+
+    Embedded rather than referenced, for the same reason vector assets are
+    inlined as geometry: the inspection SVG is one file that has to render
+    anywhere it is opened, including somewhere the book package is not.
+    """
+    import base64
+
+    x0, y0, x1, y1 = box
+    data = base64.b64encode(asset.path.read_bytes()).decode("ascii")
+    return (
+        f'  <image x="{_n(x0)}" y="{_n(y0)}" '
+        f'width="{_n(x1 - x0)}" height="{_n(y1 - y0)}" '
+        f'xlink:href="data:image/png;base64,{data}"/>'
+    )
 
 
 def maze_body(
@@ -289,6 +319,7 @@ def render_maze_svg(
     body = maze_body(maze, geometry, options, catalog=catalog, cache=cache)
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" '
+        f'xmlns:xlink="http://www.w3.org/1999/xlink" '
         f'viewBox="0 0 {_n(width)} {_n(height)}">\n'
         f"  <title>{maze.book_id} maze {maze.maze_index}</title>\n"
         + "\n".join(body)

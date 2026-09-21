@@ -217,19 +217,67 @@ def test_a_grey_tint_fails_the_ink_check(tmp_path: Path) -> None:
     assert codes(report)["ink-pure-black"] is False
 
 
-def test_an_embedded_raster_image_fails(tmp_path: Path) -> None:
+def detail(report: PreflightReport, name: str) -> str:
+    return next(r.detail for r in report.results if r.name == name)
+
+
+def _draw_asset(pdf: Path, png: Path, *, inches: float) -> Path:
+    """Place a raster asset the way the book does, so the test exercises the
+    path the book actually emits rather than ReportLab's default."""
+    from reportlab.pdfgen.canvas import Canvas
+
+    from maze_book.assets.raster import load_raster
+    from maze_book.rendering.svg_to_pdf import PdfFrame, place_document
+
+    canvas = Canvas(str(pdf), pagesize=(612.0, 792.0))
+    frame = PdfFrame(canvas, 792.0)
+    size = inches * 72.0
+    place_document(frame, load_raster(png), (100.0, 100.0, 100.0 + size, 100.0 + size))
+    canvas.showPage()
+    canvas.save()
+    return pdf
+
+
+def test_a_low_resolution_image_fails(tmp_path: Path) -> None:
+    """The rule is not "no images" -- artwork that arrives as a picture loses
+    the drawing when it is traced into the vector subset. It is "enough pixels
+    for the size it is drawn at", and the drawn size is read out of the content
+    stream so an icon is not failed for being too small to be a title page."""
     from PIL import Image
 
-    png = tmp_path / "dot.png"
-    Image.new("L", (8, 8), color=0).save(png)
+    png = tmp_path / "coarse.png"
+    image = Image.new("1", (64, 64), color=1)
+    image.paste(0, (8, 8, 56, 56))
+    image.save(png)
 
-    def draw(canvas, page):
-        canvas.drawImage(str(png), 100, 100, width=20, height=20)
-
-    pdf = make_pdf(tmp_path / "raster.pdf", pages=1, draw=draw)
+    pdf = _draw_asset(tmp_path / "coarse.pdf", png, inches=2.0)  # 32 dpi
     report = report_for(pdf)
     check_raster_and_transparency(report, reader_for(pdf))
-    assert codes(report)["no-raster-images"] is False
+    assert codes(report)["images-print-ready"] is False
+    assert "dpi" in detail(report, "images-print-ready")
+
+
+def test_an_image_with_enough_pixels_passes(tmp_path: Path) -> None:
+    from PIL import Image
+
+    png = tmp_path / "fine.png"
+    image = Image.new("1", (1200, 1200), color=1)
+    image.paste(0, (100, 100, 1100, 1100))
+    image.save(png)
+
+    pdf = _draw_asset(tmp_path / "fine.pdf", png, inches=2.0)  # 600 dpi
+    report = report_for(pdf)
+    check_raster_and_transparency(report, reader_for(pdf))
+    assert codes(report)["images-print-ready"] is True
+    assert "600 dpi" in detail(report, "images-print-ready")
+
+
+def test_a_page_with_no_images_reports_vector_only(tmp_path: Path) -> None:
+    pdf = make_pdf(tmp_path / "plain.pdf", pages=1)
+    report = report_for(pdf)
+    check_raster_and_transparency(report, reader_for(pdf))
+    assert codes(report)["images-print-ready"] is True
+    assert detail(report, "images-print-ready") == "vector only"
 
 
 def test_soft_alpha_fails_the_transparency_check(tmp_path: Path) -> None:

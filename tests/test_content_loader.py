@@ -159,8 +159,8 @@ def test_raising_the_line_limit_accepts_longer_text() -> None:
 
 
 def test_the_page_vector_passes_through_untouched() -> None:
-    prepared, _ = prepare_scene(scene(page_vector="jim_in_sheet.svg"), width=500.0)
-    assert prepared.page_vector == "jim_in_sheet.svg"
+    prepared, _ = prepare_scene(scene(page_vector="jim_in_sheet.png"), width=500.0)
+    assert prepared.page_vector == "jim_in_sheet.png"
 
 
 # ---------------------------------------------------------------------------
@@ -204,7 +204,7 @@ def test_all_fit_problems_are_reported_in_one_raise(tiny_book_dir: Path, mutated
 
 def test_page_vector_path_resolves_under_the_configured_folder(repo_root: Path) -> None:
     config = load_book_config(repo_root / "books" / "jims-halloween-maze-adventure")
-    text = SceneText(number=1, title="T", body_lines=(), page_vector="jim_in_sheet.svg")
+    text = SceneText(number=1, title="T", body_lines=(), page_vector="jim_in_sheet.png")
     resolved = page_vector_path(config, text)
     assert resolved is not None and resolved.is_file()
     assert resolved.parent == config.page_vectors_dir

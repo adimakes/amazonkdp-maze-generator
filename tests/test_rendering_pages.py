@@ -440,8 +440,8 @@ def test_a_standalone_maze_svg_has_a_viewbox_and_no_fixed_size(tmp_path: Path, r
     maze = small_maze(6, 6, candies=3)
     for asset in maze.assets:
         asset_id = {
-            "start": "jim_start.svg", "finish": "candy_bucket.svg",
-            "collectible": "lollipop.svg",
+            "start": "jim_start.png", "finish": "candy_bucket.png",
+            "collectible": "lollipop.png",
         }[asset.role]
         object.__setattr__(asset, "asset_id", asset_id)
 
@@ -457,7 +457,11 @@ def test_a_standalone_maze_svg_has_a_viewbox_and_no_fixed_size(tmp_path: Path, r
     # "width=" and would make a whole-document substring test always fail.
     assert "viewBox=" in header
     assert " width=" not in header and " height=" not in header
-    assert svg.count("<path") >= 4  # walls plus each placed asset
+    # Walls are always paths. Assets are paths when the book ships vectors and
+    # inline <image> elements when it ships rasters, so the assertion is that
+    # every placement is drawn, not which element draws it.
+    assert svg.count("<path") >= 1
+    assert svg.count("<path") + svg.count("<image") >= 4
     assert "<circle" not in svg and "<rect" not in svg
 
 
@@ -473,8 +477,8 @@ def test_rendering_the_same_maze_twice_is_byte_identical(repo_root: Path) -> Non
     for asset in maze.assets:
         object.__setattr__(
             asset, "asset_id",
-            {"start": "jim_start.svg", "finish": "candy_bucket.svg",
-             "collectible": "lollipop.svg"}[asset.role],
+            {"start": "jim_start.png", "finish": "candy_bucket.png",
+             "collectible": "lollipop.png"}[asset.role],
         )
     options = MazeRenderOptions(wall_width=3.0, margin=8.0, scales={})
     first = render_maze_svg(maze, catalog=catalog, options=options)
@@ -484,7 +488,7 @@ def test_rendering_the_same_maze_twice_is_byte_identical(repo_root: Path) -> Non
 
 def test_the_asset_cache_parses_each_file_once(repo_root: Path) -> None:
     cache = AssetGeometryCache()
-    path = repo_root / "books/jims-halloween-maze-adventure/assets/page-vectors/deco_ghost.svg"
+    path = repo_root / "books/jims-halloween-maze-adventure/assets/page-vectors/jim_in_sheet.png"
     assert cache.get(path) is cache.get(path)
 
 

@@ -42,9 +42,9 @@ def fixture_maze() -> MazeData:
         seed=1, rows=3, cols=3, start=(0, 0), finish=(2, 2),
         open_edges=sorted(canonical_edge(a, b) for a, b in pairs),
         assets=[
-            PlacedAsset(asset_id="jim_start.svg", role="start", cell=(0, 0), scale=0.6),
-            PlacedAsset(asset_id="candy_bucket.svg", role="finish", cell=(2, 2), scale=0.7),
-            PlacedAsset(asset_id="lollipop.svg", role="collectible", cell=(1, 1),
+            PlacedAsset(asset_id="jim_start.png", role="start", cell=(0, 0), scale=0.6),
+            PlacedAsset(asset_id="candy_bucket.png", role="finish", cell=(2, 2), scale=0.7),
+            PlacedAsset(asset_id="lollipop.png", role="collectible", cell=(1, 1),
                         value=1, scale=0.55),
         ],
     )

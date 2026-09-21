@@ -22,6 +22,11 @@ from typing import Iterable, Sequence
 from reportlab.pdfgen.canvas import FILL_EVEN_ODD, FILL_NON_ZERO, Canvas
 
 from ..assets.svg_subset import ParsedSvg
+from functools import lru_cache
+
+from reportlab.lib.utils import ImageReader
+
+from ..assets.raster import RasterAsset
 from ..errors import RenderingError
 from .geometry import Point, Segment
 
@@ -150,19 +155,82 @@ class PdfFrame:
         )
 
 
+class _GrayImageReader(ImageReader):
+    """An ``ImageReader`` that hands ReportLab one channel instead of three.
+
+    ReportLab picks an image's colour space from the reader's ``mode`` and takes
+    its bytes from ``getRGBData``. Every ordinary path through it ends in
+    ``DeviceRGB``, whatever went in -- which on a monochrome interior is wrong
+    twice over: it declares a colour space for a press that prints one ink,
+    which is the difference between a black-and-white book and a colour one at
+    KDP's prices, and it stores three bytes a pixel for artwork with two values.
+
+    Overriding the two members ReportLab actually reads is the whole fix. The
+    data is bitonal, so Flate finds long runs and the eight bits a component
+    ReportLab insists on cost almost nothing on disk.
+    """
+
+    #: ReportLab reads this directly to decide whether the image carries a soft
+    #: mask. Bitonal line art does not, and there is nothing to build one from.
+    _dataA = None
+
+    def __init__(self, path: Path) -> None:
+        super().__init__(str(path))
+        self._grey_path = Path(path)
+
+    def getRGBData(self) -> bytes:  # noqa: N802 - ReportLab's spelling
+        from PIL import Image
+
+        with Image.open(self._grey_path) as image:
+            grey = image.convert("L")
+            self.mode = "L"
+            self._width, self._height = grey.size
+            return grey.tobytes()
+
+
+def _place_raster(
+    frame: PdfFrame, asset: "RasterAsset", box: tuple[float, float, float, float]
+) -> None:
+    """Draw a bitonal asset into ``box``, as one grey channel.
+
+    The reader is cached per path and the same object handed to ReportLab every
+    time, so the pixels are embedded once: the same six icons land in a
+    fifty-maze book about a thousand times.
+    """
+    x0, y0, x1, y1 = box
+    frame.canvas.drawImage(
+        _grey_reader(asset.path), x0, frame.y(y1),
+        width=x1 - x0, height=y1 - y0, mask=None,
+    )
+
+
+@lru_cache(maxsize=None)
+def _grey_reader(path: Path) -> "_GrayImageReader":
+    return _GrayImageReader(path)
+
+
 def place_document(
-    frame: PdfFrame, document: ParsedSvg, box: tuple[float, float, float, float]
+    frame: PdfFrame,
+    document: "ParsedSvg | RasterAsset",
+    box: tuple[float, float, float, float],
 ) -> None:
     """Draw an asset to fill ``box``, which must be square.
 
-    The subset fixes a square viewBox precisely so the renderer can scale by the
-    box it is given rather than by the illustrator's canvas; a non-square box
-    here would scale the axes differently and silently distort the art.
+    Both asset kinds fix a square canvas -- the subset a square viewBox, the
+    raster rules a square image -- precisely so the renderer can scale by the
+    box it is given rather than by the illustrator's; a non-square box here
+    would scale the axes differently and silently distort the art.
+
+    This is the only place that knows an asset might be a picture rather than a
+    set of paths. Every caller passes what the cache handed it.
     """
     x0, y0, x1, y1 = box
     width, height = x1 - x0, y1 - y0
     if abs(width - height) > 1e-6:
         raise RenderingError(f"asset placement box must be square, got {width:g}x{height:g}")
+    if isinstance(document, RasterAsset):
+        _place_raster(frame, document, box)
+        return
     vb_x, vb_y, vb_w, vb_h = document.view_box
     if abs(vb_w - vb_h) > 1e-9:
         raise RenderingError(f"asset viewBox must be square, got {vb_w:g}x{vb_h:g}")

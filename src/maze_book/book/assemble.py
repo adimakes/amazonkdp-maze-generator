@@ -170,12 +170,18 @@ class BookAssembler:
     def _story_ornament(self, scene_number: int):
         """A corner ornament for this story page, drawn from its own stream.
 
+        Returns ``None`` when the book asks for no page decoration at all:
+        ``layout.mazePageDecorations`` of 0 means the book has decided its pages
+        carry the puzzle and the character and nothing else.
+
         18.6 specifies the ornament and ``plan_story_page`` has always been able
         to place one; nothing ever passed a path, so fifty story pages went out
         with four inches of white below the text and the feature sitting unused
         in the renderer.
         """
-        choices = sorted(self.catalog.page_vectors.values(), key=lambda a: a.asset_id)
+        if self.config.layout.maze_page_decorations <= 0:
+            return None
+        choices = self.catalog.decorations()
         if not choices:
             return None
         rng = seeds.rng(
