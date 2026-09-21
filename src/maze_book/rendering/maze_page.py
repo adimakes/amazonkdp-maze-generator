@@ -455,8 +455,12 @@ def _draw_maze_number(
     canvas.saveState()
     canvas.setFillGray(0.0)
     canvas.setFont(font, MAZE_NUMBER_SIZE)
+    # "Maze 18", not "18". A bare number in the folio position reads as a page
+    # number, and this book has none -- so a reader told to turn to 41 goes to
+    # the wrong place, and a reader looking for maze 41 never thinks to use it.
+    label = f"Maze {index}"
     if layout.side == "right":
-        canvas.drawRightString(x, frame.y(y), str(index))
+        canvas.drawRightString(x, frame.y(y), label)
     else:
-        canvas.drawString(x, frame.y(y), str(index))
+        canvas.drawString(x, frame.y(y), label)
     canvas.restoreState()

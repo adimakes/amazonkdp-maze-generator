@@ -221,11 +221,53 @@ def _content_bytes(page) -> bytes:
         return b"".join(part.get_object().get_data() for part in contents)
 
 
+def _without_strings(data: bytes) -> bytes:
+    """Content stream with its string literals blanked out.
+
+    Operators and text share one byte stream, so a page that *prints* the word
+    DARK spaced out as letters contains a lone ``K`` inside a string -- and a
+    regex looking for the CMYK operator finds it. The book failed its own
+    colour check for setting a running head in solid black. Strings are removed
+    before any operator is looked for; nothing a page draws with can hide inside
+    one.
+    """
+    out = bytearray()
+    index, length = 0, len(data)
+    while index < length:
+        byte = data[index]
+        if byte == 0x28:  # (
+            depth = 1
+            index += 1
+            while index < length and depth:
+                if data[index] == 0x5C:  # backslash escape
+                    index += 2
+                    continue
+                if data[index] == 0x28:
+                    depth += 1
+                elif data[index] == 0x29:
+                    depth -= 1
+                index += 1
+            out += b" "
+            continue
+        if byte == 0x3C:  # < opens a hex string, << opens a dictionary
+            if index + 1 < length and data[index + 1] == 0x3C:
+                out += b"<<"
+                index += 2
+                continue
+            index = data.find(b">", index)
+            index = length if index == -1 else index + 1
+            out += b" "
+            continue
+        out.append(byte)
+        index += 1
+    return bytes(out)
+
+
 def check_color_and_ink(report: PreflightReport, reader) -> None:
     colored: list[str] = []
     tints: list[str] = []
     for index, page in enumerate(reader.pages, start=1):
-        data = _content_bytes(page)
+        data = _without_strings(_content_bytes(page))
         if _COLOR_OPS.search(data):
             operators = sorted({m.decode() for m in _COLOR_OPS.findall(data)})
             colored.append(f"page {index}: {'/'.join(operators)}")

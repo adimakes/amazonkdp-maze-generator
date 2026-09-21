@@ -461,3 +461,43 @@ def test_extract_pages_text_splits_on_form_feeds(tmp_path: Path, repo_root: Path
     pages = extract_pages_text(pdf, tmp_path / "text.txt")
     assert len(pages) == 3
     assert "PAGE MARKER 2" in pages[1]
+
+
+# ---------------------------------------------------------------------------
+# The colour check reads operators, not the words on the page
+# ---------------------------------------------------------------------------
+
+
+def test_a_letter_inside_a_string_is_not_a_colour_operator() -> None:
+    """A page that prints DARK spaced out as letters contains a lone 'K', and
+    'K' is the CMYK operator. The book failed its own colour check for setting
+    a running head in solid black."""
+    from maze_book.preflight.checks import _without_strings
+
+    stream = b"BT /F1 10 Tf (T H E   D A R K   E N D) Tj ET 0 g"
+    assert b"K" not in _without_strings(stream)
+    assert b"0 g" in _without_strings(stream)
+
+
+def test_a_real_colour_operator_still_trips_the_check() -> None:
+    from maze_book.preflight.checks import _without_strings
+
+    stream = b"(harmless text) Tj 0 0 0 1 k"
+    cleaned = _without_strings(stream)
+    assert cleaned.rstrip().endswith(b"k")
+
+
+def test_escaped_parentheses_do_not_end_the_string_early() -> None:
+    from maze_book.preflight.checks import _without_strings
+
+    stream = rb"(a \) K b) Tj 1 g"
+    cleaned = _without_strings(stream)
+    assert b"K" not in cleaned
+    assert b"1 g" in cleaned
+
+
+def test_hex_strings_are_skipped_but_dictionaries_are_not() -> None:
+    from maze_book.preflight.checks import _without_strings
+
+    assert b"4B" not in _without_strings(b"<4B> Tj 0 g")
+    assert b"/Type" in _without_strings(b"<< /Type /Page >> 0 g")

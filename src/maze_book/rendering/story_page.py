@@ -31,6 +31,18 @@ from .svg_to_pdf import BODY_FONT, PdfFrame, TITLE_FONT, place_document
 
 NUMBER_TOP_IN = 3.2
 TITLE_GAP_PT = 42.0
+
+#: The act's name, above the scene number. The profile has named its acts since
+#: it was written and none of the names reached a printed page, which left a
+#: parent no way to see that the book ramps and a child no landmark between
+#: maze 1 and maze 50.
+ACT_SIZE = 10.5
+ACT_GAP_PT = 16.0
+
+
+def _tracked(text: str) -> str:
+    """Letter-spacing, done with spaces because the subset has no tracking."""
+    return " ".join(text)
 BODY_GAP_PT = 34.0
 VECTOR_GAP_PT = 40.0
 VECTOR_SIZE_IN = 1.15
@@ -47,6 +59,7 @@ class StoryPageLayout:
     body_baselines: tuple[float, ...]
     vector_box: Box | None
     ornament_box: Box | None
+    act_baseline: float | None = None
 
 
 def plan_story_page(
@@ -56,6 +69,7 @@ def plan_story_page(
     side: str,
     has_vector: bool,
     has_ornament: bool = False,
+    act_name: str | None = None,
     number_size: float = DEFAULT_NUMBER_SIZE,
     title_size: float = DEFAULT_TITLE_SIZE,
     body_size: float = DEFAULT_BODY_SIZE,
@@ -65,6 +79,7 @@ def plan_story_page(
     centre_x = (live_x0 + live_x1) / 2.0
 
     number_baseline = NUMBER_TOP_IN * PT_PER_IN + number_size
+    act_baseline = number_baseline - number_size - ACT_GAP_PT if act_name else None
     title_baseline = number_baseline + TITLE_GAP_PT + title_size
 
     leading = body_size * body_leading_ratio
@@ -91,6 +106,7 @@ def plan_story_page(
         body_baselines=body_baselines,
         vector_box=vector_box,
         ornament_box=ornament_box,
+        act_baseline=act_baseline,
     )
 
 
@@ -102,6 +118,7 @@ def draw_story_page(
     cache: AssetGeometryCache,
     vector_path: Path | None = None,
     ornament_path: Path | None = None,
+    act_name: str | None = None,
     number_font: str = BODY_FONT,
     title_font: str = TITLE_FONT,
     body_font: str = BODY_FONT,
@@ -112,6 +129,16 @@ def draw_story_page(
     canvas = frame.canvas
     canvas.saveState()
     canvas.setFillGray(0.0)
+
+    if layout.act_baseline is not None and act_name:
+        # Pure black, letter-spaced. A grey would be the obvious way to make a
+        # running head recede and it is the one thing this book cannot do:
+        # 18.8 allows no tint between 0 and 1, because a tint halftones on a
+        # monochrome press. Size and tracking do the same job in solid ink.
+        canvas.setFont(number_font, ACT_SIZE)
+        canvas.drawCentredString(
+            layout.centre_x, frame.y(layout.act_baseline), _tracked(act_name.upper())
+        )
 
     canvas.setFont(number_font, number_size)
     canvas.drawCentredString(layout.centre_x, frame.y(layout.number_baseline), str(scene.number))

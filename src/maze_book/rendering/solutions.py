@@ -108,6 +108,11 @@ def draw_solution_thumbnail(
 
     frame.segments(wall_segments(maze, geometry), wall_width)
 
+    # Which end is which. A thumbnail with a route through it and no marked
+    # ends is a picture of a line: the parent checking the answer has to find
+    # the start themselves, on a grid too small to look for a doorway in.
+    _mark_endpoints(frame, maze, geometry, wall_width)
+
     route = list(analysis.best_route)
     if route:
         candies = maze.collectible_cells()
@@ -129,6 +134,30 @@ def draw_solution_thumbnail(
         slot.caption_centre[0], frame.y(slot.caption_centre[1]),
         caption_for(maze.maze_index, analysis),
     )
+    canvas.restoreState()
+
+
+def _mark_endpoints(
+    frame: PdfFrame, maze: MazeData, geometry: MazeGeometry, wall_width: float
+) -> None:
+    """An open ring at the start, a solid square at the finish.
+
+    Two shapes rather than two sizes of the same one, because at thumbnail
+    scale a ring and a disc are the last pair still telling themselves apart,
+    and the route's own ends are already round.
+    """
+    size = max(1.6, geometry.cell * 0.34)
+    canvas = frame.canvas
+    canvas.saveState()
+    canvas.setStrokeGray(0.0)
+    canvas.setFillGray(0.0)
+
+    x, y = geometry.cell_centre(maze.start)
+    canvas.setLineWidth(max(0.5, wall_width * 0.9))
+    canvas.circle(x, frame.y(y), size / 2.0, stroke=1, fill=0)
+
+    x, y = geometry.cell_centre(maze.finish)
+    canvas.rect(x - size / 2.0, frame.y(y) - size / 2.0, size, size, stroke=0, fill=1)
     canvas.restoreState()
 
 

@@ -77,7 +77,7 @@
       {
         "number": 1,
         "title": "Where's The Costume Box?",
-        "text": "Up in the attic, behind everything else. Jim has until dark, and the bucket is already on his arm.",
+        "text": "Up in the attic, behind everything else. Jim has until dark.",
         "pageVector": "jim_in_sheet.svg"
       },
       {
@@ -124,8 +124,8 @@
       },
       {
         "number": 9,
-        "title": "Down The Garden Path",
-        "text": "Wet leaves have covered every stepping stone. Can you find Jim a dry way to the little apple tree?",
+        "title": "Across The Stepping Stones",
+        "text": "Wet leaves have covered every one of them. Can you find Jim a dry way to the little apple tree?",
         "pageVector": "deco_tree.svg"
       },
       {

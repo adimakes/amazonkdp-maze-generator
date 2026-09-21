@@ -213,6 +213,22 @@ class PageWriter:
         self.c.setFont(font, size)
         self.c.drawString(self.content_left, y, text)
 
+    def numbered(
+        self, y: float, index: int, text: str, font: str, size: float, leading: float
+    ) -> float:
+        """A hanging-indent numbered item: the number in its own column, the
+        text wrapped against a common left edge rather than under the number."""
+        gutter = pdfmetrics.stringWidth("00. ", font, size)
+        self._check_y(y)
+        self.c.setFillGray(0.0)
+        self.c.setFont(font, size)
+        self.c.drawRightString(self.content_left + gutter - 6.0, y, f"{index}.")
+        for line in wrap_text(text, font, size, self.content_width - gutter):
+            self._check_y(y)
+            self.c.drawString(self.content_left + gutter, y, line)
+            y -= leading
+        return y
+
     def centred_wrapped(
         self, y: float, text: str, font: str, size: float, leading: float, gray: float = 0.0
     ) -> float:
@@ -221,6 +237,62 @@ class PageWriter:
             self.centred(y, line, font, size, gray)
             y -= leading
         return y
+
+
+#: Height of one row of key icons, and the space around it.
+KEY_ICON_PT = 34.0
+KEY_ROW_GAP_PT = 16.0
+
+
+def _draw_icon_key(
+    c: pdfcanvas.Canvas, pw: "PageWriter", book_dir: Path, y: float
+) -> float:
+    """Print what counts and what does not, using the book's own artwork.
+
+    The whole scoring loop rests on a child telling a wrapped sweet from a bat,
+    and both are black silhouettes of similar weight. Size carries most of that
+    distinction on the maze page; this page says it in words once, with the
+    actual icons, on a page that was two-thirds blank anyway.
+    """
+    from maze_book.assets.catalog import load_catalog
+    from maze_book.model.book_config import load_book_config
+    from maze_book.model.profile import load_profile
+    from maze_book.rendering.svg import AssetGeometryCache
+    from maze_book.rendering.svg_to_pdf import PdfFrame, place_document
+
+    catalog = load_catalog(load_book_config(book_dir))
+    cache = AssetGeometryCache()
+    frame = PdfFrame(c, PAGE_HEIGHT_PT)
+
+    # Drawn at the ratio the maze pages actually use, because the key's job is
+    # to teach that ratio. Printing both rows the same size would teach the
+    # opposite of what the page then says.
+    profile = load_profile(REPO_ROOT / "profiles", load_book_config(book_dir).book.profile_id)
+    band = profile.bands[0]
+    ratio = band.dead_end_scale / band.collectible_scale
+
+    rows = (
+        ("COLLECT THESE", sorted(catalog.collectibles, key=lambda a: a.asset_id), 1.0),
+        ("THESE ARE JUST SPOOKY", sorted(catalog.dead_ends, key=lambda a: a.asset_id), ratio),
+    )
+    for heading, assets, scale in rows:
+        if not assets:
+            continue
+        pw.left_aligned(y, heading, TITLE_FONT, 12)
+        y -= KEY_ICON_PT + 8.0
+        icon = KEY_ICON_PT * scale
+        step = min(KEY_ICON_PT + 14.0, pw.content_width / max(len(assets), 1))
+        for column, asset in enumerate(assets):
+            x = pw.content_left + column * step + (KEY_ICON_PT - icon) / 2.0
+            top = PAGE_HEIGHT_PT - y - KEY_ICON_PT + (KEY_ICON_PT - icon) / 2.0
+            place_document(
+                frame, cache.get(asset.path), (x, top, x + icon, top + icon)
+            )
+        y -= KEY_ROW_GAP_PT
+    pw.left_aligned(
+        y, "The spooky ones are smaller, and they are worth nothing.", BODY_FONT, 11
+    )
+    return y - 20.0
 
 
 def build_front_matter(book_dir: Path, out_path: Path) -> None:
@@ -283,11 +355,17 @@ def build_front_matter(book_dir: Path, out_path: Path) -> None:
     pw = PageWriter(c, 3)
     y = pw.content_top - 6
     pw.centred(y, "HOW TO PLAY", TITLE_FONT, 20)
-    y -= 40
+    y -= 38
+
+    # Left-aligned, in a block. A centred numbered list is the clearest
+    # self-published tell in a book, and it is harder to read besides: a child
+    # following steps wants every number in the same column.
     how_to_play_steps = book.get("content", {}).get("howToPlay") or DEFAULT_HOW_TO_PLAY
-    for i, step in enumerate(how_to_play_steps, start=1):
-        y = pw.centred_wrapped(y, f"{i}. {step}", BODY_FONT, 12.5, 20)
+    for index, step in enumerate(how_to_play_steps, start=1):
+        y = pw.numbered(y, index, step, BODY_FONT, 12.5, 20)
         y -= 6
+
+    y = _draw_icon_key(c, pw, book_dir, y - 26)
     c.showPage()
 
     # ---- Page 4: dedication / from-the-author page (verso) ----

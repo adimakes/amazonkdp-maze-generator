@@ -141,16 +141,19 @@ class BookAssembler:
         scene = self.scenes[record.scene_number]
         vector = page_vector_path(self.config, scene)
         ornament = self._story_ornament(record.scene_number)
+        act_name = self.profile.band_for(record.scene_number).act_name
         layout = plan_story_page(
             scene,
             metrics=self.metrics,
             side=record.side,
             has_vector=vector is not None,
             has_ornament=ornament is not None,
+            act_name=act_name,
         )
         draw_story_page(
             frame, scene, layout,
             cache=self.cache, vector_path=vector, ornament_path=ornament,
+            act_name=act_name,
         )
 
     def _story_ornament(self, scene_number: int):
