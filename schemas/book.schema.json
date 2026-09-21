@@ -259,6 +259,7 @@
         "insertBlankPagesForParity": {
           "type": "boolean"
         },
+        "mazePageDecorations": { "type": "integer", "minimum": 0, "maximum": 4 },
         "expectedPageCount": {
           "type": [
             "integer",

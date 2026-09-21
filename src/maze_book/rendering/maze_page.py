@@ -14,6 +14,7 @@ candy count from 5 to 18 without the drawing code branching.
 
 from __future__ import annotations
 
+import random
 from dataclasses import dataclass, field
 from typing import Sequence
 
@@ -42,6 +43,12 @@ TALLY_VALUE_SIZE = 11.0
 TICK_GAP_PT = 5.0
 TICK_ROW_GAP_PT = 6.0
 
+#: Side of a maze-page decoration, in inches, and the air it keeps around
+#: itself. Small enough to read as decoration rather than as part of the
+#: puzzle -- a pumpkin the size of a cell would look like something to collect.
+DECOR_SIZE_IN = 0.46
+DECOR_MARGIN_PT = 10.0
+
 
 @dataclass(frozen=True, slots=True)
 class MazePageLayout:
@@ -57,6 +64,8 @@ class MazePageLayout:
     tick_label_origin: tuple[float, float]
     number_origin: tuple[float, float] | None
     geometry: MazeGeometry
+    #: Where a decoration may be drawn, in the order slots are filled.
+    decor_boxes: tuple[Box, ...] = ()
     #: Side of the endpoint markers drawn outside the grid, in points. 0 keeps
     #: them inside their cells.
     marker_size: float = 0.0
@@ -79,6 +88,7 @@ def plan_maze_page(
     tally_position: str = "below",
     show_maze_number: bool = True,
     outside_marker_fraction: float = 0.0,
+    decoration_count: int = 0,
 ) -> MazePageLayout:
     if tally_position not in ("below", "right"):
         raise RenderingError(
@@ -121,6 +131,14 @@ def plan_maze_page(
     if show_maze_number:
         number_origin = (metrics.outside_x(side), live_y1)
 
+    decor_boxes = _plan_decorations(
+        count=decoration_count,
+        maze_box=maze_box,
+        tally_box=tally_box,
+        live_top=live_y0,
+        live_bottom=live_y1,
+    )
+
     return MazePageLayout(
         side=side,
         maze_box=maze_box,
@@ -131,12 +149,54 @@ def plan_maze_page(
         best_label_origin=labels[1],
         tick_label_origin=labels[2],
         number_origin=number_origin,
+        decor_boxes=decor_boxes,
         geometry=MazeGeometry.fitted_with_margins(
             maze.rows, maze.cols, box=maze_box,
             margins=marker_margins(maze, size=marker_size),
         ),
         marker_size=marker_size,
     )
+
+
+def _plan_decorations(
+    *,
+    count: int,
+    maze_box: Box,
+    tally_box: Box,
+    live_top: float,
+    live_bottom: float,
+) -> tuple[Box, ...]:
+    """Slots for page decorations, in the bands the furniture leaves empty.
+
+    Decorations go in the air above the maze and below the tally, never beside
+    the grid: a pumpkin level with the walls reads as part of the puzzle, and a
+    child who tries to route through it has been misled by the page rather than
+    by the maze.
+
+    Slots are offered on a diagonal -- top outside corner first, then the far
+    bottom one -- because two decorations placed symmetrically read as a border,
+    and a border is furniture the eye then expects on every page.
+    """
+    if count <= 0:
+        return ()
+    size = DECOR_SIZE_IN * PT_PER_IN
+
+    def band(top: float, bottom: float) -> float | None:
+        """Where a decoration sits in a horizontal band, or None if it will not fit."""
+        if bottom - top < size + DECOR_MARGIN_PT:
+            return None
+        return top + (bottom - top - size) / 2.0
+
+    above = band(live_top, maze_box[1])
+    below = band(tally_box[3], live_bottom)
+    left, right = maze_box[0], maze_box[2] - size
+
+    candidates = [
+        (right, above), (left, below), (left, above), (right, below),
+    ]
+    return tuple(
+        (x, y, x + size, y + size) for x, y in candidates if y is not None
+    )[:count]
 
 
 def _plan_tally(
@@ -201,6 +261,7 @@ def draw_maze_page(
     show_best_possible: bool = True,
     body_font: str = "Vera",
     bold_font: str = "Vera-Bold",
+    decoration_rng: random.Random | None = None,
 ) -> None:
     geometry = layout.geometry
 
@@ -220,6 +281,8 @@ def draw_maze_page(
         document = cache.get(catalog.path_for(footprint.asset.asset_id))
         place_document(frame, document, footprint.rect)
 
+    _draw_decorations(frame, layout, catalog=catalog, cache=cache, rng=decoration_rng)
+
     _draw_tally(
         frame, layout, analysis,
         show_best_possible=show_best_possible, body_font=body_font, bold_font=bold_font,
@@ -227,6 +290,30 @@ def draw_maze_page(
 
     if layout.number_origin is not None:
         _draw_maze_number(frame, layout, maze.maze_index, font=body_font)
+
+
+def _draw_decorations(
+    frame: PdfFrame,
+    layout: MazePageLayout,
+    *,
+    catalog: AssetCatalog,
+    cache: AssetGeometryCache,
+    rng: random.Random | None,
+) -> None:
+    """Fill the planned slots from the page-vector folder, without repeating.
+
+    Drawing from a stream derived for this maze alone means page 12 keeps its
+    pumpkin when page 13 is regenerated -- the same reason every other
+    stochastic step in the build has its own purpose.
+    """
+    if not layout.decor_boxes or rng is None:
+        return
+    choices = sorted(catalog.page_vectors.values(), key=lambda a: a.asset_id)
+    if not choices:
+        return
+    picks = rng.sample(choices, k=min(len(layout.decor_boxes), len(choices)))
+    for box, asset in zip(layout.decor_boxes, picks):
+        place_document(frame, cache.get(asset.path), box)
 
 
 def _draw_tally(

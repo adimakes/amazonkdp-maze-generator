@@ -58,7 +58,8 @@
     "solutionsStartSide": "right",
     "insertEndPage": true,
     "insertBlankPagesForParity": true,
-    "expectedPageCount": 112
+    "expectedPageCount": 112,
+    "mazePageDecorations": 2
   },
   "assets": {
     "beginningVectorsDir": "assets/beginning-vectors",

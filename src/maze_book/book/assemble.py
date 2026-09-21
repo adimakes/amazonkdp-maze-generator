@@ -38,6 +38,7 @@ from ..content.loader import (
     prepare_scenes,
 )
 from ..errors import RenderingError
+from ..model import seeds
 from ..model.analysis import MazeAnalysis
 from ..model.book_config import BookConfig
 from ..model.maze_data import MazeData
@@ -156,6 +157,7 @@ class BookAssembler:
             tally_position=self.config.layout.tally_position,
             show_maze_number=self.config.layout.show_maze_number,
             outside_marker_fraction=band.outside_marker_fraction,
+            decoration_count=self.config.layout.maze_page_decorations,
         )
         raise_for_placements(
             loaded.maze,
@@ -167,6 +169,10 @@ class BookAssembler:
             frame, loaded.maze, loaded.analysis, layout,
             catalog=self.catalog, band=band, cache=self.cache,
             show_best_possible=self.config.layout.show_best_possible_score,
+            decoration_rng=seeds.rng(
+                self.config.book.seed, self.config.book.id, record.maze_index,
+                0, seeds.PURPOSE_PAGE_DECORATION,
+            ),
         )
 
     def _draw_solutions(self, frame: PdfFrame, record: PageRecord) -> None:

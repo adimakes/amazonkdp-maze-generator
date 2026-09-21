@@ -49,6 +49,7 @@ from .errors import (
     GenerationError,
     MazeBookError,
 )
+from .model import seeds
 from .model.book_config import BookConfig, load_book_config, repo_root
 from .model.json_io import read_json
 from .model.profile import Profile, load_profile
@@ -274,11 +275,16 @@ def _write_maze_pdf(context: Context, loaded: LoadedMaze, band) -> None:
         tally_position=context.config.layout.tally_position,
         show_maze_number=context.config.layout.show_maze_number,
         outside_marker_fraction=band.outside_marker_fraction,
+        decoration_count=context.config.layout.maze_page_decorations,
     )
     draw_maze_page(
         frame, loaded.maze, loaded.analysis, layout,
         catalog=context.catalog, band=band, cache=AssetGeometryCache(),
         show_best_possible=context.config.layout.show_best_possible_score,
+        decoration_rng=seeds.rng(
+            context.config.book.seed, context.config.book.id,
+            loaded.maze.maze_index, 0, seeds.PURPOSE_PAGE_DECORATION,
+        ),
     )
     canvas.showPage()
     canvas.save()

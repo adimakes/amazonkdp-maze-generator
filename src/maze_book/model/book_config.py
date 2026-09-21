@@ -133,6 +133,8 @@ class LayoutSpec:
     insert_end_page: bool
     insert_blank_pages_for_parity: bool
     expected_page_count: int | None = None
+    #: How many page-vector decorations to scatter on each maze page. 0 is off.
+    maze_page_decorations: int = 0
 
 
 @dataclass(frozen=True)
@@ -477,6 +479,7 @@ def load_book_config(
             expected_page_count=(
                 int(layout["expectedPageCount"]) if layout.get("expectedPageCount") is not None else None
             ),
+            maze_page_decorations=int(layout.get("mazePageDecorations", 0)),
         ),
         assets=AssetsSpec(
             beginning_vectors_dir=assets["beginningVectorsDir"],
