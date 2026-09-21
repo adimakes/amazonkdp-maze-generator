@@ -84,7 +84,19 @@ books/<book-id>/
 ```
 
 Story text lives inline in `book.json` under `content.scenes[]`, one
-title/text scene per maze. There is no second content file.
+title/text scene per maze. There is no second content file. `content.howToPlay`
+and `content.dedication` carry the front matter's words, so a book's character
+is never named from inside `tools/`.
+
+A few knobs are worth knowing before you write a package:
+
+| Field | What it decides |
+|---|---|
+| `generation.endpointsOnBorder` | Keeps start and finish on an outer row or column, so each can carry an opening in the wall and a marker drawn outside it. A region is a rectangle, so a 3×3 corner region contains four cells no opening can reach. |
+| `layout.mazePageDecorations` | How many page vectors to scatter on each maze page, in the air above the maze and below the tally. |
+| `assets.mazeDecorations` | Which page vectors may be used there. Leave it out for all of them; name a subset to keep a drawing that is already doing a job on that page from turning up twice. |
+| `cover.front` / `cover.back` | Full-bleed artwork for the cover wrap. |
+| `<profile>.outsideMarkerFraction` | Marker size as a share of the maze square, so it is the same on the 8×8 opener and the 18×18 finale. The grid gives up the room. |
 
 ### The two rules a new book must obey
 
@@ -159,8 +171,20 @@ output/<book-id>/
 ├── contact-sheet.png           # all mazes and their answers on one image
 ├── preflight.json              # machine-readable verdict
 ├── book-interior-editable.pdf  # live text, for proofreading
-└── book-interior.pdf           # the file you upload
+├── book-interior.pdf           # the interior you upload
+└── cover/cover-wrap.pdf        # the cover you upload, if the package has artwork
 ```
+
+The cover is built separately, because its spine width depends on the finished
+interior's page count:
+
+```bash
+uv run python tools/make_cover.py --book books/my-new-book
+```
+
+It reads that count out of the built PDF rather than out of `book.json`. A spine
+measured against a stale number is a cover that arrives folded in the wrong
+place, and no amount of care in the file fixes it afterwards.
 
 The **contact sheet** is the one to look at first. Constraints catch per-maze
 defects; they cannot see that five mazes in a row look alike, that a solution
@@ -268,21 +292,64 @@ printed page diverge.
 | Paint | `fill="#000000"` only |
 | **Strokes** | **none, anywhere** — convert strokes to filled paths |
 | Composition | centred within 12 units, ≥ 6 units of padding, ≤ 85% coverage |
-| Detail | no feature or gap thinner than 7 units, ≤ 12 subpaths |
+| Detail | no feature or gap thinner than the printed-size rule below, and a subpath budget that scales with it |
 | Forbidden | text, raster, gradients, opacity, filters, external references |
 
 **No `<circle>`, `<rect>`, `<ellipse>` or `<line>`** — every shape is a `<path>`.
 
 The stroke rule is the one that surprises people. Stroke width does not scale
 with the icon: a 6-unit line that reads as confident on a 0.6 in start marker
-becomes a black blob at the 5.5 mm of an 18×18 finale collectible. And 7 units is
-a *width*, not a radius — every limb must be at least 7 units thick and every gap
-at least 7 units wide, which is why the placeholder art is so chunky. At finale
-size, 7 units is 0.39 mm, about the thinnest mark a print-on-demand press holds
-on cream stock.
+becomes a black blob at the 5.5 mm of an 18×18 finale collectible.
 
-`tools/make_placeholder_assets.py` generates the shipped placeholder set from a
-cubic-only primitive library and can check its own output:
+**The minimum feature size is not a constant.** 0.39 mm is about the thinnest
+mark a print-on-demand press holds on cream stock, and that is the rule. What it
+comes to in viewBox units depends on how big the artwork prints: 7 units at the
+5.5 mm of a finale collectible, but only 2.6 units on a 0.6 in page decoration,
+which has six times the room. `AssetProfile.for_print_size()` states the
+millimetre once and lets the units follow, and `profiles_for_roles()` reads every
+size off the book's own profile and layout — the smallest cell in the last band,
+the marker fraction, the story page. So each file is judged by the rule its
+printed size earns, and `book validate` prints which rule it used:
+
+```text
+assets      25 SVG(s) pass the 18.5 subset
+```
+
+It is a *width*, not a radius: every limb must be at least that thick and every
+gap that wide, which is why icon art has to be chunky.
+
+### Turning supplied artwork into assets
+
+`tools/vectorize.py` traces a raster drawing into the subset, and
+`tools/import_artifacts.py` does a whole folder from a manifest, validating each
+result **before** it writes it so a failed trace cannot leave an invalid asset in
+the package:
+
+```bash
+uv run python tools/import_artifacts.py books/my-new-book
+```
+
+The manifest (`artifacts/asset-manifest.json`) names a source image, a target
+path, and how to treat the drawing. That last choice is the one worth
+understanding:
+
+* `solid` rebuilds the drawing as a filled silhouette with its white interior
+  kept as holes. At icon size the white inside the black *is* the drawing —
+  filling it turns a ghost into a blob and a gravestone loses its cross.
+* `outline` keeps the drawn line as ink, widened until it prints. Only worth it
+  where the artwork is big on the page: at a 5 mm collectible, widening a
+  hairline to 0.39 mm welds the whole drawing shut.
+* `keep_knockouts: false` fills the body flat. Whether a drawing reads better
+  hollow or solid is a judgement about that one drawing, so it is recorded per
+  asset rather than guessed from a threshold.
+
+Not every drawing survives. A figure whose line is 0.73 units wide in a 100-unit
+box cannot be printed at 14 mm, because widening it to the 2.7 units the press
+needs welds arm to body. Render both treatments, look at them, and pick — or
+pick a different drawing.
+
+`tools/make_placeholder_assets.py` generates a placeholder set from a cubic-only
+primitive library and can check its own output:
 
 ```bash
 uv run python tools/make_placeholder_assets.py books/my-new-book --check

@@ -144,6 +144,46 @@ anything draws with it, so canvases must be created with a bundled face — the
 Helvetica default puts an unembeddable base-14 font in a file that never drew a
 character, and fails the font check.
 
+## Where each asset's rules come from
+
+18.5's "no feature thinner than 7 units" is not a property of SVG. It is
+0.39 mm at the 5.5 mm a finale collectible prints at, and the millimetre is the
+rule. `AssetProfile.for_print_size()` states it once and lets the units follow;
+`profiles_for_roles()` reads every size off the book's own profile and layout,
+so a 0.6 in page decoration is judged at 2.6 units and a cell icon at 7. At
+5.5 mm the formula reproduces the locked defaults exactly, which is the check
+that keeps it honest.
+
+Two consequences worth knowing before touching a profile:
+
+- **Shrinking an icon tightens its rule.** Dropping `deadEndScale` to make
+  scenery read as smaller than candy pushed the finale's dead-end icons to
+  2.9 mm, where the press cannot hold any feature the drawing is made of, and
+  the whole asset set stopped validating. The gap stops at 1.35x for that
+  reason, not for want of ambition.
+- **Artwork has to be judged by looking.** Whether a traced drawing reads better
+  hollow or solid is a decision per drawing, recorded in
+  `artifacts/asset-manifest.json`. A figure whose line is 0.73 units wide in a
+  100-unit box cannot print at 14 mm at all -- widening it to the 2.7 units the
+  press needs welds arm to body -- and no parameter fixes that.
+
+## Endpoint markers live outside the grid
+
+`generation.endpointsOnBorder` keeps both endpoints on an outer row or column,
+because only a border cell can carry an opening in the outer wall, and only an
+opening gives a marker something to stand beside. The markers are then drawn
+outside the walls with START and FINISH printed under them.
+
+Two rules hold this together:
+
+- **One placement function.** `asset_footprints()` decides inside-or-outside
+  once and both renderers consume the list. Letting the SVG and the PDF each
+  work it out is the same mistake as letting each infer walls.
+- **Marker room is reserved on all four sides**, not on the two that carry a
+  marker. Per-side reservation made the grid 5.46 in on some pages and 6.11 in
+  on others -- two markers on one axis cost that axis twice, one per axis costs
+  each once -- so the maze visibly grew and slid from page to page.
+
 ## SVG asset contract
 
 Assets are validated (`assets/validate.py`) against a hard subset, and the *same* subset
@@ -151,8 +191,9 @@ definition drives the minimal internal SVG→ReportLab converter
 (`rendering/svg_to_pdf.py`). One subset, two consumers — never two dialects.
 Requirements: SVG 1.1 plain, `viewBox="0 0 100 100"`, artwork centred with ≥6 units of
 padding, fill `#000000` only, **no `stroke` attributes** (strokes don't scale with the
-icon — 5.5 mm finale icons become blobs), no feature/gap thinner than 7 units, ≤12
-subpaths, no text, no background rect, no raster, no gradients, no opacity.
+icon — 5.5 mm finale icons become blobs), no feature or gap thinner than what the
+asset's *printed size* allows (see above; 7 units at 5.5 mm), a subpath budget that
+scales with it, no text, no background rect, no raster, no gradients, no opacity.
 
 Public folder names are part of the contract and case-sensitive:
 `beginning-vectors/`, `ending-vectors/`, `maze-vectors/dead-end/`,
@@ -180,6 +221,16 @@ guards all three; know them before writing a profile:
 Settle profile questions by measuring, not by arguing: generate against a patched
 copy and count acceptances. That is how the PRD §17.4 drift and all three broken
 profiles were resolved.
+
+## Things that look like bugs and are not
+
+- **The colour preflight strips string literals first.** Operators and text
+  share one PDF content stream, so a page that *prints* DARK spaced out as
+  letters contains a lone `K`, and `K` is the CMYK operator. The book failed its
+  own colour check for setting a running head in solid black.
+- **A running head cannot be grey.** 18.8 allows no tint between 0 and 1,
+  because a tint halftones on a monochrome press. Size and letter-spacing do
+  that job in solid ink.
 
 ## Failure behaviour
 
