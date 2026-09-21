@@ -140,10 +140,35 @@ class BookAssembler:
     def _draw_story(self, frame: PdfFrame, record: PageRecord) -> None:
         scene = self.scenes[record.scene_number]
         vector = page_vector_path(self.config, scene)
+        ornament = self._story_ornament(record.scene_number)
         layout = plan_story_page(
-            scene, metrics=self.metrics, side=record.side, has_vector=vector is not None
+            scene,
+            metrics=self.metrics,
+            side=record.side,
+            has_vector=vector is not None,
+            has_ornament=ornament is not None,
         )
-        draw_story_page(frame, scene, layout, cache=self.cache, vector_path=vector)
+        draw_story_page(
+            frame, scene, layout,
+            cache=self.cache, vector_path=vector, ornament_path=ornament,
+        )
+
+    def _story_ornament(self, scene_number: int):
+        """A corner ornament for this story page, drawn from its own stream.
+
+        18.6 specifies the ornament and ``plan_story_page`` has always been able
+        to place one; nothing ever passed a path, so fifty story pages went out
+        with four inches of white below the text and the feature sitting unused
+        in the renderer.
+        """
+        choices = sorted(self.catalog.page_vectors.values(), key=lambda a: a.asset_id)
+        if not choices:
+            return None
+        rng = seeds.rng(
+            self.config.book.seed, self.config.book.id, scene_number,
+            0, seeds.PURPOSE_PAGE_DECORATION,
+        )
+        return rng.choice(choices).path
 
     def _draw_maze(self, frame: PdfFrame, record: PageRecord) -> None:
         loaded = self.mazes[record.maze_index]

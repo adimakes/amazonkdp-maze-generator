@@ -1367,11 +1367,21 @@ front matter
 -> story page
 -> maze page
 -> ...
--> optional end page
 -> solutions pages
+-> optional end page
 ```
 
-The Halloween target is 112 pages: five front-matter pages, 50 story/maze pairs on pages 6–105, one end page on page 106, and six solution pages on pages 107–112 at nine thumbnails per page. The assembler MUST calculate this result from inputs and MUST fail if the configured expected page count is present and does not match.
+The end page comes *after* the solutions, not between the last maze and the
+answer key. Printed before them it tells the reader the book is over six pages
+early, and the last thing they actually see is a part-filled grid of answer
+thumbnails. This ordering was the other way round until a review of real printed
+pages; the earlier order is the one thing in this section that changed for a
+reason outside the arithmetic.
+
+The Halloween target is 112 pages: five front-matter pages, 50 story/maze pairs
+on pages 6–105, six solution pages on 106–111 at nine thumbnails per page, and
+one end page on 112. The assembler MUST calculate this result from inputs and
+MUST fail if the configured expected page count is present and does not match.
 
 ### 17.11 Rendering and fonts
 

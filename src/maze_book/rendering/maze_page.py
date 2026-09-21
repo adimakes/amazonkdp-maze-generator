@@ -23,7 +23,13 @@ from ..errors import RenderingError
 from ..model.analysis import MazeAnalysis
 from ..model.maze_data import MazeData
 from ..model.profile import Band
-from .geometry import MazeGeometry, asset_footprints, marker_margins, wall_segments
+from .geometry import (
+    MazeGeometry,
+    asset_footprints,
+    border_opening,
+    marker_margins,
+    wall_segments,
+)
 from .page import PT_PER_IN, Box, PageMetrics
 from .svg import AssetGeometryCache
 from .svg_to_pdf import BODY_FONT, BOLD_FONT, PdfFrame, place_document
@@ -49,6 +55,11 @@ TICK_ROW_GAP_PT = 6.0
 DECOR_SIZE_IN = 0.46
 DECOR_MARGIN_PT = 10.0
 
+#: The two words a child looks for first.
+MARKER_LABELS = {"start": "START", "finish": "FINISH"}
+MARKER_LABEL_SIZE = 9.0
+MARKER_LABEL_GAP = 3.5
+
 
 @dataclass(frozen=True, slots=True)
 class MazePageLayout:
@@ -64,8 +75,11 @@ class MazePageLayout:
     tick_label_origin: tuple[float, float]
     number_origin: tuple[float, float] | None
     geometry: MazeGeometry
-    #: Where a decoration may be drawn, in the order slots are filled.
+    #: Every slot a decoration may occupy. Which ones get filled is drawn from
+    #: the page's seed stream, so position varies as well as icon.
     decor_boxes: tuple[Box, ...] = ()
+    #: How many of those slots to fill.
+    decoration_count: int = 0
     #: Side of the endpoint markers drawn outside the grid, in points. 0 keeps
     #: them inside their cells.
     marker_size: float = 0.0
@@ -135,8 +149,14 @@ def plan_maze_page(
         count=decoration_count,
         maze_box=maze_box,
         tally_box=tally_box,
+        live_left=live_x0,
+        live_right=live_x1,
         live_top=live_y0,
-        live_bottom=live_y1,
+        # The maze number sits on the baseline at the foot of the live area, in
+        # the outside corner -- which is one of the bottom slots. The band stops
+        # above it rather than the number being moved, because 18.6 puts the
+        # number there and a decoration can go anywhere.
+        folio_top=live_y1 - (MAZE_NUMBER_SIZE + 6.0 if show_maze_number else 0.0),
     )
 
     return MazePageLayout(
@@ -150,9 +170,13 @@ def plan_maze_page(
         tick_label_origin=labels[2],
         number_origin=number_origin,
         decor_boxes=decor_boxes,
+        decoration_count=decoration_count,
         geometry=MazeGeometry.fitted_with_margins(
             maze.rows, maze.cols, box=maze_box,
-            margins=marker_margins(maze, size=marker_size),
+            margins=marker_margins(
+                maze, size=marker_size,
+                label=MARKER_LABEL_SIZE + 2 * MARKER_LABEL_GAP if marker_size else 0.0,
+            ),
         ),
         marker_size=marker_size,
     )
@@ -163,19 +187,22 @@ def _plan_decorations(
     count: int,
     maze_box: Box,
     tally_box: Box,
+    live_left: float,
+    live_right: float,
     live_top: float,
-    live_bottom: float,
+    folio_top: float,
 ) -> tuple[Box, ...]:
-    """Slots for page decorations, in the bands the furniture leaves empty.
+    """Every slot a decoration may occupy, in the bands the furniture leaves empty.
 
     Decorations go in the air above the maze and below the tally, never beside
     the grid: a pumpkin level with the walls reads as part of the puzzle, and a
     child who tries to route through it has been misled by the page rather than
     by the maze.
 
-    Slots are offered on a diagonal -- top outside corner first, then the far
-    bottom one -- because two decorations placed symmetrically read as a border,
-    and a border is furniture the eye then expects on every page.
+    All the slots are returned, not the first two. Choosing *which* is the
+    caller's job, from the page's own seed stream -- a fixed pair repeated fifty
+    times is a border whether the two corners match or not, and only the icon
+    changing is not variety.
     """
     if count <= 0:
         return ()
@@ -187,16 +214,24 @@ def _plan_decorations(
             return None
         return top + (bottom - top - size) / 2.0
 
-    above = band(live_top, maze_box[1])
-    below = band(tally_box[3], live_bottom)
-    left, right = maze_box[0], maze_box[2] - size
+    slots: list[Box] = []
+    columns = (live_left, (live_left + live_right) / 2.0 - size / 2.0, live_right - size)
+    bands = (band(live_top, maze_box[1]), band(tally_box[3], folio_top))
+    for y in bands:
+        if y is None:
+            continue
+        slots.extend((x, y, x + size, y + size) for x in columns)
+    return tuple(slots)
 
-    candidates = [
-        (right, above), (left, below), (left, above), (right, below),
-    ]
-    return tuple(
-        (x, y, x + size, y + size) for x, y in candidates if y is not None
-    )[:count]
+
+#: Most tick boxes on one row before wrapping. Seventeen boxes across a strip
+#: fit, but they wrap 12 and 5, which reads as a full row and an afterthought
+#: rather than as one score to fill in. Nine and eight look like a pair.
+MAX_TICKS_PER_ROW = 9
+
+#: Room between the last tick box and the Total box: the word "Total" is 27 pt
+#: wide at 11 pt, and it is drawn right-aligned against the box.
+TOTAL_LABEL_ROOM_PT = 40.0
 
 
 def _plan_tally(
@@ -204,9 +239,15 @@ def _plan_tally(
 ) -> tuple[tuple[Box, ...], Box, tuple[tuple[float, float], ...]]:
     """Tick boxes, the Total box, and the three text origins.
 
-    The ticks wrap onto as many rows as they need. A 5-candy maze uses one short
-    row; an 18-candy finale needs two, and squeezing eighteen boxes onto one row
-    would make each one smaller than a child's pencil tick.
+    One reading line: the label, then the boxes, then Total on the same
+    baseline immediately after the last box, so the child's eye finishes the row
+    where the answer goes. "Best possible" drops to its own line underneath,
+    because printed next to the boxes it reads as part of the tally and a child
+    ticks against it.
+
+    The ticks wrap at ``MAX_TICKS_PER_ROW`` rather than at whatever the width
+    allows, so an 18-candy finale reads as two even rows instead of one long one
+    and a remainder.
     """
     x0, y0, x1, y1 = box
     tick = TICK_BOX_IN * PT_PER_IN
@@ -216,28 +257,35 @@ def _plan_tally(
     tick_label_origin = (x0, y0 + label_gap)
     ticks_top = y0 + label_gap + 4.0
 
+    width = x1 - x0
     if position == "below":
-        reserved = total_w + 120.0  # Total box plus the "Best possible" line
-        per_row = max(1, int((x1 - x0 - reserved + TICK_GAP_PT) // (tick + TICK_GAP_PT)))
-        rows = max(1, -(-candy_count // per_row))
-        boxes: list[Box] = []
-        for index in range(candy_count):
-            row, column = divmod(index, per_row)
-            bx = x0 + column * (tick + TICK_GAP_PT)
-            by = ticks_top + row * (tick + TICK_ROW_GAP_PT)
-            boxes.append((bx, by, bx + tick, by + tick))
-        total_box = (x1 - total_w, y1 - total_h, x1, y1)
-        total_label_origin = (x1 - total_w - 6.0, y1 - total_h / 2.0 + 4.0)
-        best_label_origin = (x0, y1 - 4.0)
+        room = int((width - total_w - 40.0 + TICK_GAP_PT) // (tick + TICK_GAP_PT))
+        per_row = max(1, min(MAX_TICKS_PER_ROW, room))
     else:
-        per_row = max(1, int((x1 - x0 + TICK_GAP_PT) // (tick + TICK_GAP_PT)))
-        boxes = []
-        for index in range(candy_count):
-            row, column = divmod(index, per_row)
-            bx = x0 + column * (tick + TICK_GAP_PT)
-            by = ticks_top + row * (tick + TICK_ROW_GAP_PT)
-            boxes.append((bx, by, bx + tick, by + tick))
-        total_box = (x0, y1 - total_h, x0 + min(total_w, x1 - x0), y1)
+        per_row = max(1, int((width + TICK_GAP_PT) // (tick + TICK_GAP_PT)))
+
+    boxes: list[Box] = []
+    for index in range(candy_count):
+        row, column = divmod(index, per_row)
+        bx = x0 + column * (tick + TICK_GAP_PT)
+        by = ticks_top + row * (tick + TICK_ROW_GAP_PT)
+        boxes.append((bx, by, bx + tick, by + tick))
+
+    rows = max(1, -(-candy_count // per_row))
+    ticks_bottom = ticks_top + rows * tick + (rows - 1) * TICK_ROW_GAP_PT
+
+    if position == "below":
+        # Total sits at the end of the first tick row, which is where the eye
+        # already is once the last box is ticked. The gap has to hold the word
+        # as well as the box, or "Total" prints over the last tick.
+        total_x = x0 + per_row * (tick + TICK_GAP_PT) + TOTAL_LABEL_ROOM_PT
+        total_x = min(total_x, x1 - total_w)
+        total_y = ticks_top + (tick - total_h) / 2.0
+        total_box = (total_x, total_y, total_x + total_w, total_y + total_h)
+        total_label_origin = (total_x - 6.0, total_y + total_h / 2.0 + 3.5)
+        best_label_origin = (x0, ticks_bottom + TALLY_VALUE_SIZE + 6.0)
+    else:
+        total_box = (x0, y1 - total_h, x0 + min(total_w, width), y1)
         total_label_origin = (x0, y1 - total_h - 6.0)
         best_label_origin = (x0, y1 - total_h - 20.0)
 
@@ -275,11 +323,15 @@ def draw_maze_page(
         "start": band.start_scale, "finish": band.finish_scale,
         "collectible": band.collectible_scale, "dead-end": band.dead_end_scale,
     }
-    for footprint in asset_footprints(
+    placements = asset_footprints(
         maze, geometry, scales=scales, marker_size=layout.marker_size
-    ):
+    )
+    for footprint in placements:
         document = cache.get(catalog.path_for(footprint.asset.asset_id))
         place_document(frame, document, footprint.rect)
+
+    if layout.marker_size > 0.0:
+        _label_markers(frame, maze, geometry, placements, font=bold_font)
 
     _draw_decorations(frame, layout, catalog=catalog, cache=cache, rng=decoration_rng)
 
@@ -290,6 +342,44 @@ def draw_maze_page(
 
     if layout.number_origin is not None:
         _draw_maze_number(frame, layout, maze.maze_index, font=body_font)
+
+
+def _label_markers(
+    frame: PdfFrame,
+    maze: MazeData,
+    geometry: MazeGeometry,
+    placements: Sequence,
+    *,
+    font: str,
+) -> None:
+    """Print START and FINISH beside the two markers.
+
+    A drawing of a boy is not the word "start", and a six-year-old reading the
+    page for the first time should not have to work out which figure is Jim and
+    which is scenery. The word goes on the side of the marker facing away from
+    the grid, so it never sits between the marker and its opening.
+    """
+    openings = border_opening(maze)
+    for footprint in placements:
+        label = MARKER_LABELS.get(footprint.asset.role)
+        side = openings.get(footprint.asset.cell)
+        if label is None or side is None:
+            continue
+        x0, y0, x1, y1 = footprint.rect
+        centre_x = (x0 + x1) / 2.0
+        if side == "N":
+            y = y0 - MARKER_LABEL_GAP
+        elif side == "S":
+            y = y1 + MARKER_LABEL_SIZE + MARKER_LABEL_GAP
+        else:
+            # Under the marker on the east and west sides: beside it would run
+            # into the page margin on the outer edge.
+            y = y1 + MARKER_LABEL_SIZE + MARKER_LABEL_GAP
+        frame.canvas.saveState()
+        frame.canvas.setFillGray(0.0)
+        frame.canvas.setFont(font, MARKER_LABEL_SIZE)
+        frame.canvas.drawCentredString(centre_x, frame.y(y), label)
+        frame.canvas.restoreState()
 
 
 def _draw_decorations(
@@ -306,13 +396,15 @@ def _draw_decorations(
     pumpkin when page 13 is regenerated -- the same reason every other
     stochastic step in the build has its own purpose.
     """
-    if not layout.decor_boxes or rng is None:
+    wanted = min(layout.decoration_count, len(layout.decor_boxes))
+    if wanted <= 0 or rng is None:
         return
     choices = sorted(catalog.page_vectors.values(), key=lambda a: a.asset_id)
     if not choices:
         return
-    picks = rng.sample(choices, k=min(len(layout.decor_boxes), len(choices)))
-    for box, asset in zip(layout.decor_boxes, picks):
+    boxes = rng.sample(list(layout.decor_boxes), k=wanted)
+    picks = rng.sample(choices, k=min(wanted, len(choices)))
+    for box, asset in zip(boxes, picks):
         place_document(frame, cache.get(asset.path), box)
 
 
@@ -337,7 +429,7 @@ def _draw_tally(
     canvas.setFont(body_font, TALLY_LABEL_SIZE)
     canvas.drawString(
         layout.tick_label_origin[0], frame.y(layout.tick_label_origin[1]),
-        "Tick one box for every candy you collect",
+        "Color in one box for every candy you collect",
     )
 
     canvas.setFont(body_font, TALLY_VALUE_SIZE)
@@ -349,7 +441,8 @@ def _draw_tally(
         canvas.setFont(bold_font, TALLY_VALUE_SIZE)
         canvas.drawString(
             layout.best_label_origin[0], frame.y(layout.best_label_origin[1]),
-            f"Best possible: {analysis.best_candy_total}",
+            f"Best possible: {analysis.best_candy_total} "
+            f"{'candy' if analysis.best_candy_total == 1 else 'candies'}",
         )
     canvas.restoreState()
 

@@ -39,7 +39,7 @@ def layout(**overrides) -> LayoutSpec:
         show_maze_number=True,
         show_best_possible_score=True,
         solutions_per_page=9,
-        solutions_start_side="right",
+        solutions_start_side="left",
         insert_end_page=True,
         insert_blank_pages_for_parity=True,
         expected_page_count=None,
@@ -61,8 +61,20 @@ def test_the_halloween_target_is_112_pages_exactly() -> None:
     assert plan.page(6).kind == KIND_STORY and plan.page(6).side == "left"
     assert plan.page(7).kind == KIND_MAZE and plan.page(7).side == "right"
     assert plan.page(105).kind == KIND_MAZE and plan.page(105).maze_index == 50
-    assert plan.page(106).kind == KIND_END
-    assert [p.page_number for p in plan.of_kind(KIND_SOLUTIONS)] == list(range(107, 113))
+    assert [p.page_number for p in plan.of_kind(KIND_SOLUTIONS)] == list(range(106, 112))
+    assert plan.page(112).kind == KIND_END
+
+
+def test_the_end_page_is_the_last_page_in_the_book() -> None:
+    """Printed before the answer key it tells the reader the book is over six
+    pages early, and the last thing they see is a part-filled grid of
+    thumbnails."""
+    plan = plan_pages(front_matter_pages=5, maze_count=50, layout=layout())
+    ends = plan.of_kind(KIND_END)
+    assert len(ends) == 1
+    assert ends[0].page_number == plan.total_pages
+    last_solution = max(p.page_number for p in plan.of_kind(KIND_SOLUTIONS))
+    assert ends[0].page_number > last_solution
 
 
 def test_solution_pages_cover_every_maze_exactly_once() -> None:

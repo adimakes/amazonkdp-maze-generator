@@ -320,7 +320,7 @@ def check_text_markers(
             if title and title not in text:
                 missing.append(f"page {number}: story title {title!r} not found")
         elif page["kind"] == "solutions":
-            if "Best:" not in text:
+            if "Best possible:" not in text:
                 missing.append(f"page {number}: no solution caption found")
     report.add(
         "text-markers",
@@ -364,10 +364,29 @@ def check_best_possible_cross_check(
                 f"maze {index}: page {number} prints {printed}, analysis says {expected}"
             )
         checked += 1
+
+    # The answer key states the same number in the same words, so it can be read
+    # back the same way. A maze page and its answer disagreeing is exactly the
+    # kind of fault a child finds and an adult cannot explain.
+    for page in plan_obj["pages"]:
+        if page["kind"] != "solutions":
+            continue
+        number = page["pageNumber"]
+        if number > len(pages_text):
+            continue
+        printed = [int(value) for value in _BEST_RE.findall(pages_text[number - 1])]
+        expected = [analyses[i].best_candy_total for i in page["solutionIndices"]]
+        if printed != expected:
+            problems.append(
+                f"solutions page {number} prints {printed}, answer key says {expected}"
+            )
+        else:
+            checked += len(expected)
+
     report.add(
         "best-possible-cross-check",
         not problems,
-        "; ".join(problems[:5]) if problems else f"{checked} maze page(s) agree with the answer key",
+        "; ".join(problems[:5]) if problems else f"{checked} printed total(s) agree with the answer key",
     )
 
 

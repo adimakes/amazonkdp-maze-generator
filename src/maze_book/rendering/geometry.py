@@ -330,17 +330,22 @@ def marker_footprint(
     return Footprint(asset=asset, rect=rect)
 
 
-def marker_margins(maze: MazeData, *, size: float) -> dict[str, float]:
-    """Room to reserve outside each side of the grid, in the geometry's units."""
+def marker_margins(maze: MazeData, *, size: float, label: float = 0.0) -> dict[str, float]:
+    """Room to reserve outside each side of the grid, in the geometry's units.
+
+    ``label`` is the room the printed START and FINISH need beyond the marker
+    itself. Charged on all four sides, not only the two that carry a marker. Charging
+    per side made the grid a different size and in a different place on every
+    page -- 5.46 in where the endpoints opened north and south, 6.11 in where
+    they opened east and west -- so flipping through the book the maze visibly
+    grew, shrank and slid. Worse, the tall variant left 1.8 mm between the
+    bottom wall and the tally text, which reads as a collision. A constant
+    reservation costs a little size and buys a page that sits still.
+    """
     if size <= 0.0:
         return {}
-    allowance = size * (1.0 + MARKER_GAP_FRACTION)
-    openings = border_opening(maze)
-    margins: dict[str, float] = {}
-    for asset in maze.assets:
-        if asset.role in (ROLE_START, ROLE_FINISH) and asset.cell in openings:
-            margins[openings[asset.cell]] = allowance
-    return margins
+    allowance = size * (1.0 + MARKER_GAP_FRACTION) + label
+    return {side: allowance for side in ("N", "E", "S", "W")}
 
 
 def asset_footprints(

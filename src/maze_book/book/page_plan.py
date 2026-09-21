@@ -182,9 +182,6 @@ def plan_pages(
                 f"maze page {maze.page_number} ({maze.side}) do not form a valid facing pair"
             )
 
-    if layout.insert_end_page:
-        builder.add(KIND_END)
-
     builder.align_to(layout.solutions_start_side, reason="the first solutions page")
 
     remaining = maze_count
@@ -196,6 +193,13 @@ def plan_pages(
         )
         index += take
         remaining -= take
+
+    # The end page goes after the answers, not before them. Printed between the
+    # last maze and the answer key it tells the reader the book is over, and the
+    # six pages they then turn to are the last thing they see -- a half-filled
+    # grid of thumbnails. Last page of the book, last page of the story.
+    if layout.insert_end_page:
+        builder.add(KIND_END)
 
     # 18.8: the finished book must have an even page count. A printer folds
     # sheets, not pages, so an odd count is padded by the press -- with a blank

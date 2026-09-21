@@ -3,7 +3,9 @@
 18.6: "9 mazes per page in a 3x3 grid, each thumbnail 2.1 x 2.1 in; best route
 drawn as a 1.5 pt solid line with rounded joins against 0.75 pt walls; candies on
 the best route drawn as small filled dots, never full icons (icons are illegible
-at that scale); caption "<n>. Best: <total> candies" under each thumbnail."
+at that scale); caption "<n>. Best possible: <total> candies" under each thumbnail, in
+the same words the maze page used, so a child comparing the two is
+comparing the same thing."
 
 The dots matter. A collectible icon is designed to read at 5.5 mm in a full-size
 maze; on a 2.1 in thumbnail of an 18x18 grid each cell is under 3 mm, and the
@@ -89,7 +91,7 @@ def plan_solutions_page(
 def caption_for(maze_index: int, analysis: MazeAnalysis) -> str:
     total = analysis.best_candy_total
     unit = "candy" if total == 1 else "candies"
-    return f"{maze_index}. Best: {total} {unit}"
+    return f"{maze_index}. Best possible: {total} {unit}"
 
 
 def draw_solution_thumbnail(

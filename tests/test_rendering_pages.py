@@ -27,7 +27,11 @@ from maze_book.rendering.maze_page import (
     plan_maze_page,
 )
 from maze_book.rendering.page import PT_PER_IN, PageMetrics, side_for_page
-from maze_book.rendering.story_page import NUMBER_TOP_IN, plan_story_page
+from maze_book.rendering.story_page import (
+    NUMBER_TOP_IN,
+    VECTOR_SIZE_IN,
+    plan_story_page,
+)
 from maze_book.rendering.svg import (
     AssetGeometryCache,
     MazeRenderOptions,
@@ -290,10 +294,14 @@ def test_everything_is_centred_on_the_live_area() -> None:
     assert (layout.vector_box[0] + layout.vector_box[2]) / 2.0 == pytest.approx(layout.centre_x)
 
 
-def test_the_decorative_vector_is_0_6_inches_square() -> None:
+def test_the_decorative_vector_is_square_and_big_enough_to_read() -> None:
+    """0.6 in is 15 mm, at which the costume drawing's sheet folds collapse into
+    noise -- and it was the only picture on four inches of otherwise blank page."""
     layout = plan_story_page(scene_text(), metrics=metrics(), side="left", has_vector=True)
-    assert layout.vector_box[2] - layout.vector_box[0] == pytest.approx(0.6 * PT_PER_IN)
-    assert layout.vector_box[3] - layout.vector_box[1] == pytest.approx(0.6 * PT_PER_IN)
+    width = layout.vector_box[2] - layout.vector_box[0]
+    assert width == pytest.approx(VECTOR_SIZE_IN * PT_PER_IN)
+    assert layout.vector_box[3] - layout.vector_box[1] == pytest.approx(width)
+    assert width >= 1.0 * PT_PER_IN
 
 
 def test_a_book_with_no_page_vectors_plans_no_vector_box() -> None:
@@ -378,9 +386,11 @@ def test_the_caption_reads_as_18_6_specifies() -> None:
         best_route_length=7, best_candy_total=6, second_best_candy_total=4,
         unique_highest_candy=True, best_route=[],
     )
-    assert sol.caption_for(7, analysis) == "7. Best: 6 candies"
+    # Same words as the maze page, so a child comparing the two is comparing
+    # the same thing -- and so preflight can read both back with one pattern.
+    assert sol.caption_for(7, analysis) == "7. Best possible: 6 candies"
     analysis.best_candy_total = 1
-    assert sol.caption_for(7, analysis) == "7. Best: 1 candy"
+    assert sol.caption_for(7, analysis) == "7. Best possible: 1 candy"
 
 
 def test_fifty_mazes_need_six_solution_pages() -> None:

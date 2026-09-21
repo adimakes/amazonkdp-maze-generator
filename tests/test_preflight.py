@@ -304,7 +304,7 @@ def test_present_markers_pass() -> None:
     report = PreflightReport(pdf=Path("x.pdf"))
     check_text_markers(
         report,
-        ["", "1\nTHE ATTIC HUNT\nbody", "3. Best: 5 candies"],
+        ["", "1\nTHE ATTIC HUNT\nbody", "3. Best possible: 5 candies"],
         plan_obj=plan_obj([
             {"pageNumber": 2, "side": "left", "kind": "story", "sceneNumber": 1},
             {"pageNumber": 3, "side": "right", "kind": "solutions"},

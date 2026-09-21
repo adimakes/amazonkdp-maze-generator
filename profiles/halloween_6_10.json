@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0",
   "profileId": "halloween_6_10",
-  "description": "Six-act difficulty ramp for a 50-maze candy-collecting book, ages 6 to 10. Loop and dead-end ranges are PRD 17.4's normative table verbatim. Grids grow 8x8 to 18x18; the 0.375 in cell floor at 18x18 is the practical minimum for a child drawing with a pencil. Dead-end count rises only gently, 4-5 to 9-10, so dead-end density *falls* with grid size, from about 7% of cells at 8x8 to about 3% at 18x18: later mazes get their difficulty from the loop budget and the sheer distance to the finish, not from a proliferation of wrong turns, and every wrong turn stays short because the depth ceiling stays under seven steps everywhere.",
+  "description": "Six-act difficulty ramp for a 50-maze candy-collecting book, ages 6 to 10. Loop and dead-end ranges are PRD 17.4's normative table verbatim. Grids grow 8x8 to 18x18; the 0.375 in cell floor at 18x18 is the practical minimum for a child drawing with a pencil. Dead-end count rises only gently, 4-5 to 9-10, so dead-end density *falls* with grid size, from about 7% of cells at 8x8 to about 3% at 18x18: later mazes get their difficulty from the loop budget and the sheer distance to the finish, not from a proliferation of wrong turns, and every wrong turn stays short because the depth ceiling stays under seven steps everywhere. collectibleScale and deadEndScale are 0.70 and 0.52, not the 0.55/0.50 pair they started as: a reviewer reading real printed pages could not tell a chocolate bar from a bat at the 16x16 size, and the tick boxes ask a child to make exactly that distinction. Both are monochrome silhouettes of similar weight, so size is the only signal left, and a 10% difference is not one. The ratio stops at 1.35 rather than going further because the finale's cell is 8.3 mm: shrinking scenery to 0.38 put it at 2.9 mm, where the press cannot hold any feature the drawing is made of, and an unreadable smudge is not a clearer signal than a small one.",
   "ageLabel": "6-10",
   "defaults": {
     "simpleRoutes": {
@@ -26,15 +26,15 @@
     "wallWidthPt": 3.0,
     "solutionWallWidthPt": 1.4,
     "solutionRouteWidthPt": 2.2,
-    "collectibleScale": 0.55,
-    "deadEndScale": 0.5,
+    "collectibleScale": 0.7,
+    "deadEndScale": 0.52,
     "startScale": 0.6,
     "finishScale": 0.7,
     "cellClearanceFraction": 0.12,
     "candySpacingPolicy": "no-adjacent-in-corridor-run",
     "maxBorderHugFraction": 0.5,
     "maxUnreachableFraction": 0.35,
-    "outsideMarkerFraction": 0.085
+    "outsideMarkerFraction": 0.0603
   },
   "bands": [
     {
@@ -68,8 +68,8 @@
       "minTemptingRoutes": 2,
       "wallWidthPt": 3.0,
       "solutionRouteWidthPt": 2.4,
-      "collectibleScale": 0.6,
-      "deadEndScale": 0.55
+      "collectibleScale": 0.7,
+      "deadEndScale": 0.52
     },
     {
       "mazeIndexMin": 11,
@@ -102,7 +102,7 @@
       "minTemptingRoutes": 3,
       "wallWidthPt": 3.0,
       "solutionRouteWidthPt": 2.3,
-      "collectibleScale": 0.58,
+      "collectibleScale": 0.7,
       "deadEndScale": 0.52
     },
     {
@@ -136,8 +136,8 @@
       "minTemptingRoutes": 3,
       "wallWidthPt": 2.75,
       "solutionRouteWidthPt": 2.2,
-      "collectibleScale": 0.56,
-      "deadEndScale": 0.5
+      "collectibleScale": 0.7,
+      "deadEndScale": 0.52
     },
     {
       "mazeIndexMin": 31,
@@ -170,8 +170,8 @@
       "minTemptingRoutes": 4,
       "wallWidthPt": 2.5,
       "solutionRouteWidthPt": 2.0,
-      "collectibleScale": 0.54,
-      "deadEndScale": 0.48,
+      "collectibleScale": 0.7,
+      "deadEndScale": 0.52,
       "timeBudgetSeconds": 30.0
     },
     {
@@ -205,8 +205,8 @@
       "minTemptingRoutes": 4,
       "wallWidthPt": 2.5,
       "solutionRouteWidthPt": 1.9,
-      "collectibleScale": 0.52,
-      "deadEndScale": 0.46,
+      "collectibleScale": 0.7,
+      "deadEndScale": 0.52,
       "timeBudgetSeconds": 45.0,
       "candyPlacementTrials": 600
     },
@@ -242,8 +242,8 @@
       "wallWidthPt": 2.25,
       "solutionWallWidthPt": 1.2,
       "solutionRouteWidthPt": 1.8,
-      "collectibleScale": 0.5,
-      "deadEndScale": 0.44,
+      "collectibleScale": 0.7,
+      "deadEndScale": 0.52,
       "timeBudgetSeconds": 60.0,
       "candyPlacementTrials": 800
     }
