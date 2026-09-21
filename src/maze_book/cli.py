@@ -148,7 +148,7 @@ def cmd_book_validate(context: Context) -> int:
 
     from .content.loader import prepare_scenes
     from .rendering.page import PageMetrics
-    from .rendering.svg_to_pdf import register_fonts
+    from .rendering.svg_to_pdf import BODY_FONT, register_fonts
 
     register_fonts(context.fonts_dir)
     metrics = PageMetrics.from_print_spec(config.print)
@@ -258,14 +258,14 @@ def _write_maze_pdf(context: Context, loaded: LoadedMaze, band) -> None:
     from .rendering.maze_page import draw_maze_page, plan_maze_page
     from .rendering.page import PageMetrics
     from .rendering.svg import AssetGeometryCache
-    from .rendering.svg_to_pdf import PdfFrame, register_fonts
+    from .rendering.svg_to_pdf import BODY_FONT, PdfFrame, register_fonts
 
     register_fonts(context.fonts_dir)
     metrics = PageMetrics.from_print_spec(context.config.print)
     path = context.paths.maze_pdf(loaded.maze.maze_index)
     path.parent.mkdir(parents=True, exist_ok=True)
     canvas = Canvas(
-        str(path), pagesize=metrics.page_size, initialFontName="Vera", initialFontSize=16.0
+        str(path), pagesize=metrics.page_size, initialFontName=BODY_FONT, initialFontSize=16.0
     )
     frame = PdfFrame(canvas, metrics.height)
     layout = plan_maze_page(

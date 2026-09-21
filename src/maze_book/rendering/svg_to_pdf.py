@@ -174,14 +174,33 @@ def place_document(
 # Fonts
 # --------------------------------------------------------------------------- #
 
-#: 17.11: v1 bundles Bitstream Vera, whose licence permits bundling,
-#: redistribution and embedding -- exactly the rights a KDP interior needs.
+#: 17.11: every bundled face must permit bundling, redistribution *and*
+#: embedding -- exactly the rights a KDP interior needs. Bitstream Vera and the
+#: SIL Open Font License both do; the licence text ships beside the files.
+#:
+#: Vera stays registered because it is the neutral fallback and the licence
+#: proof that the rule is about rights rather than about one family. What the
+#: book actually reads in is Nunito with Fredoka headings: rounded terminals, a
+#: single-storey 'a' and a tall x-height, which is what a six-year-old reading
+#: one sentence per page needs, and a hard 'l'/'I' distinction, which is what
+#: stops "Ill" from being three identical strokes.
 BUNDLED_FACES = {
     "Vera": "Vera.ttf",
     "Vera-Bold": "VeraBd.ttf",
     "Vera-Italic": "VeraIt.ttf",
     "Vera-BoldItalic": "VeraBI.ttf",
+    "Nunito": "Nunito-Regular.ttf",
+    "Nunito-Bold": "Nunito-Bold.ttf",
+    "Nunito-ExtraBold": "Nunito-ExtraBold.ttf",
+    "Fredoka-SemiBold": "Fredoka-SemiBold.ttf",
 }
+
+#: The three roles every page draws with, named once so a face change is one
+#: edit rather than fourteen. Callers take these as defaults instead of naming a
+#: family, which is what let "Vera" become fourteen separate decisions.
+BODY_FONT = "Nunito"
+BOLD_FONT = "Nunito-Bold"
+TITLE_FONT = "Fredoka-SemiBold"
 
 _registered: set[str] = set()
 
@@ -216,5 +235,12 @@ def register_fonts(fonts_dir: Path) -> dict[str, str]:
     registerFontFamily(
         "Vera", normal="Vera", bold="Vera-Bold",
         italic="Vera-Italic", boldItalic="Vera-BoldItalic",
+    )
+    # Nunito ships here as upright weights only. Naming the bold face for the
+    # italic slots keeps a stray <i> from silently resolving to a base-14 font,
+    # which is the failure 17.11 exists to prevent.
+    registerFontFamily(
+        "Nunito", normal="Nunito", bold="Nunito-Bold",
+        italic="Nunito", boldItalic="Nunito-Bold",
     )
     return dict(BUNDLED_FACES)

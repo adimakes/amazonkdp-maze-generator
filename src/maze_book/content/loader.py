@@ -26,6 +26,7 @@ from typing import Sequence
 
 from ..errors import ConfigError
 from ..model.book_config import BookConfig, Scene
+from ..rendering.svg_to_pdf import BODY_FONT, TITLE_FONT
 
 #: 18.6's story-page type, in points. Overridable by a caller that has a
 #: config knob for it; the defaults are the contract.
@@ -98,9 +99,9 @@ def prepare_scene(
     scene: Scene,
     *,
     width: float,
-    body_font: str = "Vera",
+    body_font: str = BODY_FONT,
     body_size: float = DEFAULT_BODY_SIZE,
-    title_font: str = "Vera-Bold",
+    title_font: str = TITLE_FONT,
     title_size: float = DEFAULT_TITLE_SIZE,
     max_body_lines: int = DEFAULT_MAX_BODY_LINES,
 ) -> tuple[SceneText, list[str]]:
@@ -156,9 +157,9 @@ def prepare_scenes(
     config: BookConfig,
     *,
     width: float,
-    body_font: str = "Vera",
+    body_font: str = BODY_FONT,
     body_size: float = DEFAULT_BODY_SIZE,
-    title_font: str = "Vera-Bold",
+    title_font: str = TITLE_FONT,
     title_size: float = DEFAULT_TITLE_SIZE,
     max_body_lines: int = DEFAULT_MAX_BODY_LINES,
 ) -> list[SceneText]:

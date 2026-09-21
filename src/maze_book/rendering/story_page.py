@@ -27,7 +27,7 @@ from ..content.loader import (
 )
 from .page import PT_PER_IN, Box, PageMetrics
 from .svg import AssetGeometryCache
-from .svg_to_pdf import PdfFrame, place_document
+from .svg_to_pdf import BODY_FONT, PdfFrame, TITLE_FONT, place_document
 
 NUMBER_TOP_IN = 3.2
 TITLE_GAP_PT = 42.0
@@ -102,9 +102,9 @@ def draw_story_page(
     cache: AssetGeometryCache,
     vector_path: Path | None = None,
     ornament_path: Path | None = None,
-    number_font: str = "Vera",
-    title_font: str = "Vera-Bold",
-    body_font: str = "Vera",
+    number_font: str = BODY_FONT,
+    title_font: str = TITLE_FONT,
+    body_font: str = BODY_FONT,
     number_size: float = DEFAULT_NUMBER_SIZE,
     title_size: float = DEFAULT_TITLE_SIZE,
     body_size: float = DEFAULT_BODY_SIZE,

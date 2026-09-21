@@ -26,7 +26,7 @@ from ..model.profile import Band
 from .geometry import MazeGeometry, asset_footprints, marker_margins, wall_segments
 from .page import PT_PER_IN, Box, PageMetrics
 from .svg import AssetGeometryCache
-from .svg_to_pdf import PdfFrame, place_document
+from .svg_to_pdf import BODY_FONT, BOLD_FONT, PdfFrame, place_document
 
 #: 18.6 measurements, in inches.
 MAZE_TOP_OFFSET_IN = 0.75
@@ -259,8 +259,8 @@ def draw_maze_page(
     band: Band,
     cache: AssetGeometryCache,
     show_best_possible: bool = True,
-    body_font: str = "Vera",
-    bold_font: str = "Vera-Bold",
+    body_font: str = BODY_FONT,
+    bold_font: str = BOLD_FONT,
     decoration_rng: random.Random | None = None,
 ) -> None:
     geometry = layout.geometry

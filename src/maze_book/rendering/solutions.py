@@ -24,7 +24,7 @@ from ..model.analysis import MazeAnalysis
 from ..model.maze_data import MazeData
 from .geometry import MazeGeometry, route_polyline, wall_segments
 from .page import PT_PER_IN, Box, PageMetrics
-from .svg_to_pdf import PdfFrame
+from .svg_to_pdf import BODY_FONT, PdfFrame
 
 THUMBNAIL_IN = 2.1
 CAPTION_GAP_PT = 13.0
@@ -98,7 +98,7 @@ def draw_solution_thumbnail(
     analysis: MazeAnalysis,
     slot: SolutionSlot,
     *,
-    caption_font: str = "Vera",
+    caption_font: str = BODY_FONT,
     wall_width: float = WALL_WIDTH_PT,
     route_width: float = ROUTE_WIDTH_PT,
 ) -> None:
@@ -135,7 +135,7 @@ def draw_solutions_page(
     entries: Sequence[tuple[MazeData, MazeAnalysis]],
     layout: SolutionPageLayout,
     *,
-    caption_font: str = "Vera",
+    caption_font: str = BODY_FONT,
     wall_width: float = WALL_WIDTH_PT,
     route_width: float = ROUTE_WIDTH_PT,
 ) -> None:
