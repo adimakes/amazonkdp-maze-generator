@@ -38,8 +38,15 @@ from datetime import date
 from pathlib import Path
 
 from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas as pdfcanvas
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+
+from maze_book.rendering.svg_to_pdf import (  # noqa: E402
+    BODY_FONT,
+    TITLE_FONT,
+    register_fonts as register_interior_fonts,
+)
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 FONTS_DIR = REPO_ROOT / "fonts"
@@ -53,33 +60,19 @@ PAGE_HEIGHT_PT = 11.0 * 72.0
 # margin, "outside" is the trim-edge-side margin (PRD 18.6/17.10).
 SAFE_MARGINS_IN = {"inside": 0.625, "outside": 0.5, "top": 0.5, "bottom": 0.5}
 
-# PRD 17.11: bundle + register the Bitstream Vera family by absolute path;
-# raise rather than fall back to an unconfigured system font.
-FONT_FILES = {
-    "Vera": "Vera.ttf",
-    "Vera-Bold": "VeraBd.ttf",
-    "Vera-Italic": "VeraIt.ttf",
-}
-
 GENERATOR_LABEL = "maze-book v1.0.0"
 
 
 def register_fonts() -> None:
-    """Register the bundled Bitstream Vera faces by absolute path.
+    """Register the interior's own faces, from the interior's own list.
 
-    Raises FileNotFoundError if a required face is missing. MUST NOT fall
-    back to Helvetica or any other unconfigured system font (PRD 17.11).
+    17.11: bundled faces, registered by absolute path, raising rather than
+    falling back to an unconfigured system font. The list itself comes from
+    ``rendering.svg_to_pdf`` rather than being restated here, because a front
+    matter set in a different face from the pages behind it is exactly what a
+    second copy of the list produces.
     """
-    for font_name, filename in FONT_FILES.items():
-        font_path = FONTS_DIR / filename
-        if not font_path.is_file():
-            raise FileNotFoundError(
-                f"Required font face '{font_name}' not found at {font_path}. "
-                "This script MUST NOT fall back to an unconfigured system "
-                "font (PRD 17.11) -- restore the bundled Bitstream Vera "
-                "fonts under fonts/ before running it."
-            )
-        pdfmetrics.registerFont(TTFont(font_name, str(font_path)))
+    register_interior_fonts(FONTS_DIR)
 
 
 def load_book(book_dir: Path) -> dict:
@@ -89,6 +82,22 @@ def load_book(book_dir: Path) -> dict:
         raise FileNotFoundError(f"book.json not found at {book_json_path}")
     with book_json_path.open(encoding="utf-8") as f:
         return json.load(f)
+
+
+#: Used when a package supplies none. Deliberately nameless: a default that
+#: mentions Jim would put one book's character into every other book's front
+#: matter, which is the same mistake as branching on the book id in src/.
+DEFAULT_HOW_TO_PLAY = [
+    "Find a path from the start to the finish.",
+    "You may not cross a wall.",
+    "Collect as much as you can on the way.",
+    "Tick one box for everything you collect.",
+    "Write your total in the Total box.",
+    "Compare it with the \u201cBest possible\u201d score.",
+    "Answers are in the back of the book.",
+]
+
+DEFAULT_DEDICATION = ["For everyone who likes a good puzzle."]
 
 
 def _humanize_origin_value(value: str | None) -> str:
@@ -240,7 +249,7 @@ def build_front_matter(book_dir: Path, out_path: Path) -> None:
         str(out_path),
         pagesize=(PAGE_WIDTH_PT, PAGE_HEIGHT_PT),
         invariant=1,
-        initialFontName="Vera",
+        initialFontName=BODY_FONT,
         initialFontSize=12,
         initialLeading=14.4,
     )
@@ -250,10 +259,10 @@ def build_front_matter(book_dir: Path, out_path: Path) -> None:
     # ---- Page 1: title page (recto) ----
     pw = PageWriter(c, 1)
     y = PAGE_HEIGHT_PT * 0.46
-    y = pw.centred_wrapped(y, title, "Vera-Bold", 30, 36)
+    y = pw.centred_wrapped(y, title, TITLE_FONT, 30, 36)
     y -= 18
     if subtitle:
-        pw.centred_wrapped(y, subtitle, "Vera", 15, 21)
+        pw.centred_wrapped(y, subtitle, BODY_FONT, 15, 21)
     c.showPage()
 
     # ---- Page 2: copyright page (verso) ----
@@ -266,39 +275,27 @@ def build_front_matter(book_dir: Path, out_path: Path) -> None:
         content_origin_line(content_origin),
     ]
     for line in copyright_lines:
-        y = pw.centred_wrapped(y, line, "Vera", 10.5, 15)
+        y = pw.centred_wrapped(y, line, BODY_FONT, 10.5, 15)
         y -= 8
     c.showPage()
 
     # ---- Page 3: how to play (recto) ----
     pw = PageWriter(c, 3)
     y = pw.content_top - 6
-    pw.centred(y, "HOW TO PLAY", "Vera-Bold", 20)
+    pw.centred(y, "HOW TO PLAY", TITLE_FONT, 20)
     y -= 40
-    how_to_play_steps = [
-        "Follow a path from Jim to the candy bucket.",
-        "You may not pass through a wall.",
-        "Collect as much candy as you can on the way.",
-        "Tick one box for every candy you collect.",
-        "Write your total in the Total box.",
-        "Compare your total with the “Best possible” score.",
-        "Answers are in the back of the book.",
-    ]
+    how_to_play_steps = book.get("content", {}).get("howToPlay") or DEFAULT_HOW_TO_PLAY
     for i, step in enumerate(how_to_play_steps, start=1):
-        y = pw.centred_wrapped(y, f"{i}. {step}", "Vera", 12.5, 20)
+        y = pw.centred_wrapped(y, f"{i}. {step}", BODY_FONT, 12.5, 20)
         y -= 6
     c.showPage()
 
     # ---- Page 4: dedication / from-the-author page (verso) ----
     pw = PageWriter(c, 4)
     y = PAGE_HEIGHT_PT * 0.56
-    dedication_lines = [
-        "For every trick-or-treater who loves a good puzzle,",
-        "and for the grown-ups who walk the block beside them.",
-        "Happy hunting, and happy Halloween.",
-    ]
+    dedication_lines = book.get("content", {}).get("dedication") or DEFAULT_DEDICATION
     for line in dedication_lines:
-        y = pw.centred_wrapped(y, line, "Vera-Italic", 13, 20)
+        y = pw.centred_wrapped(y, line, BODY_FONT, 13, 20)
     c.showPage()
 
     # ---- Page 5: half-title page (recto) ----
@@ -310,7 +307,7 @@ def build_front_matter(book_dir: Path, out_path: Path) -> None:
     # If this page is ever dropped, drop or add one MORE page alongside it
     # -- never change this file's page count by exactly one.
     pw = PageWriter(c, 5)
-    pw.centred_wrapped(PAGE_HEIGHT_PT * 0.5, title, "Vera-Bold", 24, 30)
+    pw.centred_wrapped(PAGE_HEIGHT_PT * 0.5, title, TITLE_FONT, 24, 30)
     c.showPage()
 
     c.save()

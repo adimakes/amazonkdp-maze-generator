@@ -170,7 +170,9 @@
         "exactRouteEnumeration"
       ],
       "properties": {
-        "endpointsOnBorder": { "type": "boolean" },
+        "endpointsOnBorder": {
+          "type": "boolean"
+        },
         "startRegion": {
           "$ref": "#/$defs/region"
         },
@@ -259,7 +261,11 @@
         "insertBlankPagesForParity": {
           "type": "boolean"
         },
-        "mazePageDecorations": { "type": "integer", "minimum": 0, "maximum": 4 },
+        "mazePageDecorations": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4
+        },
         "expectedPageCount": {
           "type": [
             "integer",
@@ -397,6 +403,26 @@
               "type": "null"
             }
           ]
+        },
+        "howToPlay": {
+          "description": "Numbered instructions for the front matter's how-to-play page.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "maxItems": 10
+        },
+        "dedication": {
+          "description": "Lines for the front matter's dedication page, one per printed line.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "maxItems": 6
         }
       }
     },
@@ -437,6 +463,33 @@
         },
         "writeEditableProofPdf": {
           "type": "boolean"
+        }
+      }
+    },
+    "cover": {
+      "description": "Supplied cover artwork for the KDP wrap. Optional: a package without it still builds an interior.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "front",
+        "back"
+      ],
+      "properties": {
+        "sourceDir": {
+          "type": "string",
+          "description": "Repo-relative folder holding the artwork."
+        },
+        "front": {
+          "type": "string",
+          "minLength": 1
+        },
+        "back": {
+          "type": "string",
+          "minLength": 1
+        },
+        "spineColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
         }
       }
     }

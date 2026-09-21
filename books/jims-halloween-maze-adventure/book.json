@@ -2,14 +2,14 @@
   "schemaVersion": "1.0",
   "book": {
     "id": "jims-halloween-maze-adventure",
-    "title": "Jim's Halloween Maze Adventure",
-    "subtitle": "50 Candy Collecting Mazes for Kids Ages 6 to 10",
+    "title": "Halloween Mazes for Kids",
+    "subtitle": "50 Mazes with a Spooky Story, Ages 6 to 10",
     "locale": "en-US",
     "seed": 42001,
     "mazeCount": 50,
     "profileId": "halloween_6_10",
     "contentOrigin": {
-      "text": "human",
+      "text": "ai-drafted-and-human-edited",
       "images": "ai-generated-and-vector-cleaned",
       "translations": "not-applicable"
     }
@@ -77,308 +77,322 @@
       {
         "number": 1,
         "title": "The Attic Hunt",
-        "text": "Jim's costume box is somewhere up in the attic. Find a way through before the sun goes down.",
+        "text": "The costume box is up in the attic somewhere, behind everything else. Jim has until dark.",
         "pageVector": "jim_costume.svg"
       },
       {
         "number": 2,
         "title": "The Stuck Zipper",
-        "text": "The ghost suit is inside out and the zipper will not move. Get across the bedroom to the sewing box.",
+        "text": "The ghost suit is inside out and the zipper will not budge. The sewing box is all the way across the room.",
         "pageVector": "jim_costume.svg"
       },
       {
         "number": 3,
         "title": "Mirror Practice",
-        "text": "Jim paints a white swirl on each cheek. Help him step past the toys and books to reach the tall mirror.",
+        "text": "Two white swirls, one on each cheek. Now Jim needs the tall mirror to see if they came out spooky or silly.",
         "pageVector": "jim_in_sheet.svg"
       },
       {
         "number": 4,
         "title": "Soup Before Sweets",
-        "text": "Mom says soup before sweets. Find a way through the busy kitchen so Jim can reach his warm bowl.",
+        "text": "Soup before sweets, says Mom. Jim's bowl is steaming away on the far side of the kitchen.",
         "pageVector": "jim_in_sheet.svg"
       },
       {
         "number": 5,
         "title": "The Missing Flashlight",
-        "text": "The flashlight rolled under the couch again. Help Jim wiggle past the pillows and boots to grab it.",
+        "text": "The flashlight has rolled under the couch again. Get past the pillows and the boots and fish it out.",
         "pageVector": "jim_in_sheet.svg"
       },
       {
         "number": 6,
         "title": "The Candy Bucket",
-        "text": "The pumpkin bucket sits high on the closet shelf. Find a clear path so Jim can lift it down.",
+        "text": "The pumpkin bucket is up on the closet shelf where Jim can only just see it. Time to go and get it down.",
         "pageVector": "jim_costume.svg"
       },
       {
         "number": 7,
         "title": "Boots By The Door",
-        "text": "One boot waits by the door and one hides under the stairs. Help Jim hop through the hall to find both.",
+        "text": "One boot is waiting by the door. The other is hiding under the stairs, and Jim is hopping.",
         "pageVector": "jim_costume.svg"
       },
       {
         "number": 8,
         "title": "The Front Door",
-        "text": "The porch light is on and the night smells like wet leaves. Find a way past the coats to the front door.",
+        "text": "The porch light is on and the night smells like wet leaves. Only the coats to get past now.",
         "pageVector": "deco_moon.svg"
       },
       {
         "number": 9,
         "title": "Down The Garden Path",
-        "text": "Damp leaves cover the stepping stones in the yard. Help Jim follow the path down to the little apple tree.",
+        "text": "Wet leaves have covered every single stepping stone. The little apple tree is right at the bottom of the garden.",
         "pageVector": "deco_tree.svg"
       },
       {
         "number": 10,
         "title": "The Squeaky Gate",
-        "text": "The gate squeaks in the wind at the end of the yard. Find a way around the flower pots to open it.",
+        "text": "Squeeeak. That is the gate at the end of the yard, and the flower pots are in the way.",
         "pageVector": "deco_tree.svg"
       },
       {
         "number": 11,
         "title": "The First Porch",
-        "text": "The first house has a grinning pumpkin by the steps. Help Jim reach the doorbell and say trick or treat.",
+        "text": "A grinning pumpkin sits by the steps of the very first house. Jim practises saying trick or treat on the way up.",
         "pageVector": "jim_in_sheet.svg"
       },
       {
         "number": 12,
         "title": "The Barking Dog",
-        "text": "A small dog barks behind the fence and wags his tail. Find a quiet way past him to the next driveway.",
+        "text": "The dog behind the fence is barking his head off and wagging his tail at the same time. Past him, quietly.",
         "pageVector": "jim_costume.svg"
       },
       {
         "number": 13,
         "title": "The Sprinkler Surprise",
-        "text": "A sprinkler spins on the wet grass. Help Jim zigzag across the lawn and keep his ghost sheet dry.",
+        "text": "Somebody has left the sprinkler on. A wet ghost is not a scary ghost, so time the dashes carefully.",
         "pageVector": "deco_ghost.svg"
       },
       {
         "number": 14,
         "title": "Between The Hedges",
-        "text": "Tall hedges line the sidewalk like green walls. Find a way through the gaps so Jim can keep going.",
+        "text": "These hedges are taller than Dad. Find the gaps and keep going.",
         "pageVector": "deco_tree.svg"
       },
       {
         "number": 15,
         "title": "Sheets On The Line",
-        "text": "White sheets flap on the line like floating ghosts. Help Jim slip between them to the back gate.",
+        "text": "White sheets flap on the line, and for a second Jim thinks they are other ghosts. The back gate is behind them.",
         "pageVector": "deco_ghost.svg"
       },
       {
         "number": 16,
         "title": "The Corner Store",
-        "text": "The corner store window glows with orange lights. Find a path down the busy aisle to the candy counter.",
+        "text": "Orange lights fill the corner store window. The candy counter is at the back, down one very narrow aisle.",
         "pageVector": "jim_in_sheet.svg"
       },
       {
         "number": 17,
         "title": "The Pile Of Leaves",
-        "text": "A giant pile of leaves blocks the sidewalk. Help Jim crunch a trail through it without dropping his bucket.",
+        "text": "Somebody raked the whole street into one pile. Crunch a trail through it, and hold on to that bucket.",
         "pageVector": "deco_tree.svg"
       },
       {
         "number": 18,
         "title": "A Crowd Of Pirates",
-        "text": "Pirates and robots fill the sidewalk with laughing and shouting. Find a way through the crowd to the next porch.",
+        "text": "Pirates and robots everywhere, all shouting at once. The next porch is somewhere on the other side of them.",
         "pageVector": "jim_costume.svg"
       },
       {
         "number": 19,
         "title": "The Spider Mailbox",
-        "text": "A rubber spider dangles from the neighbor's mailbox. Help Jim duck under it and get to the porch light.",
+        "text": "A rubber spider swings from the mailbox. Jim knows it is rubber. Jim still ducks.",
         "pageVector": "deco_spider.svg"
       },
       {
         "number": 20,
         "title": "The Long Driveway",
-        "text": "The last house on the street sits far back from the road. Find a way up the long driveway to the door.",
+        "text": "The last house on the street sits a long way back. It is a long walk for one sweet, but Jim is going anyway.",
         "pageVector": "deco_moon.svg"
       },
       {
         "number": 21,
         "title": "Into The Park",
-        "text": "The park gate stands open and the sky turns purple. Help Jim find a path through the dark trees.",
+        "text": "The park gate is open and the sky has gone purple. These trees looked much shorter this morning.",
         "pageVector": "deco_tree.svg"
       },
       {
         "number": 22,
         "title": "The Duck Pond",
-        "text": "Ducks bob on the still water under the first stars. Find a dry path around the pond to the stone bridge.",
+        "text": "Ducks bob about under the first stars. The stone bridge is on the far side and the mud in between is deep.",
         "pageVector": "deco_moon.svg"
       },
       {
         "number": 23,
         "title": "The Pumpkin Patch",
-        "text": "Fat pumpkins sit in muddy rows across the field. Find a way between them to the wagon at the far side.",
+        "text": "Rows and rows of fat pumpkins, every one of them sitting in mud. The wagon is parked at the far end.",
         "pageVector": "deco_tree.svg"
       },
       {
         "number": 24,
         "title": "The Hay Bale Maze",
-        "text": "Hay bales make walls taller than Jim. Find the way through them to the lantern glowing in the middle.",
+        "text": "The hay bales are stacked higher than Jim's head. Somewhere in the middle of them, a lantern is glowing.",
         "pageVector": "deco_moon.svg"
       },
       {
         "number": 25,
         "title": "The Quiet School Yard",
-        "text": "The school yard is quiet and the swings sway in the breeze. Help Jim cross the blacktop to the open gate.",
+        "text": "The swings are moving and nobody is on them. Across the blacktop, somebody has left the gate open.",
         "pageVector": "jim_in_sheet.svg"
       },
       {
         "number": 26,
         "title": "The Skeleton Band",
-        "text": "A skeleton band plays kazoos on the bandstand. Help Jim hop through the folding chairs to hear the song.",
+        "text": "A skeleton band is playing kazoos on the bandstand, badly. Jim would like a closer look.",
         "pageVector": "deco_gravestone.svg"
       },
       {
         "number": 27,
         "title": "The Bat Alley",
-        "text": "Bats swoop over the alley lights, squeaking hello. Find a path between the trash cans to the bright street.",
+        "text": "Bats swoop over the alley lights, squeaking away. They are only saying hello. Probably.",
         "pageVector": "deco_bat.svg"
       },
       {
         "number": 28,
         "title": "The Fountain Square",
-        "text": "Water splashes in the old stone fountain. Help Jim weave through the benches to the candy stand.",
+        "text": "Water splashes in the old stone fountain. There is a candy stand on the other side of all these benches.",
         "pageVector": "deco_moon.svg"
       },
       {
         "number": 29,
         "title": "The Costume Parade",
-        "text": "Drums thump as the costume parade fills the street. Find a way through the marchers to the sidewalk.",
+        "text": "Drums. The parade has filled the whole street, and Jim is on the wrong side of it.",
         "pageVector": "jim_costume.svg"
       },
       {
         "number": 30,
         "title": "The Library Steps",
-        "text": "Paper bats hang above the library steps. Help Jim climb through the crowd to the treat bowl by the door.",
+        "text": "There is a treat bowl by the library door and it is going fast. Paper bats swing overhead the whole way up.",
         "pageVector": "deco_bat.svg"
       },
       {
         "number": 31,
         "title": "The Old Orchard",
-        "text": "Twisted apple trees lean over the tall grass. Help Jim find a path between the trunks to the stone wall.",
+        "text": "The old apple trees lean right out over the grass. The stone wall is somewhere past them.",
         "pageVector": "deco_tree.svg"
       },
       {
         "number": 32,
         "title": "The Cobweb Shed",
-        "text": "Silver webs cover the door of the little garden shed. Help Jim brush past them to the lantern inside.",
+        "text": "Silver webs cover the shed door, every inch of it. There is a lantern in there, and Jim wants it.",
         "pageVector": "deco_web_corner.svg"
       },
       {
         "number": 33,
         "title": "The Foggy Lane",
-        "text": "Thick fog rolls along the narrow lane. Help Jim follow the fence posts until the streetlight glows again.",
+        "text": "Fog has come down thick in the lane. Follow the fence posts and the streetlight will turn up eventually.",
         "pageVector": "deco_ghost.svg"
       },
       {
         "number": 34,
         "title": "The Black Cat",
-        "text": "A black cat sits in the middle of the lane and purrs. Find a way around her so Jim can keep walking.",
+        "text": "A black cat has sat down in the middle of the lane and started purring. She is not moving for anybody.",
         "pageVector": "deco_moon.svg"
       },
       {
         "number": 35,
         "title": "The Graveyard Fence",
-        "text": "Old stones stand in rows behind the iron fence. Help Jim follow the fence line to the gate at the corner.",
+        "text": "Old stones stand in rows behind the iron fence. Jim keeps close to the fence and does not look twice.",
         "pageVector": "deco_gravestone.svg"
       },
       {
         "number": 36,
         "title": "The Creaky Bridge",
-        "text": "The wooden bridge creaks over a chuckling stream. Find the dry boards that lead Jim to the other side.",
+        "text": "The wooden bridge creaks over a chuckling stream. Some of these boards are dry and some are not.",
         "pageVector": "deco_tree.svg"
       },
       {
         "number": 37,
         "title": "The Whispering Willow",
-        "text": "A willow brushes the path with long green fingers. Help Jim slip under the branches and back to the road.",
+        "text": "The willow trails its branches right across the path. They only feel like fingers.",
         "pageVector": "deco_tree.svg"
       },
       {
         "number": 38,
         "title": "The Lighthouse Path",
-        "text": "The lighthouse beam sweeps over the rocks. Find a path up the steep steps to the keeper's candy dish.",
+        "text": "The lighthouse beam swings over the rocks and back again. The keeper keeps a candy dish at the top of those steps.",
         "pageVector": "deco_moon.svg"
       },
       {
         "number": 39,
         "title": "The Dancing Skeletons",
-        "text": "Skeletons clack and tap dance in the old barn. Help Jim spin through the hay to the fiddle player.",
+        "text": "Clack, clack, clack. The skeletons are tap dancing in the old barn and the fiddler shows no sign of stopping.",
         "pageVector": "deco_gravestone.svg"
       },
       {
         "number": 40,
         "title": "The Owl Loft",
-        "text": "A round owl blinks down from the hay loft. Find a way past the buckets and ropes to the open door.",
+        "text": "A very round owl blinks down from the hay loft. Jim blinks back, then goes looking for the open door.",
         "pageVector": "deco_bat.svg"
       },
       {
         "number": 41,
         "title": "The Mansion Gates",
-        "text": "Tall iron gates stand at the top of the hill. Help Jim find the open one and start up the winding drive.",
+        "text": "Tall iron gates at the top of the hill, and one of them is open. Jim just has to work out which.",
         "pageVector": "deco_moon.svg"
       },
       {
         "number": 42,
         "title": "The Hedge Maze",
-        "text": "Green walls twist and turn in the mansion garden. Find the path to the stone bench at the center.",
+        "text": "A maze inside a maze. There is a stone bench at the middle of this one, for anybody who reaches it.",
         "pageVector": "deco_tree.svg"
       },
       {
         "number": 43,
         "title": "The Grand Porch",
-        "text": "Cobwebs hang like lace across the huge front porch. Help Jim duck under them to reach the brass bell.",
+        "text": "Cobwebs hang right across the enormous porch. Behind them somewhere is a brass bell the size of Jim's head.",
         "pageVector": "deco_web_corner.svg"
       },
       {
         "number": 44,
         "title": "The Great Hall",
-        "text": "Candles flicker in the great hall and a ghost waltzes by. Find a way across the checkered floor.",
+        "text": "Candles flicker all the way down the great hall. A ghost waltzes past and does not even look at Jim.",
         "pageVector": "deco_ghost.svg"
       },
       {
         "number": 45,
         "title": "The Cellar Steps",
-        "text": "Jars of pickles line the cool cellar walls. Help Jim find a path through the crates to the light switch.",
+        "text": "Jars of pickles line the cellar wall, hundreds of them. The light switch is past all these crates.",
         "pageVector": "deco_spider.svg"
       },
       {
         "number": 46,
         "title": "The Tower Stairs",
-        "text": "Stone stairs curl up and up inside the tower. Help Jim climb past the flapping bats to the very top.",
+        "text": "The stairs curl up and up and up. The bats do not mind sharing, so long as Jim keeps left.",
         "pageVector": "deco_bat.svg"
       },
       {
         "number": 47,
         "title": "The Dusty Ballroom",
-        "text": "A music box plays in the dusty ballroom. Find a way between the covered chairs to the tall glass doors.",
+        "text": "A music box is still playing in the dusty ballroom. Nobody has been here for years and it is still playing.",
         "pageVector": "deco_web_corner.svg"
       },
       {
         "number": 48,
         "title": "The Mansion Attic",
-        "text": "Trunks and old hats fill the mansion attic. Help Jim tiptoe through the boxes to the round window.",
+        "text": "Trunks, old hats, and a smell like the back of a wardrobe. The round window is at the far end.",
         "pageVector": "deco_spider.svg"
       },
       {
         "number": 49,
         "title": "The Last Big House",
-        "text": "Paper ghosts float above the last big porch on the hill. Help Jim reach the door for the final treats.",
+        "text": "Paper ghosts float over the last big porch on the hill. Final door of the night, and the bucket is nearly full.",
         "pageVector": "deco_ghost.svg"
       },
       {
         "number": 50,
         "title": "Home At Last",
-        "text": "Jim's own porch light glows warm and yellow. Help him reach the steps, then dump out the bucket and count the candy.",
+        "text": "Jim's own porch light is glowing warm and yellow. Reach the steps, tip out the bucket, and start counting.",
         "pageVector": "jim_in_sheet.svg"
       }
     ],
     "endPage": {
-      "title": "THE END",
-      "text": "Now go and count your candy."
-    }
+      "title": "The End",
+      "text": "Tip it all out on the floor and count. Jim always does."
+    },
+    "howToPlay": [
+      "Find a path from Jim to the candy bucket.",
+      "You cannot walk through a wall.",
+      "Pick up as much candy as you can on the way.",
+      "Tick one box for every candy you get.",
+      "Write how many you got in the Total box.",
+      "See how close you came to the “Best possible” score.",
+      "Stuck? The answers are at the back."
+    ],
+    "dedication": [
+      "For everyone who takes the long way round",
+      "because that is where the good sweets are.",
+      "Happy Halloween."
+    ]
   },
   "outputs": {
     "writeMazeJson": true,
@@ -389,5 +403,11 @@
     "writeContactSheet": true,
     "writePreflightReport": true,
     "writeEditableProofPdf": true
+  },
+  "cover": {
+    "sourceDir": "artifacts",
+    "front": "Boy_running_from_Halloween_maze_2K_20260917223746.jpeg",
+    "back": "BACK_COVER_–__HALLOWEEN_MAZES_2K_20260917235030 (1).jpeg",
+    "spineColor": "#512E6F"
   }
 }
