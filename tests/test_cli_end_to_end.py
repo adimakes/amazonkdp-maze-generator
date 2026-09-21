@@ -341,7 +341,7 @@ def test_copying_a_book_and_editing_only_its_config_makes_a_different_book(
             "number": index,
             "title": f"Launch Pad {index}",
             "text": f"Sam checks the fuel gauge and counts {index} stars ahead.",
-            "pageVector": "deco_moon.svg",
+            "pageVector": "deco_ghost.svg",
         }
         for index in range(1, 13)
     ]
