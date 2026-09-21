@@ -28,7 +28,65 @@ sys.path.insert(0, str(REPO / "src"))
 sys.path.insert(0, str(REPO / "tools"))
 
 from maze_book.assets.raster import check_raster, load_raster  # noqa: E402
-from vectorize import despeckle, otsu_threshold  # noqa: E402
+
+def otsu_threshold(grey: np.ndarray) -> int:
+    """Otsu's between-class variance threshold.
+
+    Chosen over a fixed 128 because the supplied art is JPEG: compression puts a
+    halo around every black stroke, and where the true threshold sits depends on
+    how much white the particular image has.
+    """
+    histogram = np.bincount(grey.ravel(), minlength=256).astype(np.float64)
+    total = histogram.sum()
+    weight_bg = np.cumsum(histogram)
+    weight_fg = total - weight_bg
+    levels = np.arange(256)
+    mean_bg = np.cumsum(histogram * levels) / np.maximum(weight_bg, 1)
+    grand = (histogram * levels).sum()
+    mean_fg = (grand - np.cumsum(histogram * levels)) / np.maximum(weight_fg, 1)
+    between = weight_bg * weight_fg * (mean_bg - mean_fg) ** 2
+    return int(np.argmax(between[:-1]))
+
+
+def despeckle(mask: np.ndarray, *, min_fraction: float = 0.0004) -> np.ndarray:
+    """Drop ink islands too small to be art.
+
+    JPEG ringing around a black stroke survives thresholding as a scatter of
+    one- and two-pixel specks, and at 600 dpi each one is a visible dot. The
+    floor is a fraction of the image so it means the same thing whatever
+    resolution the source arrived at.
+    """
+    labels, count = _label(mask)
+    if count == 0:
+        return mask
+    sizes = np.bincount(labels.ravel())
+    floor = max(4, int(mask.size * min_fraction))
+    keep = [index for index in range(1, count + 1) if sizes[index] >= floor]
+    return np.isin(labels, keep) if keep else mask
+
+
+def _label(mask: np.ndarray) -> tuple[np.ndarray, int]:
+    """4-connected component labels of the True cells, by flood fill."""
+    height, width = mask.shape
+    labels = np.zeros((height, width), dtype=np.int32)
+    current = 0
+    stack: list[tuple[int, int]] = []
+    for start_y in range(height):
+        for start_x in range(width):
+            if not mask[start_y, start_x] or labels[start_y, start_x]:
+                continue
+            current += 1
+            labels[start_y, start_x] = current
+            stack.append((start_y, start_x))
+            while stack:
+                y, x = stack.pop()
+                for ny, nx in ((y - 1, x), (y + 1, x), (y, x - 1), (y, x + 1)):
+                    if 0 <= ny < height and 0 <= nx < width:
+                        if mask[ny, nx] and not labels[ny, nx]:
+                            labels[ny, nx] = current
+                            stack.append((ny, nx))
+    return labels, current
+
 
 #: Padding around the artwork, as a fraction of the final square. Matches the
 #: subset's 6-of-100 with room to spare, so vector and raster assets in one book

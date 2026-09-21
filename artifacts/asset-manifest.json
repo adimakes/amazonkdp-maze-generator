@@ -85,7 +85,7 @@
       }
     },
     {
-      "source": "Kid_in_ghost_sheet_icon_2K_20260917235730.jpeg",
+      "source": "Kid_holding_pumpkin_bucket_2K_20260917235747.jpeg",
       "target": "beginning-vectors/jim_start.svg",
       "mode": "outline"
     },
@@ -113,6 +113,31 @@
       "source": "Spider_web_icon_2K_20260917235834.jpeg",
       "target": "page-vectors/web_corner.svg",
       "mode": "outline"
+    },
+    {
+      "target": "page-vectors/jim_walking.svg",
+      "source": "Kid_holding_pumpkin_bucket_2K_20260917235747.jpeg",
+      "mode": "solid"
+    },
+    {
+      "target": "page-vectors/jim_with_bucket.svg",
+      "source": "Child_holding_pumpkin_bucket_2K_20260917235741.jpeg",
+      "mode": "solid"
+    },
+    {
+      "target": "page-vectors/web_wedge.svg",
+      "source": "Black_and_white_spider_web_2K_20260917235752.jpeg",
+      "mode": "solid"
+    },
+    {
+      "target": "maze-vectors/dead-end/spider_big.svg",
+      "source": "Black_and_white_spider_icon_2K_20260917235948.jpeg",
+      "mode": "solid"
+    },
+    {
+      "target": "maze-vectors/dead-end/spider_web.svg",
+      "source": "Spider_web_icon_2K_20260917235827.jpeg",
+      "mode": "solid"
     }
   ],
   "covers": [
@@ -121,7 +146,7 @@
       "face": "front"
     },
     {
-      "source": "BACK_COVER_\u2013__HALLOWEEN_MAZES_2K_20260917235030 (1).jpeg",
+      "source": "BACK_COVER_–__HALLOWEEN_MAZES_2K_20260917235030 (1).jpeg",
       "face": "back"
     }
   ]

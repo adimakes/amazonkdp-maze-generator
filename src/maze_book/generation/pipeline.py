@@ -215,8 +215,14 @@ def place_assets(
         ),
     ]
 
-    # Step 11: every eligible dead end gets exactly one marker (17.8).
+    # Step 11: eligible dead ends get a marker, as many as the profile asks
+    # for (17.8). Which ones comes from the same stream that picks the faces, so
+    # regenerating one maze cannot reshuffle another, and the choice is taken in
+    # sorted order so it does not depend on how the graph was walked.
     dead_ends = graph.dead_end_cells(adjacency, exclude=(maze.start, maze.finish))
+    wanted = max(1, round(len(dead_ends) * band.dead_end_marker_fraction))
+    if wanted < len(dead_ends):
+        dead_ends = sorted(rng.sample(sorted(dead_ends), k=wanted))
     for ordinal, cell in enumerate(dead_ends):
         chosen = catalog.choose_dead_end(rng, ordinal)
         assets.append(

@@ -82,6 +82,7 @@
         "startScale": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
         "finishScale": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
         "outsideMarkerFraction": { "type": "number", "minimum": 0, "maximum": 0.25 },
+        "deadEndMarkerFraction": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
         "cellClearanceFraction": { "type": "number", "minimum": 0, "maximum": 0.5 },
         "candySpacingPolicy": { "enum": ["no-adjacent-in-corridor-run", "no-adjacent", "none"] },
         "maxBorderHugFraction": { "type": "number", "minimum": 0, "maximum": 1 },

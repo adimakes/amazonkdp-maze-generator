@@ -77,6 +77,10 @@ class Band:
     #: same size on the 8x8 opener as on the 18x18 finale. 0 keeps the markers
     #: inside their cells, which is the pre-18.6 behaviour.
     outside_marker_fraction: float = 0.0
+    #: What share of eligible dead ends carry a marker. 1.0 is every one, which
+    #: is right while a maze has four or five; a finale has ten of them beside
+    #: seventeen collectibles, and the page stops reading as a puzzle.
+    dead_end_marker_fraction: float = 1.0
 
 
 _REQUIRED = (
@@ -206,6 +210,7 @@ class Profile:
             max_border_hug_fraction=float(band["maxBorderHugFraction"]),
             max_unreachable_fraction=float(band["maxUnreachableFraction"]),
             outside_marker_fraction=float(band.get("outsideMarkerFraction", 0.0)),
+            dead_end_marker_fraction=float(band.get("deadEndMarkerFraction", 1.0)),
         )
 
 

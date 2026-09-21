@@ -231,10 +231,10 @@ def test_every_band_loops_min_is_at_least_3_except_child_6_7_first_steps(repo_ro
 _HALLOWEEN_PRD_GRID_CANDY_MARGIN_WALL: dict[str, tuple[int, int, IntRange, int, float]] = {
     "Getting Ready": (8, 8, IntRange(5, 7), 2, 3.00),
     "The Neighborhood": (10, 10, IntRange(7, 9), 2, 3.00),
-    "The Dark End of the Street": (12, 12, IntRange(9, 11), 2, 2.75),
-    "The Haunted Half Hour": (14, 14, IntRange(11, 13), 1, 2.50),
-    "The Long Way Home": (16, 16, IntRange(13, 15), 1, 2.50),
-    "Finale": (18, 18, IntRange(16, 18), 1, 2.25),
+    "The Dark End of the Street": (12, 12, IntRange(8, 10), 2, 2.75),
+    "The Haunted Half Hour": (14, 14, IntRange(9, 11), 1, 2.50),
+    "The Long Way Home": (16, 16, IntRange(10, 12), 1, 2.50),
+    "Finale": (18, 18, IntRange(11, 13), 1, 2.25),
 }
 
 # (loops range, deadEnds range) as printed in PRD 17.4. The shipped profile drifted

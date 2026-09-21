@@ -1078,14 +1078,23 @@ A profile MUST be data-driven. Age labels are metadata; acceptance is based on m
 
 The supplied `halloween_6_10` profile MUST encode these ranges from the Halloween PRD:
 
-| Act | Maze numbers | Grid | Cell size | Candy range | Loop range `k` | Dead-end range | Margin | Wall stroke |
-|---|---|---:|---:|---:|---:|---:|---:|---:|
-| 1. Getting Ready | 1–10 | 8×8 | 0.844 in | 5–7 | 3–4 | 4–5 | 2 | 3.00 pt |
-| 2. The Neighborhood | 11–20 | 10×10 | 0.675 in | 7–9 | 4–5 | 5–6 | 2 | 3.00 pt |
-| 3. The Dark End of the Street | 21–30 | 12×12 | 0.563 in | 9–11 | 5–6 | 6–7 | 2 | 2.75 pt |
-| 4. The Haunted Half Hour | 31–40 | 14×14 | 0.482 in | 11–13 | 6–8 | 7–8 | 1 | 2.50 pt |
-| 5. The Long Way Home | 41–48 | 16×16 | 0.422 in | 13–15 | 8–10 | 8–9 | 1 | 2.50 pt |
-| Finale | 49–50 | 18×18 | 0.375 in | 16–18 | 10–12 | 9–10 | 1 | 2.25 pt |
+| Act | Maze numbers | Grid | Cell size | Candy range | Loop range `k` | Dead-end range | Marked | Margin | Wall stroke |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| 1. Getting Ready | 1–10 | 8×8 | 0.844 in | 5–7 | 3–4 | 4–5 | all | 2 | 3.00 pt |
+| 2. The Neighborhood | 11–20 | 10×10 | 0.675 in | 7–9 | 4–5 | 5–6 | all | 2 | 3.00 pt |
+| 3. The Dark End of the Street | 21–30 | 12×12 | 0.563 in | 8–10 | 5–6 | 6–7 | 0.70 | 2 | 2.75 pt |
+| 4. The Haunted Half Hour | 31–40 | 14×14 | 0.482 in | 9–11 | 6–8 | 7–8 | 0.60 | 1 | 2.50 pt |
+| 5. The Long Way Home | 41–48 | 16×16 | 0.422 in | 10–12 | 8–10 | 8–9 | 0.50 | 1 | 2.50 pt |
+| Finale | 49–50 | 18×18 | 0.375 in | 11–13 | 10–12 | 9–10 | 0.45 | 1 | 2.25 pt |
+
+Candy counts from act 3 on are lower than this table first carried, and the
+"Marked" column is new. Both come from the same finding, which only shows up on
+a printed page: candy and dead-end markers each scale with the grid, so the
+finale carried seventeen collectibles beside ten markers and the page stopped
+reading as a puzzle with things in it and started reading as a page covered in
+things. The candy count is the puzzle and comes down a little; the markers are
+decoration and come down a lot. Both ranges stay satisfiable -- all fifty mazes
+are still accepted -- which is the only property this table has to keep.
 
 Cell size is derived (`layout.mazeSquareIn / cols`) and is informative, not an input. The
 0.375 in floor is the practical minimum for a child drawing with a pencil, which is why
@@ -1288,7 +1297,13 @@ For repository v1:
 - Dead-end cells are non-terminal traversable cells with graph degree one.
 - The finish is never reported as an unwanted dead end.
 - The start is excluded from dead-end asset placement even if its degree is one.
-- Every remaining eligible dead end receives one dead-end asset.
+- Eligible dead ends receive a dead-end asset, as many of them as the
+  profile's `deadEndMarkerFraction` asks for (default 1.0, every one).
+  Which ones is drawn from the asset-variant stream, so it is stable.
+  A marker at every dead end is right while a maze has four or five; an
+  18x18 finale has ten of them beside seventeen collectibles, and the page
+  stops reading as a puzzle with things in it and starts reading as a page
+  covered in things.
 - A collectible MAY be on a route-specific cell or a shared route cell, but the profile decides how much shared candy is allowed.
 - The scorer counts each collectible at most once because routes contain no repeated cells.
 - Asset variant selection is deterministic and uses sorted filenames.
