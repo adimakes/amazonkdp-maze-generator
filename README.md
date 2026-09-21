@@ -67,6 +67,14 @@ uv run maze-book book build books/my-new-book
 collectible variants, maze count, trim size or difficulty. If you find yourself
 wanting to edit `src/`, the answer is a config knob or a new profile.
 
+> **Writing the book, rather than building it:** `.claude/skills/new-book/SKILL.md`
+> carries the judgement this README does not — how to tell which supplied drawing
+> can survive at 5 mm, how to keep fifty scenes from sounding like one scene
+> written fifty times, what a profile may promise, and what two rounds of review
+> against real printed pages turned up. Claude Code loads it with
+> `/new-book`; read it yourself before starting a package. It is the part that
+> decides whether the book is worth buying.
+
 A book package looks like this. The folder names are part of the contract and are
 case-sensitive:
 

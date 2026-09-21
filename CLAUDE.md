@@ -18,6 +18,20 @@ Adding a new book = new folder + assets + `book.json` (scene text lives inline i
 `book.json` under `content.scenes[]`) → `book build` → a print-ready interior PDF.
 **Never** add book-specific branching to `src/`; add a config knob or a profile instead.
 
+## Before writing or changing a book, load the `new-book` skill
+
+`.claude/skills/new-book/SKILL.md`. Invoke it with the Skill tool whenever the
+task is authoring a book package rather than changing the engine: writing or
+revising scenes, turning supplied artwork into assets, writing a profile,
+building front matter or a cover, or reviewing a built interior.
+
+This file documents the *mechanism*. The skill documents the judgement the
+mechanism cannot make -- which drawing survives at 5 mm, what fifty scenes have
+to avoid sounding like, what a page has to show a six-year-old -- all of it
+learned from building one book and having it reviewed against real printed
+pages. Neither is derivable from the other, and the failures the skill records
+are the expensive kind: they pass every schema and every test.
+
 `maze-book-repository-prd.md` is the authoritative spec. **§17 is the normative locked
 contract** (repo layout, `book.json` shape, `MazeData`/`MazeAnalysis` schemas, pipeline,
 CLI, output paths, exit codes) and overrides any looser wording earlier in the document.
