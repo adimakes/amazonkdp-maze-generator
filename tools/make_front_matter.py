@@ -295,6 +295,27 @@ def _draw_icon_key(
     return y - 20.0
 
 
+#: The character, under the title. A title page with nothing on it is the
+#: first page anyone opens, and it was two lines of type on a blank sheet.
+TITLE_FIGURE_IN = 2.4
+
+
+def _draw_title_figure(c: pdfcanvas.Canvas, book_dir: Path, y: float) -> None:
+    from maze_book.assets.catalog import load_catalog
+    from maze_book.model.book_config import load_book_config
+    from maze_book.rendering.svg import AssetGeometryCache
+    from maze_book.rendering.svg_to_pdf import PdfFrame, place_document
+
+    catalog = load_catalog(load_book_config(book_dir))
+    size = TITLE_FIGURE_IN * 72.0
+    x = (PAGE_WIDTH_PT - size) / 2.0
+    place_document(
+        PdfFrame(c, PAGE_HEIGHT_PT),
+        AssetGeometryCache().get(catalog.start.path),
+        (x, y, x + size, y + size),
+    )
+
+
 def build_front_matter(book_dir: Path, out_path: Path) -> None:
     register_fonts()
     book = load_book(book_dir)
@@ -330,11 +351,12 @@ def build_front_matter(book_dir: Path, out_path: Path) -> None:
 
     # ---- Page 1: title page (recto) ----
     pw = PageWriter(c, 1)
-    y = PAGE_HEIGHT_PT * 0.46
+    y = PAGE_HEIGHT_PT * 0.40
     y = pw.centred_wrapped(y, title, TITLE_FONT, 30, 36)
     y -= 18
     if subtitle:
-        pw.centred_wrapped(y, subtitle, BODY_FONT, 15, 21)
+        y = pw.centred_wrapped(y, subtitle, BODY_FONT, 15, 21)
+    _draw_title_figure(c, book_dir, y + 46.0)
     c.showPage()
 
     # ---- Page 2: copyright page (verso) ----

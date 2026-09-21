@@ -49,7 +49,14 @@ from ..rendering.page import PageMetrics
 from ..rendering.solutions import draw_solutions_page, plan_solutions_page
 from ..rendering.story_page import draw_story_page, plan_story_page
 from ..rendering.svg import AssetGeometryCache, MazeRenderOptions, render_maze_svg
-from ..rendering.svg_to_pdf import BODY_FONT, PdfFrame, TITLE_FONT, register_fonts
+from ..rendering.page import PT_PER_IN
+from ..rendering.svg_to_pdf import (
+    BODY_FONT,
+    PdfFrame,
+    TITLE_FONT,
+    place_document,
+    register_fonts,
+)
 from .artifacts import LoadedMaze, OutputPaths
 from .page_plan import (
     KIND_BLANK,
@@ -84,6 +91,9 @@ def _canvas(target, page_size) -> Canvas:
 #: specific would be book content living in the engine, and 17.2 makes the engine
 #: theme-agnostic. A book that wants its own wording sets ``content.endPage``.
 DEFAULT_END_PAGE = ("THE END", "")
+
+#: Jim on the end page, big enough to be a goodbye rather than a footnote.
+END_PAGE_FIGURE_IN = 2.0
 
 
 @dataclass(slots=True)
@@ -230,6 +240,15 @@ class BookAssembler:
             canvas.setFont(BODY_FONT, 16.0)
             canvas.drawCentredString(centre_x, frame.y(live_y0 + 290.0), text)
         canvas.restoreState()
+
+        # The last page a child sees held two lines of type on a blank sheet.
+        # It gets the book's own character, at the size the story pages use.
+        size = END_PAGE_FIGURE_IN * PT_PER_IN
+        top = live_y0 + 350.0
+        place_document(
+            frame, self.cache.get(self.catalog.start.path),
+            (centre_x - size / 2.0, top, centre_x + size / 2.0, top + size),
+        )
 
     # -- whole book ---------------------------------------------------------
 
