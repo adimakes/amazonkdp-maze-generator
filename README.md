@@ -96,6 +96,10 @@ A few knobs are worth knowing before you write a package:
 | `layout.mazePageDecorations` | How many page vectors to scatter on each maze page, in the air above the maze and below the tally. |
 | `assets.mazeDecorations` | Which page vectors may be used there. Leave it out for all of them; name a subset to keep a drawing that is already doing a job on that page from turning up twice. |
 | `cover.front` / `cover.back` | Full-bleed artwork for the cover wrap. |
+| `cover.cards` / `cover.samples` | Rectangles on the back-cover artwork, and which mazes to print in them, so the samples are this book's real pages rather than mock-ups. |
+| `book.author` | Printed on the title page and named as the copyright holder. Without it the copyright line names the book as its own owner. |
+| `book.printContentOrigin` | Whether the content-origin line is printed on the copyright page. KDP's AI disclosure is made in the publishing form and is required either way. |
+| `content.meetPage` | The fifth front-matter page. It used to reprint the title page, on the run Amazon's preview opens with. |
 | `<profile>.outsideMarkerFraction` | Marker size as a share of the maze square, so it is the same on the 8×8 opener and the 18×18 finale. The grid gives up the room. |
 
 ### The two rules a new book must obey

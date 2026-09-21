@@ -222,6 +222,15 @@ Settle profile questions by measuring, not by arguing: generate against a patche
 copy and count acceptances. That is how the PRD §17.4 drift and all three broken
 profiles were resolved.
 
+## Two margins, two questions
+
+`safe-area` measures the press's 0.25 in trim band; a failure there is a
+reprint. `declared-margins` measures what the book itself promises in
+`print.safeMarginsIn`. A page can keep one and break the other, which is how a
+corner ornament sat 6 pt above the top margin on 33 story pages with every check
+passing. Bounds-check a *baseline* and you get the same class of miss one level
+down -- a heading placed inside the margin with its capitals outside it.
+
 ## Things that look like bugs and are not
 
 - **The colour preflight strips string literals first.** Operators and text
