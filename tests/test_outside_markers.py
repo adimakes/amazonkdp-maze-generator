@@ -290,3 +290,39 @@ def test_the_press_limit_is_what_the_units_actually_encode() -> None:
         profile = AssetProfile.for_print_size(millimetres)
         printed_mm = profile.min_feature_units / 100.0 * millimetres
         assert printed_mm == pytest.approx(AssetProfile.PRESS_LIMIT_MM)
+
+
+# --------------------------------------------------------------------------- #
+# What may decorate a maze page
+# --------------------------------------------------------------------------- #
+
+
+def test_the_decoration_pool_can_exclude_a_drawing_that_is_already_a_marker(
+    repo_root,
+) -> None:
+    """Jim's own figure is the start marker on every maze page. Scattered on the
+    same page as decoration a child reads it as a second Jim, standing somewhere
+    that means nothing."""
+    from maze_book.assets.catalog import load_catalog
+    from maze_book.model.book_config import load_book_config
+
+    catalog = load_catalog(load_book_config(repo_root / "books" / "jims-halloween-maze-adventure"))
+    decorations = {asset.asset_id for asset in catalog.decorations()}
+
+    assert decorations, "a book with page vectors must have something to decorate with"
+    assert decorations <= set(catalog.page_vectors)
+    assert catalog.start.asset_id not in decorations
+    assert "jim_in_sheet.svg" not in decorations, (
+        "the start marker's own drawing must not also be page furniture"
+    )
+
+
+def test_an_empty_pool_means_every_page_vector_is_allowed(repo_root) -> None:
+    """A book that says nothing gets the old behaviour rather than no decoration."""
+    from maze_book.assets.catalog import AssetCatalog, load_catalog
+    from maze_book.model.book_config import load_book_config
+    import dataclasses
+
+    catalog = load_catalog(load_book_config(repo_root / "books" / "jims-halloween-maze-adventure"))
+    unrestricted = dataclasses.replace(catalog, maze_decorations=())
+    assert {a.asset_id for a in unrestricted.decorations()} == set(catalog.page_vectors)

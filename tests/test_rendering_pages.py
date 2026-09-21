@@ -484,7 +484,7 @@ def test_rendering_the_same_maze_twice_is_byte_identical(repo_root: Path) -> Non
 
 def test_the_asset_cache_parses_each_file_once(repo_root: Path) -> None:
     cache = AssetGeometryCache()
-    path = repo_root / "books/jims-halloween-maze-adventure/assets/page-vectors/deco_moon.svg"
+    path = repo_root / "books/jims-halloween-maze-adventure/assets/page-vectors/deco_ghost.svg"
     assert cache.get(path) is cache.get(path)
 
 

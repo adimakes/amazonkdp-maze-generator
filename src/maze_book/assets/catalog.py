@@ -93,6 +93,7 @@ class AssetCatalog:
     page_vectors: dict[str, AssetFile]
     dead_end_policy: str
     collectible_policy: str
+    maze_decorations: tuple[str, ...] = ()
 
     def choose_dead_end(self, rng: random.Random, ordinal: int) -> AssetFile:
         return _pick(
@@ -117,6 +118,15 @@ class AssetCatalog:
         ):
             seen.setdefault(str(asset.path), asset)
         return sorted(seen.values(), key=lambda a: str(a.path))
+
+    def decorations(self) -> list["AssetFile"]:
+        """Page vectors allowed to decorate a maze page, in a stable order."""
+        allowed = set(self.maze_decorations)
+        chosen = [
+            asset for asset in self.page_vectors.values()
+            if not allowed or asset.asset_id in allowed
+        ]
+        return sorted(chosen, key=lambda asset: asset.asset_id)
 
     def roles(self) -> dict[str, str]:
         """Which role each asset file plays, keyed by path.
@@ -190,4 +200,5 @@ def load_catalog(config: BookConfig) -> AssetCatalog:
         page_vectors=page_vectors,
         dead_end_policy=config.assets.dead_end_asset_policy,
         collectible_policy=config.assets.collectible_asset_policy,
+        maze_decorations=config.assets.maze_decorations,
     )

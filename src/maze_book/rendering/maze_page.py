@@ -399,7 +399,7 @@ def _draw_decorations(
     wanted = min(layout.decoration_count, len(layout.decor_boxes))
     if wanted <= 0 or rng is None:
         return
-    choices = sorted(catalog.page_vectors.values(), key=lambda a: a.asset_id)
+    choices = catalog.decorations()
     if not choices:
         return
     boxes = rng.sample(list(layout.decor_boxes), k=wanted)

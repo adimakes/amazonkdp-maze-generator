@@ -331,6 +331,14 @@
             "first-in-folder",
             "cycle-folder"
           ]
+        },
+        "mazeDecorations": {
+          "description": "Page-vector filenames allowed to decorate a maze page. Omit for all of them.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
         }
       }
     },

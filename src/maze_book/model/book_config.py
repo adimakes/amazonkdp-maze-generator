@@ -148,6 +148,11 @@ class AssetsSpec:
     finish_asset: str
     dead_end_asset_policy: str
     collectible_asset_policy: str
+    #: Which page vectors may be scattered on a *maze* page. Empty means all
+    #: of them. It exists so a drawing that is already doing a job on that
+    #: page -- the start marker's own figure -- cannot also turn up as
+    #: decoration, where a child reads it as a second Jim.
+    maze_decorations: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -491,6 +496,7 @@ def load_book_config(
             finish_asset=assets["finishAsset"],
             dead_end_asset_policy=assets["deadEndAssetPolicy"],
             collectible_asset_policy=assets["collectibleAssetPolicy"],
+            maze_decorations=tuple(assets.get("mazeDecorations") or ()),
         ),
         scenes=[
             Scene(

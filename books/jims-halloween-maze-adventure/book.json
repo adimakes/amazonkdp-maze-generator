@@ -70,7 +70,18 @@
     "startAsset": "jim_start.svg",
     "finishAsset": "candy_bucket.svg",
     "deadEndAssetPolicy": "random-from-folder",
-    "collectibleAssetPolicy": "random-from-folder"
+    "collectibleAssetPolicy": "random-from-folder",
+    "mazeDecorations": [
+      "deco_bat.svg",
+      "deco_ghost.svg",
+      "deco_gravestone.svg",
+      "deco_spider.svg",
+      "deco_tree.svg",
+      "deco_web_corner.svg",
+      "haunted_house.svg",
+      "spooky_tree.svg",
+      "web_corner.svg"
+    ]
   },
   "content": {
     "scenes": [
@@ -192,7 +203,7 @@
         "number": 20,
         "title": "The Long Driveway",
         "text": "The last house on the street sits way back from the road. A long walk for one candy, but Jim is going anyway.",
-        "pageVector": "deco_moon.svg"
+        "pageVector": "haunted_house.svg"
       },
       {
         "number": 21,
@@ -204,7 +215,7 @@
         "number": 22,
         "title": "The Duck Pond",
         "text": "Ducks bob about under the first stars. Jim needs the stone bridge, and the mud in between is deep.",
-        "pageVector": "deco_moon.svg"
+        "pageVector": "deco_bat.svg"
       },
       {
         "number": 23,
@@ -300,7 +311,7 @@
         "number": 38,
         "title": "Up To The Lighthouse",
         "text": "The beam swings over the rocks and back again. The keeper keeps a candy dish at the top of all those steps.",
-        "pageVector": "deco_moon.svg"
+        "pageVector": "spooky_tree.svg"
       },
       {
         "number": 39,
