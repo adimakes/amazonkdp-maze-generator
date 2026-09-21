@@ -101,9 +101,21 @@ def run_preflight(
             report.add(name, not strict, "pdftotext unavailable", skipped=not strict)
 
     if "pdftoppm" not in absent:
-        check_safe_area(report, pdf, page_count=len(reader.pages), prefix=raster_prefix)
+        margins = config.print.safe_margins_in
+        check_safe_area(
+            report, pdf, page_count=len(reader.pages), prefix=raster_prefix,
+            # The inside margin is the gutter side and alternates between recto
+            # and verso, so it is checked as the *smaller* of the two on both
+            # edges: a page cannot break a margin it does not have.
+            declared_margins={
+                "top": margins.top,
+                "bottom": margins.bottom,
+                "left": min(margins.inside, margins.outside),
+                "right": min(margins.inside, margins.outside),
+            },
+        )
     else:
-        for name in ("safe-area", "renders-every-page"):
+        for name in ("safe-area", "declared-margins", "renders-every-page"):
             report.add(name, not strict, "pdftoppm unavailable", skipped=not strict)
 
     check_qpdf(report, pdf, strict=strict)

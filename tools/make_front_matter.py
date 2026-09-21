@@ -182,15 +182,30 @@ class PageWriter:
         self.content_bottom = bottom
         self.center_x = self.content_left + self.content_width / 2.0
 
-    def _check_y(self, y: float) -> None:
-        if not (self.content_bottom - 1e-6 <= y <= self.content_top + 1e-6):
+    #: Fraction of the font size a capital rises above the baseline, and a
+    #: descender drops below it. Generous on purpose: this is a bound, and the
+    #: alternative is asking the font for metrics at every draw call.
+    ASCENT_RATIO = 0.78
+    DESCENT_RATIO = 0.25
+
+    def _check_y(self, y: float, size: float = 0.0) -> None:
+        """Bounds-check a *baseline*, allowing for the glyphs above and below it.
+
+        Checking the baseline alone passes a heading whose capitals stand above
+        the top margin, which is how the how-to-play page came to break the very
+        margin this class exists to enforce.
+        """
+        top = y + size * self.ASCENT_RATIO
+        bottom = y - size * self.DESCENT_RATIO
+        if not (self.content_bottom - 1e-6 <= bottom and top <= self.content_top + 1e-6):
             raise ValueError(
-                f"page {self.page_number}: y={y:.2f}pt is outside the safe "
-                f"area [{self.content_bottom:.2f}, {self.content_top:.2f}]pt"
+                f"page {self.page_number}: a {size:g}pt line on baseline y={y:.2f}pt "
+                f"reaches [{bottom:.2f}, {top:.2f}]pt, outside the safe area "
+                f"[{self.content_bottom:.2f}, {self.content_top:.2f}]pt"
             )
 
     def centred(self, y: float, text: str, font: str, size: float, gray: float = 0.0) -> None:
-        self._check_y(y)
+        self._check_y(y, size)
         width = pdfmetrics.stringWidth(text, font, size)
         if width > self.content_width + 1e-6:
             raise ValueError(
@@ -202,7 +217,7 @@ class PageWriter:
         self.c.drawCentredString(self.center_x, y, text)
 
     def left_aligned(self, y: float, text: str, font: str, size: float, gray: float = 0.0) -> None:
-        self._check_y(y)
+        self._check_y(y, size)
         width = pdfmetrics.stringWidth(text, font, size)
         if width > self.content_width + 1e-6:
             raise ValueError(
@@ -219,12 +234,12 @@ class PageWriter:
         """A hanging-indent numbered item: the number in its own column, the
         text wrapped against a common left edge rather than under the number."""
         gutter = pdfmetrics.stringWidth("00. ", font, size)
-        self._check_y(y)
+        self._check_y(y, size)
         self.c.setFillGray(0.0)
         self.c.setFont(font, size)
         self.c.drawRightString(self.content_left + gutter - 6.0, y, f"{index}.")
         for line in wrap_text(text, font, size, self.content_width - gutter):
-            self._check_y(y)
+            self._check_y(y, size)
             self.c.drawString(self.content_left + gutter, y, line)
             y -= leading
         return y
@@ -319,9 +334,10 @@ def _draw_title_figure(c: pdfcanvas.Canvas, book_dir: Path, y: float) -> None:
 def build_front_matter(book_dir: Path, out_path: Path) -> None:
     register_fonts()
     book = load_book(book_dir)
-    title = book["book"]["title"]
-    subtitle = book["book"].get("subtitle") or ""
-    content_origin = book["book"].get("contentOrigin") or {}
+    meta = book["book"]
+    title = meta["title"]
+    subtitle = meta.get("subtitle") or ""
+    content_origin = meta.get("contentOrigin") or {}
     year = date.today().year
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -356,18 +372,27 @@ def build_front_matter(book_dir: Path, out_path: Path) -> None:
     y -= 18
     if subtitle:
         y = pw.centred_wrapped(y, subtitle, BODY_FONT, 15, 21)
-    _draw_title_figure(c, book_dir, y + 46.0)
+    author = meta.get("author")
+    if author:
+        y -= 16
+        y = pw.centred_wrapped(y, author, BODY_FONT, 13, 19)
+    _draw_title_figure(c, book_dir, y + (62.0 if author else 46.0))
     c.showPage()
 
     # ---- Page 2: copyright page (verso) ----
     pw = PageWriter(c, 2)
     y = pw.content_top - 220
+    holder = meta.get("author") or title
     copyright_lines = [
-        f"Copyright © {year} {title}.",
+        f"Copyright © {year} {holder}.",
         "All rights reserved.",
         f"This interior was generated deterministically by {GENERATOR_LABEL}.",
-        content_origin_line(content_origin),
     ]
+    # KDP's AI disclosure is made in the publishing form, and is required
+    # whether or not this line is printed. Printing it as well is a choice the
+    # package makes, not something the format requires.
+    if meta.get("printContentOrigin", True):
+        copyright_lines.append(content_origin_line(content_origin))
     for line in copyright_lines:
         y = pw.centred_wrapped(y, line, BODY_FONT, 10.5, 15)
         y -= 8
@@ -375,7 +400,7 @@ def build_front_matter(book_dir: Path, out_path: Path) -> None:
 
     # ---- Page 3: how to play (recto) ----
     pw = PageWriter(c, 3)
-    y = pw.content_top - 6
+    y = pw.content_top - 20 * PageWriter.ASCENT_RATIO
     pw.centred(y, "HOW TO PLAY", TITLE_FONT, 20)
     y -= 38
 
@@ -398,16 +423,27 @@ def build_front_matter(book_dir: Path, out_path: Path) -> None:
         y = pw.centred_wrapped(y, line, BODY_FONT, 13, 20)
     c.showPage()
 
-    # ---- Page 5: half-title page (recto) ----
+    # ---- Page 5: meet the character (recto) ----
     # NOTE (PRD 18.7): front matter MUST change two pages at a time -- a
-    # one-page change flips every story/maze spread in the rest of the
-    # book. Pages 1-4 above are a natural 4-page core; this half-title page
-    # is the deliberate 5th page that makes the front matter's page count
-    # ODD (so scene 1's story page lands on an even/left page, per 18.7).
-    # If this page is ever dropped, drop or add one MORE page alongside it
-    # -- never change this file's page count by exactly one.
+    # one-page change flips every story/maze spread in the rest of the book.
+    # Pages 1-4 above are a natural 4-page core; this is the deliberate 5th page
+    # that makes the count ODD (so scene 1's story page lands on an even/left
+    # page). If it is ever dropped, drop or add one MORE page alongside it.
+    #
+    # It used to be a half title, which reprinted page 1 word for word. Amazon's
+    # preview opens on exactly this run of pages, so a browsing parent met three
+    # blank-looking pages and the title twice before anything happened.
     pw = PageWriter(c, 5)
-    pw.centred_wrapped(PAGE_HEIGHT_PT * 0.5, title, TITLE_FONT, 24, 30)
+    meet = book.get("content", {}).get("meetPage")
+    if meet:
+        y = PAGE_HEIGHT_PT * 0.30
+        y = pw.centred_wrapped(y, meet["title"], TITLE_FONT, 24, 30)
+        y -= 14
+        for line in meet.get("lines", []):
+            y = pw.centred_wrapped(y, line, BODY_FONT, 14, 20)
+        _draw_title_figure(c, book_dir, y + 40.0)
+    else:
+        pw.centred_wrapped(PAGE_HEIGHT_PT * 0.5, title, TITLE_FONT, 24, 30)
     c.showPage()
 
     c.save()

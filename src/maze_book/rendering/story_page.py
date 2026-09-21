@@ -47,7 +47,12 @@ BODY_GAP_PT = 34.0
 VECTOR_GAP_PT = 40.0
 VECTOR_SIZE_IN = 1.15
 ORNAMENT_SIZE_IN = 0.55
-ORNAMENT_INSET_PT = 6.0
+#: The ornament sits *inside* the live area like everything else. A negative
+#: inset put it 6 pt above the top safe margin the book declares: legal for the
+#: press, which only cares about the 0.25 in trim band, but a page that breaks
+#: its own contract, and in a spread the ornament visibly rode higher than the
+#: page beside it.
+ORNAMENT_INSET_PT = 0.0
 
 
 @dataclass(frozen=True, slots=True)

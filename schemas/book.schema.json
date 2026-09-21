@@ -87,6 +87,15 @@
               "type": "string"
             }
           }
+        },
+        "author": {
+          "description": "Name printed on the title page and the copyright line, and used as the copyright holder.",
+          "type": "string",
+          "minLength": 1
+        },
+        "printContentOrigin": {
+          "description": "Print the contentOrigin disclosure on the copyright page. KDP's own AI disclosure is made in the publishing form and is required either way; this only controls the printed page.",
+          "type": "boolean"
         }
       }
     },
@@ -431,6 +440,28 @@
           },
           "minItems": 1,
           "maxItems": 6
+        },
+        "meetPage": {
+          "description": "The fifth front-matter page: a short introduction to the book's character.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "title"
+          ],
+          "properties": {
+            "title": {
+              "type": "string",
+              "minLength": 1
+            },
+            "lines": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "maxItems": 5
+            }
+          }
         }
       }
     },
@@ -498,6 +529,28 @@
         "spineColor": {
           "type": "string",
           "pattern": "^#[0-9A-Fa-f]{6}$"
+        },
+        "cards": {
+          "description": "Sample-card rectangles on the back-cover artwork, as [x0, y0, x1, y1] fractions of the image.",
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "minItems": 4,
+            "maxItems": 4
+          }
+        },
+        "samples": {
+          "description": "Maze indices to print in those cards, in the same order.",
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          }
         }
       }
     }

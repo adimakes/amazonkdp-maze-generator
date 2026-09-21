@@ -12,7 +12,9 @@
       "text": "ai-drafted-and-human-edited",
       "images": "ai-generated-and-vector-cleaned",
       "translations": "not-applicable"
-    }
+    },
+    "author": "Aditya Bhatia",
+    "printContentOrigin": false
   },
   "print": {
     "trimWidthIn": 8.5,
@@ -79,8 +81,7 @@
       "deco_tree.svg",
       "deco_web_corner.svg",
       "haunted_house.svg",
-      "spooky_tree.svg",
-      "web_corner.svg"
+      "spooky_tree.svg"
     ]
   },
   "content": {
@@ -404,7 +405,15 @@
       "For everyone who takes the long way round",
       "because that is where the good sweets are.",
       "Happy Halloween."
-    ]
+    ],
+    "meetPage": {
+      "title": "Meet Jim",
+      "lines": [
+        "Jim is going trick-or-treating, and he is going the long way round,",
+        "because the long way round is where the good candy is.",
+        "He needs somebody to find the path. That is you."
+      ]
+    }
   },
   "outputs": {
     "writeMazeJson": true,
@@ -420,6 +429,38 @@
     "sourceDir": "artifacts",
     "front": "Boy_running_from_Halloween_maze_2K_20260917223746.jpeg",
     "back": "BACK_COVER_–__HALLOWEEN_MAZES_2K_20260917235030 (1).jpeg",
-    "spineColor": "#512E6F"
+    "spineColor": "#512E6F",
+    "cards": [
+      [
+        0.16183035714285715,
+        0.31625,
+        0.44140625,
+        0.49375
+      ],
+      [
+        0.5580357142857143,
+        0.31625,
+        0.8376116071428571,
+        0.49375
+      ],
+      [
+        0.17020089285714285,
+        0.51625,
+        0.4458705357142857,
+        0.68625
+      ],
+      [
+        0.5574776785714286,
+        0.5166666666666667,
+        0.8331473214285714,
+        0.6883333333333334
+      ]
+    ],
+    "samples": [
+      3,
+      18,
+      35,
+      49
+    ]
   }
 }

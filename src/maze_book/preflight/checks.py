@@ -440,11 +440,20 @@ def check_safe_area(
     prefix: Path,
     dpi: int = 72,
     threshold: int = 200,
+    declared_margins: "dict[str, float] | None" = None,
 ) -> None:
-    """18.8: no mark within 0.25 in of any trim edge.
+    """18.8: no mark within 0.25 in of any trim edge, and inside what the book says.
 
-    Measured by rasterizing and looking, not by trusting the layout arithmetic --
-    the arithmetic is precisely what would be wrong if this check were needed.
+    Two bands, because they answer different questions. The 0.25 in trim band is
+    the press's rule and a failure there is a reprint. ``declared_margins`` is
+    the book's own promise in ``print.safeMarginsIn``, and a page that breaks it
+    still prints -- which is exactly why nothing catches it. A corner ornament
+    placed 6 pt above the top margin passed every check in this file while
+    riding visibly higher than the page facing it.
+
+    Both are measured by rasterizing and looking, not by trusting the layout
+    arithmetic -- the arithmetic is precisely what would be wrong if this check
+    were needed.
 
     Rasterization goes to a temporary directory in a lossless format, because the
     measurement is a threshold against white and JPEG ringing along a hard edge
@@ -463,6 +472,7 @@ def check_safe_area(
 
     band = int(round(SAFE_AREA_IN * dpi))
     offenders: list[str] = []
+    declared: list[str] = []
     rendered_count = 0
 
     with tempfile.TemporaryDirectory(prefix="maze-book-preflight-") as scratch:
@@ -493,6 +503,23 @@ def check_safe_area(
                             f"page {page_number}: ink in the {name} band (gray {darkest})"
                         )
                         break
+                if declared_margins:
+                    for name, inches in declared_margins.items():
+                        edge = int(round(inches * dpi))
+                        if edge <= band:
+                            continue
+                        box = {
+                            "top": (0, 0, width, edge),
+                            "bottom": (0, height - edge, width, height),
+                            "left": (0, 0, edge, height),
+                            "right": (width - edge, 0, width, height),
+                        }[name]
+                        if gray.crop(box).getextrema()[0] < threshold:
+                            declared.append(
+                                f"page {page_number}: ink inside the declared "
+                                f"{inches:g} in {name} margin"
+                            )
+                            break
                 gray.save(prefix.parent / f"{prefix.name}-{page_number:03d}.jpg", quality=70)
 
     report.add(
@@ -502,6 +529,14 @@ def check_safe_area(
         if offenders
         else f"{rendered_count} page(s) clear of the {SAFE_AREA_IN} in trim band",
     )
+    if declared_margins:
+        report.add(
+            "declared-margins",
+            not declared,
+            ", ".join(declared[:5])
+            if declared
+            else f"{rendered_count} page(s) inside the margins the book declares",
+        )
     report.add(
         "renders-every-page",
         rendered_count == page_count,

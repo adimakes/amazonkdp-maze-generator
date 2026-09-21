@@ -152,11 +152,8 @@ def plan_maze_page(
         live_left=live_x0,
         live_right=live_x1,
         live_top=live_y0,
-        # The maze number sits on the baseline at the foot of the live area, in
-        # the outside corner -- which is one of the bottom slots. The band stops
-        # above it rather than the number being moved, because 18.6 puts the
-        # number there and a decoration can go anywhere.
-        folio_top=live_y1 - (MAZE_NUMBER_SIZE + 6.0 if show_maze_number else 0.0),
+        live_bottom=live_y1,
+        folio_side=side if show_maze_number else None,
     )
 
     return MazePageLayout(
@@ -190,7 +187,8 @@ def _plan_decorations(
     live_left: float,
     live_right: float,
     live_top: float,
-    folio_top: float,
+    live_bottom: float,
+    folio_side: str | None,
 ) -> tuple[Box, ...]:
     """Every slot a decoration may occupy, in the bands the furniture leaves empty.
 
@@ -216,11 +214,24 @@ def _plan_decorations(
 
     slots: list[Box] = []
     columns = (live_left, (live_left + live_right) / 2.0 - size / 2.0, live_right - size)
-    bands = (band(live_top, maze_box[1]), band(tally_box[3], folio_top))
-    for y in bands:
-        if y is None:
-            continue
-        slots.extend((x, y, x + size, y + size) for x in columns)
+
+    above = band(live_top, maze_box[1])
+    if above is not None:
+        slots.extend((x, above, x + size, above + size) for x in columns)
+
+    # The folio sits in one bottom corner, not across the whole band. Clipping
+    # the band above it left 0.36 in where a decoration needs 0.60, so the
+    # bottom row silently vanished and every page wore its two decorations in a
+    # line along the top -- the same border the slots were spread out to avoid,
+    # turned on its side. Only the folio's own column is dropped.
+    below = band(tally_box[3], live_bottom)
+    if below is not None:
+        folio_column = columns[-1] if folio_side == "right" else columns[0]
+        slots.extend(
+            (x, below, x + size, below + size)
+            for x in columns
+            if folio_column is None or x != folio_column
+        )
     return tuple(slots)
 
 
@@ -229,7 +240,7 @@ def _plan_decorations(
 #: rather than as one score to fill in. Nine and eight look like a pair.
 MAX_TICKS_PER_ROW = 9
 
-#: Room between the last tick box and the Total box: the word "Total" is 27 pt
+#: Room between the last tick box and the Total box: the word "Total" is 26 pt
 #: wide at 11 pt, and it is drawn right-aligned against the box.
 TOTAL_LABEL_ROOM_PT = 40.0
 

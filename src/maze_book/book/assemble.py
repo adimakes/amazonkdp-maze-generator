@@ -50,6 +50,7 @@ from ..rendering.solutions import draw_solutions_page, plan_solutions_page
 from ..rendering.story_page import draw_story_page, plan_story_page
 from ..rendering.svg import AssetGeometryCache, MazeRenderOptions, render_maze_svg
 from ..rendering.page import PT_PER_IN
+from ..rendering.story_page import ORNAMENT_SIZE_IN
 from ..rendering.svg_to_pdf import (
     BODY_FONT,
     PdfFrame,
@@ -242,13 +243,18 @@ class BookAssembler:
         canvas.restoreState()
 
         # The last page a child sees held two lines of type on a blank sheet.
-        # It gets the book's own character, at the size the story pages use.
+        # It gets what a story page gets: the character, and a corner ornament.
         size = END_PAGE_FIGURE_IN * PT_PER_IN
         top = live_y0 + 350.0
         place_document(
             frame, self.cache.get(self.catalog.start.path),
             (centre_x - size / 2.0, top, centre_x + size / 2.0, top + size),
         )
+        ornament = self._story_ornament(self.config.book.maze_count + 1)
+        if ornament is not None:
+            corner = ORNAMENT_SIZE_IN * PT_PER_IN
+            x = live_x0 if record.side == "left" else live_x1 - corner
+            place_document(frame, self.cache.get(ornament), (x, live_y0, x + corner, live_y0 + corner))
 
     # -- whole book ---------------------------------------------------------
 

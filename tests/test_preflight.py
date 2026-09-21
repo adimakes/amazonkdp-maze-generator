@@ -501,3 +501,70 @@ def test_hex_strings_are_skipped_but_dictionaries_are_not() -> None:
 
     assert b"4B" not in _without_strings(b"<4B> Tj 0 g")
     assert b"/Type" in _without_strings(b"<< /Type /Page >> 0 g")
+
+
+# ---------------------------------------------------------------------------
+# The book's own declared margins, not just the press's trim band
+# ---------------------------------------------------------------------------
+
+
+def test_declared_margins_are_checked_separately_from_the_trim_band(tmp_path) -> None:
+    """A page can clear the 0.25 in band the press cares about and still break
+    the margin the book declares. Nothing caught that, so a corner ornament sat
+    6 pt above the top margin on 33 story pages and every check passed."""
+    from reportlab.pdfgen.canvas import Canvas
+
+    from maze_book.preflight.checks import check_safe_area
+
+    pdf = tmp_path / "one.pdf"
+    canvas = Canvas(str(pdf), pagesize=(612.0, 792.0))
+    # 0.40 in from the top: clear of the 0.25 in trim band, inside a 0.5 in margin.
+    canvas.rect(300.0, 792.0 - 0.40 * 72.0 - 4.0, 20.0, 4.0, stroke=0, fill=1)
+    canvas.showPage()
+    canvas.save()
+
+    report = PreflightReport(pdf=pdf)
+    check_safe_area(
+        report, pdf, page_count=1, prefix=tmp_path / "raster" / "page",
+        declared_margins={"top": 0.5, "bottom": 0.5, "left": 0.5, "right": 0.5},
+    )
+    results = codes(report)
+    assert results["safe-area"] is True, "0.40 in clears the 0.25 in trim band"
+    assert results["declared-margins"] is False
+
+
+def test_a_page_inside_both_passes_both(tmp_path) -> None:
+    from reportlab.pdfgen.canvas import Canvas
+
+    from maze_book.preflight.checks import check_safe_area
+
+    pdf = tmp_path / "clean.pdf"
+    canvas = Canvas(str(pdf), pagesize=(612.0, 792.0))
+    canvas.rect(300.0, 400.0, 20.0, 20.0, stroke=0, fill=1)
+    canvas.showPage()
+    canvas.save()
+
+    report = PreflightReport(pdf=pdf)
+    check_safe_area(
+        report, pdf, page_count=1, prefix=tmp_path / "raster" / "page",
+        declared_margins={"top": 0.5, "bottom": 0.5, "left": 0.5, "right": 0.5},
+    )
+    assert codes(report)["safe-area"] is True
+    assert codes(report)["declared-margins"] is True
+
+
+def test_no_declared_margins_means_no_extra_check(tmp_path) -> None:
+    """A book that declares nothing gets the trim-band check and nothing else."""
+    from reportlab.pdfgen.canvas import Canvas
+
+    from maze_book.preflight.checks import check_safe_area
+
+    pdf = tmp_path / "plain.pdf"
+    canvas = Canvas(str(pdf), pagesize=(612.0, 792.0))
+    canvas.rect(300.0, 400.0, 20.0, 20.0, stroke=0, fill=1)
+    canvas.showPage()
+    canvas.save()
+
+    report = PreflightReport(pdf=pdf)
+    check_safe_area(report, pdf, page_count=1, prefix=tmp_path / "raster" / "page")
+    assert "declared-margins" not in codes(report)

@@ -86,6 +86,13 @@ class BookMeta:
     maze_count: int
     profile_id: str
     content_origin: ContentOrigin
+    #: Printed on the title page and named as the copyright holder. Without
+    #: it the copyright line names the book as its own owner.
+    author: str | None = None
+    #: Whether ``content_origin`` is printed on the copyright page. KDP's own
+    #: AI disclosure is made in the publishing form and is required either
+    #: way; this only decides whether the buyer reads it too.
+    print_content_origin: bool = True
 
 
 @dataclass(frozen=True)
@@ -446,6 +453,8 @@ def load_book_config(
                 images=origin["images"],
                 translations=origin["translations"],
             ),
+            author=book.get("author"),
+            print_content_origin=bool(book.get("printContentOrigin", True)),
         ),
         print=PrintSpec(
             trim_width_in=float(printing["trimWidthIn"]),

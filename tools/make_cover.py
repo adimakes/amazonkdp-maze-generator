@@ -57,6 +57,10 @@ BARCODE_INSET_IN = 0.25
 #: Spine text needs this much clear on each side of the spine fold.
 SPINE_TEXT_CLEARANCE_IN = 0.0625
 
+#: How far the flat spine colour runs onto each cover, so a small bind shift
+#: shows spine colour at a cover's edge rather than cover art on the spine.
+SPINE_OVERLAP_IN = 0.06
+
 
 def load_book(book_dir: Path) -> dict:
     return json.loads((book_dir / "book.json").read_text(encoding="utf-8"))
@@ -143,14 +147,18 @@ def build_cover(book_dir: Path, out_path: Path, *, paper: str = "white") -> dict
     )
 
     # Spine: a flat colour taken from the artwork rather than guessed, so the
-    # fold does not show as a seam against either face.
+    # fold does not show as a seam against either face. It runs a little wide on
+    # both sides, because a bind shift of a millimetre then puts spine colour on
+    # the edge of a cover instead of front-cover art on the spine.
     spine_colour = cover.get("spineColor") or "#5B2E91"
+    overlap = SPINE_OVERLAP_IN * PT_PER_IN
     canvas.setFillColor(spine_colour)
-    canvas.rect(bleed + face, 0.0, spine, wrap_h, stroke=0, fill=1)
+    canvas.rect(bleed + face - overlap, 0.0, spine + 2 * overlap, wrap_h, stroke=0, fill=1)
 
     if spine_in >= 0.1875:
         _draw_spine_text(canvas, meta, x=bleed + face, spine=spine, wrap_h=wrap_h)
 
+    _place_real_mazes(canvas, book_dir, cover, box=back_box)
     _clear_barcode(canvas, back_box, trim_h=trim_h)
 
     canvas.showPage()
@@ -161,6 +169,112 @@ def build_cover(book_dir: Path, out_path: Path, *, paper: str = "white") -> dict
         "wrapIn": (round(wrap_w / PT_PER_IN, 4), round(wrap_h / PT_PER_IN, 4)),
         "path": str(out_path),
     }
+
+
+#: Where each sample card's maze sits inside the card, as fractions of the
+#: card. Measured off the supplied artwork, and identical for all four cards.
+CARD_MAZE_INSET = (0.177, 0.115, 0.668)  # x, y, side -- all of the card's width
+
+
+def _place_real_mazes(
+    canvas: pdfcanvas.Canvas,
+    book_dir: Path,
+    cover: dict,
+    *,
+    box: tuple[float, float, float, float],
+) -> None:
+    """Paste real pages from this book over the back cover's sample cards.
+
+    The supplied artwork draws four invented mazes: coloured candy, round dots,
+    a boy icon, on white cards. The interior is flat monochrome line art with
+    silhouette icons. A parent compares the back cover to page 7 and concludes
+    the samples were mocked up -- which is the complaint that costs stars, and
+    the only honest fix is to show what is actually inside.
+
+    It also makes the EASY / MEDIUM / HARD / EXPERT labels true, since the four
+    samples are drawn from four different bands.
+    """
+    samples = cover.get("samples")
+    cards = cover.get("cards")
+    if not samples or not cards:
+        return
+
+    x0, y0, x1, y1 = box
+    width, height = x1 - x0, y1 - y0
+    inset_x, inset_y, side = CARD_MAZE_INSET
+
+    for card, maze_index in zip(cards, samples):
+        image = _maze_sample(book_dir, int(maze_index))
+        if image is None:
+            continue
+        # Card rectangles are fractions of the artwork, which fills the panel.
+        cx0 = x0 + card[0] * width
+        cy0 = y0 + (1.0 - card[3]) * height        # artwork y runs downward
+        cw, ch = (card[2] - card[0]) * width, (card[3] - card[1]) * height
+        size = side * cw
+        px = cx0 + inset_x * cw
+        py = cy0 + ch - inset_y * ch - size
+        canvas.drawImage(
+            ImageReader(image), px, py, width=size, height=size, mask=None
+        )
+
+
+def _maze_sample(book_dir: Path, maze_index: int):
+    """One maze rendered as a square white image, or None if it is not built."""
+    import io
+    import subprocess
+    import tempfile
+
+    book_id = load_book(book_dir)["book"]["id"]
+    out = REPO / "output" / book_id
+    plan_path = out / "page-plan.json"
+    if not plan_path.is_file():
+        return None
+    plan = json.loads(plan_path.read_text(encoding="utf-8"))
+    page = next(
+        (p["pageNumber"] for p in plan["pages"]
+         if p["kind"] == "maze" and p.get("mazeIndex") == maze_index),
+        None,
+    )
+    if page is None:
+        return None
+
+    with tempfile.TemporaryDirectory() as tmp:
+        subprocess.run(
+            ["pdftoppm", "-r", "260", "-png", "-f", str(page), "-l", str(page),
+             str(out / "book-interior.pdf"), f"{tmp}/s"],
+            check=True, capture_output=True,
+        )
+        rendered = next(Path(tmp).glob("*.png"), None)
+        if rendered is None:
+            return None
+        image = Image.open(rendered).convert("L")
+        image.load()
+
+    # Crop to the maze square the page layout defines, not to "all the ink":
+    # the ink on that page starts at a decoration in the top band and ends below
+    # the tally, so an ink-bounds crop puts tick boxes on the cover.
+    from maze_book.model.book_config import load_book_config
+    from maze_book.rendering.maze_page import MAZE_TOP_OFFSET_IN
+    from maze_book.rendering.page import PageMetrics
+
+    config = load_book_config(book_dir)
+    metrics = PageMetrics.from_print_spec(config.print)
+    live_x0, live_y0, live_x1, _ = metrics.live_box("right")
+    square = config.layout.maze_square_in * PT_PER_IN
+    left = live_x0 + ((live_x1 - live_x0) - square) / 2.0
+    top = live_y0 + MAZE_TOP_OFFSET_IN * PT_PER_IN
+
+    scale = image.width / (config.print.trim_width_in * PT_PER_IN)
+    crop = tuple(
+        int(round(value * scale))
+        for value in (left, top, left + square, top + square)
+    )
+    cropped = image.crop(crop)
+    buffer = io.BytesIO()
+    cropped.save(buffer, format="PNG")
+    buffer.seek(0)
+    return buffer
 
 
 def _draw_spine_text(
