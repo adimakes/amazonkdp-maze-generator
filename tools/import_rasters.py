@@ -137,12 +137,12 @@ def to_bitonal(path: Path, *, padding: float = PADDING_FRACTION, side_px: int = 
 def import_assets(manifest_path: Path, package: Path, *, only: str | None = None):
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     source_dir = manifest_path.parent
-    sizes = json.loads((package / "book.json").read_text(encoding="utf-8"))
+    sizes = json.loads((package / "input" / "book.json").read_text(encoding="utf-8"))
     printed = _printed_inches(sizes)
     ok = bad = 0
 
     for entry in manifest["assets"]:
-        target = (package / "assets" / entry["target"]).with_suffix(".png")
+        target = (package / "input" / "assets" / entry["target"]).with_suffix(".png")
         if only and only not in entry["target"]:
             continue
         role = _role_of(entry["target"])
@@ -163,7 +163,7 @@ def import_assets(manifest_path: Path, package: Path, *, only: str | None = None
         problems = check_raster(asset, printed_inches=printed.get(role))
         mark = "ok " if not problems else "!! "
         print(
-            f"{mark}{target.relative_to(package / 'assets')!s:<40} "
+            f"{mark}{target.relative_to(package / 'input' / 'assets')!s:<40} "
             f"{asset.side}px  ink {asset.coverage_fraction:.0%}  "
             f"{asset.effective_dpi(printed.get(role, 1.0)):.0f} dpi at "
             f"{printed.get(role, 0):.2f} in"
@@ -214,10 +214,11 @@ def _printed_inches(book: dict) -> dict[str, float]:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     parser.add_argument("package", type=Path)
-    parser.add_argument("--manifest", type=Path, default=REPO / "artifacts" / "asset-manifest.json")
+    parser.add_argument("--manifest", type=Path)
     parser.add_argument("--only")
     args = parser.parse_args(argv)
-    ok, bad = import_assets(args.manifest, args.package, only=args.only)
+    manifest = args.manifest or (args.package / "input" / "artwork" / "artwork.json")
+    ok, bad = import_assets(manifest, args.package, only=args.only)
     print(f"\n{ok} asset(s) imported and valid, {bad} failed")
     return 0 if not bad else 1
 

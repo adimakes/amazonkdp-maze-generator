@@ -77,7 +77,7 @@ def register_fonts() -> None:
 
 def load_book(book_dir: Path) -> dict:
     """Load book.json for the given book package directory."""
-    book_json_path = book_dir / "book.json"
+    book_json_path = book_dir / "input" / "book.json"
     if not book_json_path.is_file():
         raise FileNotFoundError(f"book.json not found at {book_json_path}")
     with book_json_path.open(encoding="utf-8") as f:
@@ -439,7 +439,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         "--out",
         type=Path,
         default=None,
-        help="Output PDF path (default: <book>/front-matter.pdf)",
+        help="Output PDF path (default: <book>/input/front-matter.pdf)",
     )
     return parser.parse_args(argv)
 
@@ -447,7 +447,9 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     book_dir: Path = args.book
-    out_path: Path = args.out if args.out is not None else book_dir / "front-matter.pdf"
+    out_path: Path = (
+        args.out if args.out is not None else book_dir / "input" / "front-matter.pdf"
+    )
     build_front_matter(book_dir, out_path)
     print(f"wrote {out_path}")
     return 0

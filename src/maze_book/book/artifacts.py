@@ -99,12 +99,47 @@ class BookFingerprint:
 
 
 class OutputPaths:
-    """Every path in the 17.14 output contract, in one place."""
+    """Every path a build writes, split by who the file is for (17.14).
 
-    def __init__(self, root: Path, book_id: str) -> None:
-        self.base = Path(root) / book_id
-        self.mazes = self.base / "mazes"
-        self.pages = self.base / "pages"
+    Three destinations, because three audiences:
+
+    * ``output/`` is what gets uploaded. Two PDFs, nothing else -- if a file in
+      there is not going to KDP, it is in the wrong folder, and the point of the
+      folder is that you can open it and know what to do.
+    * ``build/`` is the working set: the per-maze JSON and SVG, the per-page
+      PDFs, the page plan, the preflight report, the contact sheet, and the
+      editable interior a proofreader reads. Regenerable, and safe to delete.
+    * ``input/`` is never written by a build. It is what you supplied.
+
+    The split exists because these all used to land in one directory, where the
+    two files that matter sat among a hundred that do not.
+    """
+
+    #: Folder names, so a book package reads the same whoever opens it.
+    OUTPUT_DIR = "output"
+    BUILD_DIR = "build"
+
+    def __init__(self, root: Path, book_id: str | None = None) -> None:
+        """``root`` is the book package folder. ``book_id`` is accepted for the
+        older layout, where one shared directory held every book by name."""
+        root = Path(root)
+        self.book = root / book_id if book_id else root
+        self.output = self.book / self.OUTPUT_DIR
+        self.build = self.book / self.BUILD_DIR
+        #: Kept as the working root, since most writers want ``build``.
+        self.base = self.build
+        self.mazes = self.build / "mazes"
+        self.pages = self.build / "pages"
+
+    def ensure_dirs(self) -> None:
+        """Create the folders a build writes into.
+
+        Both, always. A book whose ``output`` folder only appears once the
+        interior is written is a book where an empty ``output`` and a failed
+        build look the same from the outside.
+        """
+        self.output.mkdir(parents=True, exist_ok=True)
+        self.build.mkdir(parents=True, exist_ok=True)
 
     def maze_json(self, index: int) -> Path:
         return self.mazes / f"{index:03d}.json"
@@ -121,37 +156,49 @@ class OutputPaths:
     def page_pdf(self, number: int) -> Path:
         return self.pages / f"page-{number:03d}.pdf"
 
-    @property
-    def normalized_book(self) -> Path:
-        return self.base / "normalized-book.json"
-
-    @property
-    def page_plan(self) -> Path:
-        return self.base / "page-plan.json"
-
-    @property
-    def contact_sheet(self) -> Path:
-        return self.base / "contact-sheet.png"
-
-    @property
-    def preflight(self) -> Path:
-        return self.base / "preflight.json"
+    # -- the two files that get uploaded ------------------------------------
 
     @property
     def interior(self) -> Path:
-        return self.base / "book-interior.pdf"
+        return self.output / "book-interior.pdf"
+
+    @property
+    def cover(self) -> Path:
+        return self.output / "book-cover.pdf"
+
+    # -- everything else ----------------------------------------------------
+
+    @property
+    def normalized_book(self) -> Path:
+        return self.build / "normalized-book.json"
+
+    @property
+    def page_plan(self) -> Path:
+        return self.build / "page-plan.json"
+
+    @property
+    def contact_sheet(self) -> Path:
+        return self.build / "contact-sheet.png"
+
+    @property
+    def preflight(self) -> Path:
+        return self.build / "preflight.json"
 
     @property
     def editable(self) -> Path:
-        return self.base / "book-interior-editable.pdf"
+        """Live text for proofreading. Not an upload, so not in ``output``."""
+        return self.build / "book-interior-editable.pdf"
 
     @property
     def interior_text(self) -> Path:
-        return self.base / "book-interior.txt"
+        return self.build / "book-interior.txt"
 
     @property
     def validate_page_prefix(self) -> Path:
-        return self.base / "validate-page"
+        """Preflight's page rasterizations (17.15). In their own folder because
+        there is one per page, and a hundred and ten of them loose in ``build``
+        buries the handful of files anyone actually opens."""
+        return self.build / "page-previews" / "page"
 
 
 def write_normalized_book(

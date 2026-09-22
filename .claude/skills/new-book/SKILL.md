@@ -27,8 +27,13 @@ this wins on taste.
 
 ```bash
 cp -r books/jims-halloween-maze-adventure books/<new-book-id>
+# replace input/artwork/, edit input/book.json, then:
 uv run maze-book book validate books/<new-book-id>
 ```
+
+A package is `input/` (everything supplied), `output/` (the two PDFs that get
+uploaded, and nothing else) and `build/` (the working set). Duplicating the
+folder duplicates the book.
 
 Then work in this order, because each step constrains the next:
 
@@ -233,14 +238,14 @@ uv run python tools/make_cover.py --book books/<book-id>
 
 Constraints catch per-maze defects. They cannot see that the book is dull.
 
-**Read the contact sheet first** (`output/<book-id>/contact-sheet.png`): fifty
+**Read the contact sheet first** (`books/<book-id>/build/contact-sheet.png`): fifty
 mazes and their answers in one image shows the ramp, repetition and any solution
 that hugs an edge in a few seconds.
 
 **Then render and look at real pages.**
 
 ```bash
-pdftoppm -r 110 -png -f 6 -l 7 output/<book-id>/book-interior.pdf /tmp/p
+pdftoppm -r 110 -png -f 6 -l 7 books/<book-id>/output/book-interior.pdf /tmp/p
 ```
 
 Look at: the front matter, an early spread, a middle spread, a late spread, a

@@ -386,7 +386,7 @@ def assemble(
         body, front_matter, front_matter_pages=plan.front_matter_pages
     )
 
-    paths.base.mkdir(parents=True, exist_ok=True)
+    paths.ensure_dirs()
     paths.interior.write_bytes(merged)
     if write_editable:
         paths.editable.write_bytes(merged)

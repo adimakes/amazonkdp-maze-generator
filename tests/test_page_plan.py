@@ -268,7 +268,7 @@ def test_a_blank_page_record_carries_no_scene_or_pair() -> None:
 def test_front_matter_page_count_reads_the_real_pdf(repo_root) -> None:
     """17.10: the count comes from the file, not from a number the user retyped
     into book.json and then let go stale."""
-    pdf = repo_root / "books" / "jims-halloween-maze-adventure" / "front-matter.pdf"
+    pdf = repo_root / "books" / "jims-halloween-maze-adventure" / "input" / "front-matter.pdf"
     count = front_matter_page_count(pdf)
     assert count % 2 == 1, "front matter must be odd so scene 1's story page lands on a left page"
 

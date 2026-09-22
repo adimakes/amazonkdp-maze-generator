@@ -64,11 +64,11 @@
     "mazePageDecorations": 0
   },
   "assets": {
-    "beginningVectorsDir": "assets/beginning-vectors",
-    "endingVectorsDir": "assets/ending-vectors",
-    "deadEndVectorsDir": "assets/maze-vectors/dead-end",
-    "collectibleVectorsDir": "assets/maze-vectors/collectibles",
-    "pageVectorsDir": "assets/page-vectors",
+    "beginningVectorsDir": "assets/start",
+    "endingVectorsDir": "assets/finish",
+    "deadEndVectorsDir": "assets/dead-ends",
+    "collectibleVectorsDir": "assets/collectibles",
+    "pageVectorsDir": "assets/decorations",
     "startAsset": "jim_start.png",
     "finishAsset": "candy_bucket.png",
     "deadEndAssetPolicy": "random-from-folder",
@@ -413,7 +413,7 @@
     "writeEditableProofPdf": true
   },
   "cover": {
-    "sourceDir": "artifacts",
+    "sourceDir": "artwork",
     "front": "Boy_running_from_Halloween_maze_2K_20260917223746.jpeg",
     "back": "BACK_COVER_–__HALLOWEEN_MAZES_2K_20260917235030 (1).jpeg",
     "spineColor": "#512E6F",

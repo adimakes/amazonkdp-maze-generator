@@ -52,73 +52,122 @@ local work `--lenient` reports the skip explicitly instead of failing.
 
 ---
 
-## Starting a new book
+## Make a second book
 
-Copy a book package, edit two things, build:
+A book is a folder. Copy it, change what's inside, build.
 
 ```bash
 cp -r books/jims-halloween-maze-adventure books/my-new-book
-# edit books/my-new-book/book.json  -> id, title, seed, mazeCount, profileId, scenes
-# replace books/my-new-book/assets/**/*.svg with your artwork
-uv run maze-book book build books/my-new-book
 ```
+
+Then four edits, in this order:
+
+**1. Put your pictures in `input/artwork/`.** Anything PIL can open. Black line
+art on white is what works; the tracer decides which pixels are ink and stops.
+
+**2. Tell it which picture is which**, in `input/artwork/artwork.json`:
+
+```json
+{ "assets": [
+  { "target": "collectibles/lollipop.svg", "source": "my-lollipop.jpeg" },
+  { "target": "dead-ends/ghost.svg",       "source": "my-ghost.jpeg" }
+] }
+```
+
+The `target` folder decides the job: `start`, `finish`, `collectibles`,
+`dead-ends`, `decorations`.
+
+```bash
+uv run python tools/import_rasters.py books/my-new-book
+```
+
+That writes print-ready PNGs into `input/assets/`, each sized for how big it
+actually prints, and tells you per file whether it passed.
+
+**3. Edit `input/book.json`.** The whole book is in there. The fields you will
+always change:
+
+```json
+{ "book": { "id": "my-new-book", "title": "...", "seed": 12345, "mazeCount": 50 },
+  "content": { "scenes": [ { "number": 1, "title": "...", "text": "..." } ] } }
+```
+
+`book.id` must match the folder name. `seed` is what makes your mazes yours —
+change it and you get a different fifty.
+
+**4. Build.**
+
+```bash
+uv run python tools/make_front_matter.py --book books/my-new-book
+uv run maze-book book build books/my-new-book
+uv run python tools/make_cover.py --book books/my-new-book
+```
+
+Upload the two files in `books/my-new-book/output/`. That folder has nothing
+else in it.
+
+### A translation, or another edition
+
+Copy the folder again and change only the words:
+
+```bash
+cp -r books/my-new-book books/my-new-book-es
+# edit books/my-new-book-es/input/book.json: id, title, locale, scenes
+uv run maze-book book build books/my-new-book-es
+```
+
+Same artwork, same seed, same fifty mazes, different language. Nothing else
+needs to change, and nothing outside that folder is touched.
+
+### What lives where
+
+```text
+books/<book-id>/
+├── input/                  ← everything you supply. Edit freely.
+│   ├── book.json           the whole book: print, layout, generation, assets, content
+│   ├── front-matter.pdf    optional; built by tools/make_front_matter.py
+│   ├── artwork/            your pictures + artwork.json saying which is which
+│   └── assets/             print-ready, generated from artwork/
+│       ├── start/          the start marker
+│       ├── finish/         the finish marker
+│       ├── collectibles/   the things to collect
+│       ├── dead-ends/      markers for wrong turns
+│       └── decorations/    optional page decoration
+├── output/                 ← the two files you upload to KDP. Nothing else.
+│   ├── book-interior.pdf
+│   └── book-cover.pdf
+└── build/                  ← working files. Regenerable; delete any time.
+    ├── contact-sheet.png   all 50 mazes and answers on one image — look here first
+    ├── page-plan.json      every page's number, side, kind and facing pair
+    ├── preflight.json      machine-readable verdict
+    ├── book-interior-editable.pdf   live text, for proofreading
+    ├── mazes/              per-maze JSON, analysis and inspection SVG
+    └── pages/              one PDF per physical page
+```
+
+The split is by who the file is for. If something in `output/` is not going to
+KDP, it is in the wrong folder.
 
 **No source change is ever required** to change theme, story, asset names,
 collectible variants, maze count, trim size or difficulty. If you find yourself
 wanting to edit `src/`, the answer is a config knob or a new profile.
 
 > **Writing the book, rather than building it:** `.claude/skills/new-book/SKILL.md`
-> carries the judgement this README does not — how to tell which supplied drawing
-> can survive at 5 mm, how to keep fifty scenes from sounding like one scene
-> written fifty times, what a profile may promise, and what two rounds of review
-> against real printed pages turned up. Claude Code loads it with
-> `/new-book`; read it yourself before starting a package. It is the part that
-> decides whether the book is worth buying.
-
-A book package looks like this. The folder names are part of the contract and are
-case-sensitive:
-
-```text
-books/<book-id>/
-├── book.json                       # the entire book: print, layout, generation, assets, content
-├── assets/
-│   ├── beginning-vectors/          # the start marker
-│   ├── ending-vectors/             # the finish marker
-│   ├── maze-vectors/
-│   │   ├── dead-end/               # markers for wrong turns
-│   │   └── collectibles/           # the things to collect
-│   └── page-vectors/               # optional story-page decoration
-└── front-matter.pdf                # optional, single pages, odd page count
-```
-
-Story text lives inline in `book.json` under `content.scenes[]`, one
-title/text scene per maze. There is no second content file. `content.howToPlay`
-and `content.dedication` carry the front matter's words, so a book's character
-is never named from inside `tools/`.
-
-A few knobs are worth knowing before you write a package:
-
-| Field | What it decides |
-|---|---|
-| `generation.endpointsOnBorder` | Keeps start and finish on an outer row or column, so each can carry an opening in the wall and a marker drawn outside it. A region is a rectangle, so a 3×3 corner region contains four cells no opening can reach. |
-| `layout.mazePageDecorations` | How many page vectors to scatter on each maze page, in the air above the maze and below the tally. |
-| `assets.mazeDecorations` | Which page vectors may be used there. Leave it out for all of them; name a subset to keep a drawing that is already doing a job on that page from turning up twice. |
-| `cover.front` / `cover.back` | Full-bleed artwork for the cover wrap. |
-| `cover.cards` / `cover.samples` | Rectangles on the back-cover artwork, and which mazes to print in them, so the samples are this book's real pages rather than mock-ups. |
-| `book.author` | Printed on the title page and named as the copyright holder. Without it the copyright line names the book as its own owner. |
-| `book.printContentOrigin` | Whether the content-origin line is printed on the copyright page. KDP's AI disclosure is made in the publishing form and is required either way. |
-| `content.meetPage` | The fifth front-matter page. It used to reprint the title page, on the run Amazon's preview opens with. |
-| `<profile>.outsideMarkerFraction` | Marker size as a share of the maze square, so it is the same on the 8×8 opener and the 18×18 finale. The grid gives up the room. |
+> carries the judgement this README does not — which supplied drawing survives at
+> 5 mm, how to keep fifty scenes from sounding like one scene written fifty
+> times, what a profile may promise, and what two rounds of review against real
+> printed pages turned up. Claude Code loads it with `/new-book`; read it
+> yourself before starting a package.
 
 ### The two rules a new book must obey
 
-**Front matter must have an odd page count.** Front matter is read from the PDF
-itself — you never retype the count into `book.json` — and an odd count is what
-puts scene 1's story page on an even (left) page. Add or remove front matter
-**two pages at a time**; a one-page change flips every spread in the book.
+**Front matter must have an odd page count.** It is read from the PDF itself —
+you never retype the count into `book.json` — and an odd count is what puts
+scene 1's story page on an even (left) page. Add or remove front matter **two
+pages at a time**; a one-page change flips every spread in the book.
 
-**Assets must pass the SVG subset.** Run `uv run maze-book book validate <book>`
-and it will tell you, per file, which rule failed and what it measured. See
+**Assets must pass validation.** Run `uv run maze-book book validate <book>` and
+it tells you, per file, which rule failed and what it measured. See
 [SVG assets](#svg-assets) below.
 
 ---
@@ -173,18 +222,20 @@ These are a public contract; CI can depend on them.
 ## Output
 
 ```text
-output/<book-id>/
-├── normalized-book.json        # exactly what this build was made from, with hashes
-├── mazes/001.json              # canonical MazeData
-├── mazes/001.analysis.json     # routes, scores, constraint verdicts
-├── mazes/001.svg               # inspection vector
-├── pages/page-001.pdf          # one file per physical page
-├── page-plan.json              # every page's number, side, kind and facing pair
-├── contact-sheet.png           # all mazes and their answers on one image
-├── preflight.json              # machine-readable verdict
-├── book-interior-editable.pdf  # live text, for proofreading
-├── book-interior.pdf           # the interior you upload
-└── cover/cover-wrap.pdf        # the cover you upload, if the package has artwork
+books/<book-id>/
+├── output/                     # what you upload, and only that
+│   ├── book-interior.pdf
+│   └── book-cover.pdf
+└── build/                      # everything the build needed on the way
+    ├── normalized-book.json    # exactly what this build was made from, with hashes
+    ├── mazes/001.json          # canonical MazeData
+    ├── mazes/001.analysis.json # routes, scores, constraint verdicts
+    ├── mazes/001.svg           # inspection vector
+    ├── pages/page-001.pdf      # one file per physical page
+    ├── page-plan.json          # every page's number, side, kind and facing pair
+    ├── contact-sheet.png       # all mazes and their answers on one image
+    ├── preflight.json          # machine-readable verdict
+    └── book-interior-editable.pdf   # live text, for proofreading
 ```
 
 The cover is built separately, because its spine width depends on the finished

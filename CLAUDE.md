@@ -9,13 +9,19 @@ A **generalized, data-driven generator for KDP-ready puzzle-book interiors**. Th
 
 ```
 books/<book-id>/
-  book.json          # the entire book contract (print, layout, generation, assets, content)
-  assets/            # monochrome SVGs in fixed, case-sensitive folders
-  front-matter.pdf   # optional; supplied pre-made
+  input/             # everything supplied: book.json, artwork/, assets/, front-matter.pdf
+  output/            # the two PDFs that get uploaded, and nothing else
+  build/             # the working set: mazes, pages, page plan, preflight, contact sheet
 ```
 
-Adding a new book = new folder + assets + `book.json` (scene text lives inline in
-`book.json` under `content.scenes[]`) → `book build` → a print-ready interior PDF.
+Everything a book is made from and everything it produces lives in the book's
+own folder, so duplicating the folder duplicates the book. The split in
+`output` vs `build` is by audience: a file in `output` that is not going to KDP
+is in the wrong folder.
+
+Adding a new book = copy a folder, replace `input/artwork/`, edit
+`input/book.json` (scene text lives inline under `content.scenes[]`) →
+`book build` → a print-ready interior and cover in `output/`.
 **Never** add book-specific branching to `src/`; add a config knob or a profile instead.
 
 ## Before writing or changing a book, load the `new-book` skill
@@ -68,7 +74,9 @@ uv run maze-book book preflight     books/jims-halloween-maze-adventure
 uv run maze-book book build         books/jims-halloween-maze-adventure   # full pipeline
 ```
 
-Everything lands under `output/<book-id>/` (see PRD §17.14). `--force` bypasses the
+Everything lands inside the book's own folder (PRD §17.14): `output/` holds the
+two PDFs that get uploaded and nothing else, `build/` holds the working set,
+`input/` is never written by a build. `--force` bypasses the
 content-hash cache; `--only START:END` restricts to a 1-based maze range.
 
 ## Architecture: the load-bearing decisions
@@ -233,8 +241,10 @@ asset's *printed size* allows (see above; 7 units at 5.5 mm), a subpath budget t
 scales with it, no text, no background rect, no raster, no gradients, no opacity.
 
 Public folder names are part of the contract and case-sensitive:
-`beginning-vectors/`, `ending-vectors/`, `maze-vectors/dead-end/`,
-`maze-vectors/collectibles/`, `page-vectors/` (optional).
+`input/assets/start/`, `input/assets/finish/`, `input/assets/dead-ends/`,
+`input/assets/collectibles/`, `input/assets/decorations/` (optional). The names
+are `book.json` values, so a package may use others -- these are what the
+shipped book uses and what the README documents.
 
 ## Profile traps
 

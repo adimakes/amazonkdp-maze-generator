@@ -84,8 +84,14 @@ class Context:
         self.profile.covers(self.config.book.maze_count)
 
         self.catalog: AssetCatalog = load_catalog(self.config)
-        output_root = Path(getattr(args, "output", None) or (self.root / DEFAULT_OUTPUT))
-        self.paths = OutputPaths(output_root, self.config.book.id)
+        # Everything a book is made from and everything it produces lives in
+        # the book's own folder, so duplicating the folder duplicates the book.
+        override = getattr(args, "output", None)
+        self.paths = (
+            OutputPaths(Path(override), self.config.book.id)
+            if override
+            else OutputPaths(self.config.book_dir)
+        )
         self.fonts_dir = self.root / "fonts"
 
     @property
@@ -500,7 +506,11 @@ def _add_common(parser: argparse.ArgumentParser, *, index: bool = False) -> None
     parser.add_argument("--book", dest="book_flag", help="path to books/<book-id>")
     parser.add_argument("--seed", type=int, help="override book.seed")
     parser.add_argument("--profile", help="override book.profileId")
-    parser.add_argument("--output", help=f"output root (default {DEFAULT_OUTPUT}/)")
+    parser.add_argument(
+        "--output",
+        help="write somewhere other than the book's own folder; the book id is\n"
+             "appended, as in the shared-directory layout",
+    )
     parser.add_argument("--only", help="restrict to a 1-based maze range, e.g. 1:5")
     parser.add_argument("--force", action="store_true", help="bypass the artifact cache")
     if index:

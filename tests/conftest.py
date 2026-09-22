@@ -3,7 +3,8 @@
 ``repo_root`` anchors every schema/profile lookup back to the checkout root so
 tests do not depend on the current working directory pytest happens to be
 invoked from. ``tiny_book_dir`` points at the hand-authored fixture package
-under ``tests/fixtures/books/tiny-child-book/``. ``mutated_book`` copies that
+under ``tests/fixtures/books/tiny-child-book/``, which has the same
+input/output/build shape as a real package. ``mutated_book`` copies that
 package into a throwaway ``tmp_path`` and lets a test apply an arbitrary
 mutation to the parsed ``book.json`` dict before it is written back — this is
 the workhorse behind the negative book_config tests, each of which wants a
@@ -33,7 +34,9 @@ def repo_root() -> Path:
 @pytest.fixture(scope="session")
 def tiny_book_dir(repo_root: Path) -> Path:
     path = repo_root / "tests" / "fixtures" / "books" / "tiny-child-book"
-    assert (path / "book.json").is_file(), f"fixture book.json missing at {path}"
+    assert (path / "input" / "book.json").is_file(), (
+        f"fixture book.json missing at {path}/input"
+    )
     return path
 
 
@@ -55,7 +58,7 @@ def mutated_book(tiny_book_dir: Path, tmp_path: Path) -> Callable[[Callable[[dic
         counter["n"] += 1
         dest = tmp_path / f"mutated-{counter['n']}" / "tiny-child-book"
         shutil.copytree(tiny_book_dir, dest)
-        config_path = dest / "book.json"
+        config_path = dest / "input" / "book.json"
         obj = json.loads(config_path.read_text(encoding="utf-8"))
         mutator(obj)
         config_path.write_text(json.dumps(obj, indent=2), encoding="utf-8")

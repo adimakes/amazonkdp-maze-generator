@@ -465,7 +465,7 @@ def test_geometry_false_skips_the_rasterized_rules_only() -> None:
 def _shipped_svgs(repo_root: Path) -> list[Path]:
     """Vector assets across every shipped package. May legitimately be empty:
     a book whose artwork arrived as pictures ships rasters instead."""
-    return sorted(repo_root.glob("books/*/assets/**/*.svg"))
+    return sorted(repo_root.glob("books/*/input/assets/**/*.svg"))
 
 
 def test_every_shipped_asset_passes_the_rule_set_its_printed_size_earns(
@@ -524,11 +524,8 @@ def test_no_shipped_svg_asset_contains_a_stroke_attribute(repo_root: Path) -> No
 
 
 def test_the_halloween_package_ships_the_folders_the_contract_names(repo_root: Path) -> None:
-    book = repo_root / "books" / "jims-halloween-maze-adventure" / "assets"
-    for folder in (
-        "beginning-vectors", "ending-vectors",
-        "maze-vectors/dead-end", "maze-vectors/collectibles", "page-vectors",
-    ):
+    book = repo_root / "books" / "jims-halloween-maze-adventure" / "input" / "assets"
+    for folder in ("start", "finish", "dead-ends", "collectibles", "decorations"):
         directory = book / folder
         assert directory.is_dir(), folder
         # The folder names are the contract; the file format is not.

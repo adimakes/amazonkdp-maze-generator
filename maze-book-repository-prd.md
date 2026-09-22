@@ -38,8 +38,8 @@ src/jimmaze/
 The universal repository uses self-contained book packages:
 
 ```text
-books/<book-id>/book.json
-books/<book-id>/assets/**/*.svg
+books/<book-id>/input/book.json
+books/<book-id>/input/assets/**
 ```
 
 This is the most important structural change.
@@ -236,7 +236,7 @@ maze-book-generator/
 Every book package must contain exactly one required JSON configuration file:
 
 ```text
-books/<book-id>/book.json
+books/<book-id>/input/book.json
 ```
 
 It may contain SVG assets and an optional supplied front-matter PDF. The generator must not require code changes when a new book package is added.
@@ -843,12 +843,12 @@ The following are intentionally deferred from repository v1:
 Use the Halloween PRD's maze mechanics and quality constraints, but do not use its monolithic repository layout. Use the universal book-package layout defined here:
 
 ```text
-books/<book-id>/book.json
-books/<book-id>/assets/beginning-vectors/
-books/<book-id>/assets/ending-vectors/
-books/<book-id>/assets/maze-vectors/dead-end/
-books/<book-id>/assets/maze-vectors/collectibles/
-books/<book-id>/assets/page-vectors/       # optional
+books/<book-id>/input/book.json
+books/<book-id>/input/assets/start/          # the start marker
+books/<book-id>/input/assets/finish/         # the finish marker
+books/<book-id>/input/assets/dead-ends/      # markers for wrong turns
+books/<book-id>/input/assets/collectibles/   # the things to collect
+books/<book-id>/input/assets/decorations/    # optional page decoration
 ```
 
 Use `mazelib` only as a replaceable base-generation adapter. Use the canonical open-edge grid graph as the internal contract. Keep all route simulation, candy scoring, asset placement, SVG rendering, and PDF assembly independent of the external maze library.
@@ -932,7 +932,7 @@ The repository MUST support a book with no `page-vectors` folder. Story pages th
 Each book package MUST have exactly one required input/configuration file:
 
 ```text
-books/<book-id>/book.json
+books/<book-id>/input/book.json
 ```
 
 All story text for the book MUST be inside this file under `content.scenes`. A second story Markdown/YAML/JSON file is not required for v1. The generator MAY later support external content files, but they are outside the v1 contract.
@@ -1030,7 +1030,7 @@ The real Halloween file MUST contain 50 scenes. The example contains one scene o
 
 Path-resolution rules are normative:
 
-- `assets.beginningVectorsDir`, `assets.endingVectorsDir`, `assets.deadEndVectorsDir`, `assets.collectibleVectorsDir`, and `assets.pageVectorsDir` are directories relative to `book.json`.
+- `assets.beginningVectorsDir`, `assets.endingVectorsDir`, `assets.deadEndVectorsDir`, `assets.collectibleVectorsDir`, and `assets.pageVectorsDir` are directories relative to `book.json`, which lives in the package's `input/` folder.
 - `assets.startAsset` is a filename relative to `beginningVectorsDir`.
 - `assets.finishAsset` is a filename relative to `endingVectorsDir`.
 - `content.scenes[].pageVector`, when present, is a filename relative to `pageVectorsDir`.
@@ -1040,7 +1040,7 @@ Path-resolution rules are normative:
 The JSON Schema MUST enforce at least:
 
 - `schemaVersion`, `book`, `print`, `generation`, `layout`, `assets`, `content`, and `outputs` are present.
-- `book.id` is a safe lowercase kebab-case identifier and matches the book-folder name.
+- `book.id` is a safe lowercase kebab-case identifier and matches the book-folder name (the folder holding `input/`, not `input` itself).
 - `mazeCount` is a positive integer.
 - `content.scenes` contains exactly `mazeCount` entries.
 - Scene numbers are unique, consecutive, and equal to `1..mazeCount`.
@@ -1049,7 +1049,7 @@ The JSON Schema MUST enforce at least:
 - `interiorBleed` is `false` for the v1 profile.
 - `storyPageSide` and `mazePageSide` are opposite sides.
 - `solutionsPerPage` is a positive integer.
-- `startAsset` and `finishAsset` resolve to existing SVG files.
+- `startAsset` and `finishAsset` resolve to existing asset files.
 
 Unknown top-level fields SHOULD be rejected, with an `extensions` object reserved for future additions. This prevents silent misspellings such as `mazeCounnt`.
 
@@ -1495,26 +1495,38 @@ Exit codes MUST be stable:
 
 ### 17.14 Output contract
 
-A successful build MUST write:
+Everything a book is made from and everything it produces lives in the book's
+own folder, so duplicating the folder duplicates the book. A successful build
+MUST write:
 
 ```text
-output/<book-id>/
-├── normalized-book.json
-├── mazes/
-│   ├── 001.json
-│   ├── 001.analysis.json
-│   ├── 001.svg
-│   └── ...
-├── pages/
-│   ├── page-001.pdf
-│   ├── page-002.pdf
-│   └── ...
-├── page-plan.json
-├── contact-sheet.png
-├── preflight.json
-├── book-interior-editable.pdf
-└── book-interior.pdf
+books/<book-id>/
+├── input/                         # supplied; never written by a build
+│   ├── book.json
+│   ├── front-matter.pdf           # optional
+│   ├── artwork/                   # source pictures + artwork.json
+│   └── assets/**                  # print-ready assets
+├── output/                        # exactly what gets uploaded, and nothing else
+│   ├── book-interior.pdf
+│   └── book-cover.pdf
+└── build/                         # working set; regenerable, safe to delete
+    ├── normalized-book.json
+    ├── mazes/{001.json, 001.analysis.json, 001.svg, ...}
+    ├── pages/{page-001.pdf, ...}
+    ├── page-plan.json
+    ├── contact-sheet.png
+    ├── preflight.json
+    └── book-interior-editable.pdf
 ```
+
+The split is by *audience*, and it is the whole point of the folder: `output`
+holds what a person uploads, so a file in there that is not going to KDP is in
+the wrong place. `build` holds what the build needed on the way. These used to
+land together in one directory, where the two files that matter sat among a
+hundred that do not.
+
+`--output <dir>` writes elsewhere and appends the book id, which is the older
+shared-directory layout and is what the test suite uses.
 
 The production PDF MUST NOT be announced as successful unless all required preflight checks pass. If an intermediate artifact exists but a later stage fails, the CLI MUST return a non-zero exit code and report the failed stage.
 

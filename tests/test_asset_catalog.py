@@ -210,7 +210,7 @@ def test_load_catalog_takes_start_and_finish_from_config_not_folder_order(
     """Those two assets are the identity of the book. Dropping a new SVG that
     sorts first into ``beginning-vectors/`` must not silently replace Jim."""
     path = mutated_book(lambda obj: None)
-    (path / "assets" / "beginning-vectors" / "aaa_first.svg").write_text(
+    (path / "input" / "assets" / "beginning-vectors" / "aaa_first.svg").write_text(
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"/>', encoding="utf-8"
     )
     catalog = load_catalog(load_book_config(path, require_assets=True))
@@ -237,7 +237,7 @@ def test_an_unsupported_start_asset_never_reaches_the_catalog(mutated_book) -> N
     from maze_book.errors import ConfigError
 
     path = mutated_book(lambda obj: obj["assets"].update(startAsset="start.gif"))
-    (path / "assets" / "beginning-vectors" / "start.gif").write_text("x", encoding="utf-8")
+    (path / "input" / "assets" / "beginning-vectors" / "start.gif").write_text("x", encoding="utf-8")
     with pytest.raises(ConfigError, match=r"schema validation") as excinfo:
         load_book_config(path, require_assets=False)
     assert any("startAsset" in detail for detail in excinfo.value.details)
@@ -272,7 +272,7 @@ def test_load_catalog_picks_up_page_vectors_when_the_folder_is_configured(
         obj["assets"]["pageVectorsDir"] = "assets/page-vectors"
 
     path = mutated_book(mutator)
-    directory = path / "assets" / "page-vectors"
+    directory = path / "input" / "assets" / "page-vectors"
     directory.mkdir(parents=True)
     for name in ("moon.svg", "bat.svg"):
         (directory / name).write_text(

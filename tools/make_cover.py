@@ -63,7 +63,7 @@ SPINE_OVERLAP_IN = 0.06
 
 
 def load_book(book_dir: Path) -> dict:
-    return json.loads((book_dir / "book.json").read_text(encoding="utf-8"))
+    return json.loads((book_dir / "input" / "book.json").read_text(encoding="utf-8"))
 
 
 def interior_page_count(pdf_path: Path) -> int:
@@ -114,13 +114,11 @@ def build_cover(book_dir: Path, out_path: Path, *, paper: str = "white") -> dict
     book = load_book(book_dir)
     meta = book["book"]
     cover = book.get("cover") or {}
-    artifacts = REPO / (cover.get("sourceDir") or "artifacts")
+    artwork = book_dir / "input" / (cover.get("sourceDir") or "artwork")
 
     trim_w = float(book["print"]["trimWidthIn"])
     trim_h = float(book["print"]["trimHeightIn"])
-    pages = interior_page_count(
-        REPO / "output" / meta["id"] / "book-interior.pdf"
-    )
+    pages = interior_page_count(book_dir / "output" / "book-interior.pdf")
     spine_in = pages * CALIPER_IN[paper]
 
     wrap_w = (trim_w * 2 + spine_in + BLEED_IN * 2) * PT_PER_IN
@@ -138,12 +136,12 @@ def build_cover(book_dir: Path, out_path: Path, *, paper: str = "white") -> dict
 
     # Back cover: the left panel, running into the left and outer bleed.
     back_box = (0.0, 0.0, bleed + face, wrap_h)
-    draw_cover_image(canvas, artifacts / cover["back"], box=back_box)
+    draw_cover_image(canvas, artwork / cover["back"], box=back_box)
 
     # Front cover: the right panel.
     front_x = bleed + face + spine
     draw_cover_image(
-        canvas, artifacts / cover["front"], box=(front_x, 0.0, wrap_w, wrap_h)
+        canvas, artwork / cover["front"], box=(front_x, 0.0, wrap_w, wrap_h)
     )
 
     # Spine: a flat colour taken from the artwork rather than guessed, so the
@@ -225,9 +223,7 @@ def _maze_sample(book_dir: Path, maze_index: int):
     import subprocess
     import tempfile
 
-    book_id = load_book(book_dir)["book"]["id"]
-    out = REPO / "output" / book_id
-    plan_path = out / "page-plan.json"
+    plan_path = book_dir / "build" / "page-plan.json"
     if not plan_path.is_file():
         return None
     plan = json.loads(plan_path.read_text(encoding="utf-8"))
@@ -242,7 +238,7 @@ def _maze_sample(book_dir: Path, maze_index: int):
     with tempfile.TemporaryDirectory() as tmp:
         subprocess.run(
             ["pdftoppm", "-r", "260", "-png", "-f", str(page), "-l", str(page),
-             str(out / "book-interior.pdf"), f"{tmp}/s"],
+             str(book_dir / "output" / "book-interior.pdf"), f"{tmp}/s"],
             check=True, capture_output=True,
         )
         rendered = next(Path(tmp).glob("*.png"), None)
@@ -318,8 +314,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--paper", choices=sorted(CALIPER_IN), default="white")
     args = parser.parse_args(argv)
 
-    book_id = load_book(args.book)["book"]["id"]
-    out = args.out or REPO / "output" / book_id / "cover" / "cover-wrap.pdf"
+    out = args.out or args.book / "output" / "book-cover.pdf"
     result = build_cover(args.book, out, paper=args.paper)
     print(
         f"{result['pages']} pages -> spine {result['spineIn']} in; "

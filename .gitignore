@@ -5,12 +5,14 @@ __pycache__/
 
 # uv
 .venv/
-
-# Build artifacts
-output/
-build-tmp/
 .pytest_cache/
 .ruff_cache/
+
+# A book's working files are regenerable from its input/, so they do not belong
+# in history. The two PDFs in output/ are products, not sources; the folder is
+# kept so a fresh clone still reads as input / output / build.
+books/*/build/
+books/*/output/*.pdf
 
 # OS
 .DS_Store

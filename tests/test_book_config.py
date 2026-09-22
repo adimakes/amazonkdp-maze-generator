@@ -50,15 +50,15 @@ def test_load_tiny_fixture_with_required_assets_resolves_paths(tiny_book_dir: Pa
     assert config.book.profile_id == "child_6_7"
     assert config.book.content_origin.text == "human"
 
-    assert config.beginning_vectors_dir == (tiny_book_dir / "assets" / "beginning-vectors").resolve()
-    assert config.ending_vectors_dir == (tiny_book_dir / "assets" / "ending-vectors").resolve()
-    assert config.dead_end_vectors_dir == (tiny_book_dir / "assets" / "maze-vectors" / "dead-end").resolve()
+    assert config.beginning_vectors_dir == (tiny_book_dir / "input" / "assets" / "beginning-vectors").resolve()
+    assert config.ending_vectors_dir == (tiny_book_dir / "input" / "assets" / "ending-vectors").resolve()
+    assert config.dead_end_vectors_dir == (tiny_book_dir / "input" / "assets" / "maze-vectors" / "dead-end").resolve()
     assert config.collectible_vectors_dir == (
-        tiny_book_dir / "assets" / "maze-vectors" / "collectibles"
+        tiny_book_dir / "input" / "assets" / "maze-vectors" / "collectibles"
     ).resolve()
     assert config.page_vectors_dir is None
 
-    assert config.start_asset_path == (tiny_book_dir / "assets" / "beginning-vectors" / "start.svg").resolve()
+    assert config.start_asset_path == (tiny_book_dir / "input" / "assets" / "beginning-vectors" / "start.svg").resolve()
     assert config.start_asset_path.is_file()
     assert config.finish_asset_path.is_file()
     assert config.front_matter_path is None
@@ -258,7 +258,7 @@ def test_beginning_vectors_dir_symlink_escaping_package_is_rejected(mutated_book
     path = mutated_book(mutator)
     outside = tmp_path / "outside-target"
     outside.mkdir()
-    link = path / "assets" / "escape-vectors"
+    link = path / "input" / "assets" / "escape-vectors"
     try:
         link.symlink_to(outside, target_is_directory=True)
     except OSError:

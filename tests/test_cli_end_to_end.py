@@ -109,11 +109,11 @@ def test_book_validate_generates_nothing(halloween: Path, tmp_path: Path) -> Non
     """17.13: it "validates JSON, paths, profile, and assets without generating
     a maze"."""
     run("book", "validate", str(halloween), "--output", str(tmp_path))
-    assert not (tmp_path / "jims-halloween-maze-adventure" / "mazes").exists()
+    assert not (tmp_path / "jims-halloween-maze-adventure" / "build" / "mazes").exists()
 
 
 def test_a_broken_asset_makes_validate_exit_2(tiny_copy: Path, tmp_path: Path) -> None:
-    svg = tiny_copy / "assets" / "maze-vectors" / "collectibles" / "candy_01.svg"
+    svg = tiny_copy / "input" / "assets" / "maze-vectors" / "collectibles" / "candy_01.svg"
     svg.write_text(
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">'
         '<path d="M10 10 L90 90" stroke="#000"/></svg>',
@@ -125,7 +125,7 @@ def test_a_broken_asset_makes_validate_exit_2(tiny_copy: Path, tmp_path: Path) -
 def test_story_text_that_will_not_fit_makes_validate_exit_2(
     tiny_copy: Path, tmp_path: Path
 ) -> None:
-    config_path = tiny_copy / "book.json"
+    config_path = tiny_copy / "input" / "book.json"
     obj = json.loads(config_path.read_text(encoding="utf-8"))
     obj["content"]["scenes"][0]["text"] = " ".join(["candy"] * 90)
     config_path.write_text(json.dumps(obj), encoding="utf-8")
@@ -141,7 +141,7 @@ def test_maze_generate_writes_the_two_json_artifacts(tiny_copy: Path, tmp_path: 
     assert run(
         "maze", "generate", str(tiny_copy), "--index", "1", "--output", str(tmp_path)
     ) == EXIT_OK
-    base = tmp_path / "tiny-child-book" / "mazes"
+    base = tmp_path / "tiny-child-book" / "build" / "mazes"
     assert (base / "001.json").is_file()
     assert (base / "001.analysis.json").is_file()
 
@@ -152,7 +152,7 @@ def test_maze_render_refuses_to_generate_and_exits_3(tiny_copy: Path, tmp_path: 
     assert run(
         "maze", "render", str(tiny_copy), "--index", "1", "--output", str(tmp_path)
     ) == EXIT_GENERATION
-    assert not (tmp_path / "tiny-child-book" / "mazes" / "001.json").exists()
+    assert not (tmp_path / "tiny-child-book" / "build" / "mazes" / "001.json").exists()
 
 
 def test_maze_render_writes_an_svg_once_the_maze_is_cached(
@@ -163,7 +163,7 @@ def test_maze_render_writes_an_svg_once_the_maze_is_cached(
         "maze", "render", str(tiny_copy), "--index", "1", "--format", "svg",
         "--output", str(tmp_path),
     ) == EXIT_OK
-    svg = tmp_path / "tiny-child-book" / "mazes" / "001.svg"
+    svg = tmp_path / "tiny-child-book" / "build" / "mazes" / "001.svg"
     assert svg.is_file()
     assert svg.read_text(encoding="utf-8").startswith("<svg")
 
@@ -185,12 +185,12 @@ def test_book_assemble_without_cached_mazes_exits_3(tiny_copy: Path, tmp_path: P
 
 def test_the_seed_override_changes_the_maze(tiny_copy: Path, tmp_path: Path) -> None:
     run("maze", "generate", str(tiny_copy), "--index", "1", "--output", str(tmp_path))
-    first = (tmp_path / "tiny-child-book" / "mazes" / "001.json").read_text(encoding="utf-8")
+    first = (tmp_path / "tiny-child-book" / "build" / "mazes" / "001.json").read_text(encoding="utf-8")
 
     other = tmp_path / "other"
     run("maze", "generate", str(tiny_copy), "--index", "1", "--seed", "987654",
         "--output", str(other))
-    second = (other / "tiny-child-book" / "mazes" / "001.json").read_text(encoding="utf-8")
+    second = (other / "tiny-child-book" / "build" / "mazes" / "001.json").read_text(encoding="utf-8")
     assert first != second
 
 
@@ -198,7 +198,7 @@ def test_only_restricts_generation_to_the_range(tiny_copy: Path, tmp_path: Path)
     assert run(
         "book", "generate-mazes", str(tiny_copy), "--only", "2:3", "--output", str(tmp_path)
     ) == EXIT_OK
-    base = tmp_path / "tiny-child-book" / "mazes"
+    base = tmp_path / "tiny-child-book" / "build" / "mazes"
     assert not (base / "001.json").exists()
     assert (base / "002.json").is_file() and (base / "003.json").is_file()
 
@@ -215,13 +215,16 @@ def test_the_tiny_book_builds_end_to_end(tiny_copy: Path, tmp_path: Path) -> Non
     assert run("book", "build", str(tiny_copy), "--output", str(tmp_path)) == EXIT_OK
 
     base = tmp_path / "tiny-child-book"
+    # The two files that get uploaded, and nothing else, in `output`.
+    assert sorted(p.name for p in (base / "output").iterdir()) == ["book-interior.pdf"]
+    # Everything a build produces on the way there, in `build`.
     for name in (
         "normalized-book.json", "page-plan.json", "contact-sheet.png",
-        "preflight.json", "book-interior.pdf", "book-interior-editable.pdf",
+        "preflight.json", "book-interior-editable.pdf",
     ):
-        assert (base / name).is_file(), name
+        assert (base / "build" / name).is_file(), name
 
-    report = json.loads((base / "preflight.json").read_text(encoding="utf-8"))
+    report = json.loads((base / "build" / "preflight.json").read_text(encoding="utf-8"))
     assert report["passed"] is True
     assert report["failed"] == []
 
@@ -249,7 +252,7 @@ def test_preflight_checks_existing_output_without_changing_it(
 ) -> None:
     """17.13: it "checks existing outputs without changing them"."""
     run("book", "build", str(tiny_copy), "--output", str(tmp_path))
-    interior = tmp_path / "tiny-child-book" / "book-interior.pdf"
+    interior = tmp_path / "tiny-child-book" / "output" / "book-interior.pdf"
     before = interior.read_bytes()
     assert run("book", "preflight", str(tiny_copy), "--output", str(tmp_path)) == EXIT_OK
     assert interior.read_bytes() == before
@@ -258,7 +261,7 @@ def test_preflight_checks_existing_output_without_changing_it(
 def test_a_tampered_pdf_fails_preflight_with_exit_5(tiny_copy: Path, tmp_path: Path) -> None:
     """The gate has to be able to say no, or it is decoration."""
     run("book", "build", str(tiny_copy), "--output", str(tmp_path))
-    interior = tmp_path / "tiny-child-book" / "book-interior.pdf"
+    interior = tmp_path / "tiny-child-book" / "output" / "book-interior.pdf"
 
     from pypdf import PdfReader, PdfWriter
 
@@ -280,11 +283,11 @@ def test_the_halloween_book_builds_and_passes_every_preflight_check(
     assert run("book", "build", str(halloween), "--output", str(tmp_path)) == EXIT_OK
 
     base = tmp_path / "jims-halloween-maze-adventure"
-    report = json.loads((base / "preflight.json").read_text(encoding="utf-8"))
+    report = json.loads((base / "build" / "preflight.json").read_text(encoding="utf-8"))
     assert report["passed"] is True, report["failed"]
     assert report["skipped"] == []
 
-    plan = json.loads((base / "page-plan.json").read_text(encoding="utf-8"))
+    plan = json.loads((base / "build" / "page-plan.json").read_text(encoding="utf-8"))
     # The total is the book's own arithmetic, so the assertions are the
     # properties 18.7 fixes: an even total, and every maze covered once.
     assert plan["totalPages"] % 2 == 0
@@ -292,8 +295,8 @@ def test_the_halloween_book_builds_and_passes_every_preflight_check(
 
     from pypdf import PdfReader
 
-    assert len(PdfReader(str(base / "book-interior.pdf")).pages) == plan["totalPages"]
-    assert len(list((base / "mazes").glob("*.json"))) == 100  # maze + analysis each
+    assert len(PdfReader(str(base / "output" / "book-interior.pdf")).pages) == plan["totalPages"]
+    assert len(list((base / "build" / "mazes").glob("*.json"))) == 100  # maze + analysis each
 
 
 def test_a_partial_run_does_not_overwrite_the_whole_book_contact_sheet(
@@ -305,7 +308,7 @@ def test_a_partial_run_does_not_overwrite_the_whole_book_contact_sheet(
     from PIL import Image
 
     run("book", "generate-mazes", str(tiny_copy), "--output", str(tmp_path))
-    sheet = tmp_path / "tiny-child-book" / "contact-sheet.png"
+    sheet = tmp_path / "tiny-child-book" / "build" / "contact-sheet.png"
     with Image.open(sheet) as image:
         full_size = image.size
 
@@ -331,7 +334,7 @@ def test_copying_a_book_and_editing_only_its_config_makes_a_different_book(
     package = tmp_path / "books" / "sams-space-maze-quest"
     shutil.copytree(halloween, package)
 
-    config_path = package / "book.json"
+    config_path = package / "input" / "book.json"
     obj = json.loads(config_path.read_text(encoding="utf-8"))
     obj["book"].update(
         id="sams-space-maze-quest",
@@ -353,22 +356,22 @@ def test_copying_a_book_and_editing_only_its_config_makes_a_different_book(
     obj["layout"]["frontMatterPdf"] = None
     obj["layout"]["expectedPageCount"] = None
     config_path.write_text(json.dumps(obj, indent=2), encoding="utf-8")
-    (package / "front-matter.pdf").unlink()
+    (package / "input" / "front-matter.pdf").unlink()
 
     output = tmp_path / "out"
     assert run("book", "build", str(package), "--output", str(output)) == EXIT_OK
 
     base = output / "sams-space-maze-quest"
-    report = json.loads((base / "preflight.json").read_text(encoding="utf-8"))
+    report = json.loads((base / "build" / "preflight.json").read_text(encoding="utf-8"))
     assert report["passed"] is True, report["failed"]
 
-    plan = json.loads((base / "page-plan.json").read_text(encoding="utf-8"))
+    plan = json.loads((base / "build" / "page-plan.json").read_text(encoding="utf-8"))
     assert plan["frontMatterPages"] == 0
     assert plan["totalPages"] % 2 == 0
     assert len([p for p in plan["pages"] if p["kind"] == "maze"]) == 12
 
     # A different seed and profile must produce genuinely different mazes.
-    first = json.loads((base / "mazes" / "001.json").read_text(encoding="utf-8"))
+    first = json.loads((base / "build" / "mazes" / "001.json").read_text(encoding="utf-8"))
     original = json.loads(
         (Path(__file__).resolve().parents[1] / "output" / "jims-halloween-maze-adventure"
          / "mazes" / "001.json").read_text(encoding="utf-8")
@@ -390,9 +393,9 @@ def test_every_planned_page_gets_its_own_pdf_including_front_matter(
     """
     run("book", "build", str(tiny_copy), "--output", str(tmp_path))
     plan = json.loads(
-        (tmp_path / "tiny-child-book" / "page-plan.json").read_text(encoding="utf-8")
+        (tmp_path / "tiny-child-book" / "build" / "page-plan.json").read_text(encoding="utf-8")
     )
-    pages = sorted((tmp_path / "tiny-child-book" / "pages").glob("page-*.pdf"))
+    pages = sorted((tmp_path / "tiny-child-book" / "build" / "pages").glob("page-*.pdf"))
     assert [p.name for p in pages] == [
         f"page-{record['pageNumber']:03d}.pdf" for record in plan["pages"]
     ]
@@ -406,11 +409,11 @@ def test_front_matter_pages_are_split_out_verbatim(halloween: Path, tmp_path: Pa
     run("book", "generate-mazes", str(halloween), "--output", str(tmp_path))
     run("book", "assemble", str(halloween), "--output", str(tmp_path))
 
-    pages = tmp_path / "jims-halloween-maze-adventure" / "pages"
+    pages = tmp_path / "jims-halloween-maze-adventure" / "build" / "pages"
     assert (pages / "page-001.pdf").is_file()
     assert len(PdfReader(str(pages / "page-001.pdf")).pages) == 1
     plan = json.loads(
-        (tmp_path / "jims-halloween-maze-adventure" / "page-plan.json").read_text(
+        (tmp_path / "jims-halloween-maze-adventure" / "build" / "page-plan.json").read_text(
             encoding="utf-8"
         )
     )

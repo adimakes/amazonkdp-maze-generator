@@ -26,6 +26,11 @@ from typing import Any
 from ..errors import ConfigError
 from .json_io import read_json
 
+#: A package folder holds everything a book is made from under this name, and
+#: everything a build produces beside it. One glance says which is which.
+INPUT_DIR = "input"
+CONFIG_NAME = "book.json"
+
 SCHEMA_VERSION = "1.0"
 
 
@@ -204,6 +209,8 @@ class OutputsSpec:
 
 @dataclass
 class BookConfig:
+    #: Where the book's inputs live: ``books/<book-id>/input``. Asset paths in
+    #: ``book.json`` are relative to this.
     package_dir: Path
     config_path: Path
     book: BookMeta
@@ -217,6 +224,15 @@ class BookConfig:
     raw: dict[str, Any] = field(default_factory=dict)
 
     # ---- resolved paths -------------------------------------------------- #
+
+    @property
+    def book_dir(self) -> Path:
+        """The package folder itself -- the one named after the book."""
+        return (
+            self.package_dir.parent
+            if self.package_dir.name == INPUT_DIR
+            else self.package_dir
+        )
 
     def dir_path(self, rel: str, *, field_name: str) -> Path:
         return safe_join(self.package_dir, rel, field_name=field_name)
@@ -308,9 +324,16 @@ def _check_cross_fields(obj: dict[str, Any], package_dir: Path) -> None:
     layout = obj["layout"]
     scenes = obj["content"]["scenes"]
 
-    if book["id"] != package_dir.name:
+    # The package folder is the one named after the book. `input/` sits inside
+    # it, so when the config is loaded from there the name to match is its
+    # parent's -- otherwise every book in the world would have to be called
+    # "input".
+    package_name = (
+        package_dir.parent.name if package_dir.name == INPUT_DIR else package_dir.name
+    )
+    if book["id"] != package_name:
         problems.append(
-            f"book.id '{book['id']}' does not match folder name '{package_dir.name}'"
+            f"book.id '{book['id']}' does not match folder name '{package_name}'"
         )
 
     maze_count = book["mazeCount"]
@@ -404,12 +427,25 @@ def load_book_config(
     schema_path: Path | None = None,
     require_assets: bool = True,
 ) -> BookConfig:
-    """Load ``book.json`` (or its containing directory) into a ``BookConfig``."""
+    """Load a book package into a ``BookConfig``.
+
+    ``path`` is the package folder -- ``books/<book-id>`` -- and everything the
+    book is made *from* lives under ``input/`` inside it. The config file itself
+    may also be named directly, which is what the tests and the tooling do.
+
+    Asset paths in ``book.json`` stay relative to the file, so ``input/`` is the
+    root they resolve against and nothing in the contract has to know the folder
+    exists.
+    """
     path = Path(path)
     if path.is_dir():
-        path = path / "book.json"
+        candidates = [path / INPUT_DIR / CONFIG_NAME, path / CONFIG_NAME]
+        path = next((c for c in candidates if c.is_file()), candidates[0])
     if not path.is_file():
-        raise ConfigError(f"book config not found: {path}")
+        raise ConfigError(
+            f"book config not found: {path}\n"
+            f"a book package is a folder holding {INPUT_DIR}/{CONFIG_NAME}"
+        )
 
     package_dir = path.parent
     obj = read_json(path)

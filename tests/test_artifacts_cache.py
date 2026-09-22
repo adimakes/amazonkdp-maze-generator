@@ -44,18 +44,46 @@ def tiny_store(tiny_book_dir: Path, repo_root: Path, tmp_path: Path) -> MazeStor
 
 
 def test_output_paths_match_the_17_14_contract(tmp_path: Path) -> None:
+    """17.14 splits what a build writes by who the file is for."""
     paths = OutputPaths(tmp_path, "my-book")
     base = tmp_path / "my-book"
-    assert paths.maze_json(1) == base / "mazes" / "001.json"
-    assert paths.analysis_json(42) == base / "mazes" / "042.analysis.json"
-    assert paths.maze_svg(7) == base / "mazes" / "007.svg"
-    assert paths.page_pdf(6) == base / "pages" / "page-006.pdf"
-    assert paths.normalized_book == base / "normalized-book.json"
-    assert paths.page_plan == base / "page-plan.json"
-    assert paths.contact_sheet == base / "contact-sheet.png"
-    assert paths.preflight == base / "preflight.json"
-    assert paths.interior == base / "book-interior.pdf"
-    assert paths.editable == base / "book-interior-editable.pdf"
+
+    # `output` is what gets uploaded, and only that.
+    assert paths.interior == base / "output" / "book-interior.pdf"
+    assert paths.cover == base / "output" / "book-cover.pdf"
+
+    # `build` is the working set: regenerable, and safe to delete.
+    assert paths.maze_json(1) == base / "build" / "mazes" / "001.json"
+    assert paths.analysis_json(42) == base / "build" / "mazes" / "042.analysis.json"
+    assert paths.maze_svg(7) == base / "build" / "mazes" / "007.svg"
+    assert paths.page_pdf(6) == base / "build" / "pages" / "page-006.pdf"
+    assert paths.normalized_book == base / "build" / "normalized-book.json"
+    assert paths.page_plan == base / "build" / "page-plan.json"
+    assert paths.contact_sheet == base / "build" / "contact-sheet.png"
+    assert paths.preflight == base / "build" / "preflight.json"
+    # The editable interior is for proofreading, not for uploading.
+    assert paths.editable == base / "build" / "book-interior-editable.pdf"
+
+
+def test_a_package_folder_is_its_own_output_root(tmp_path: Path) -> None:
+    """Duplicating the folder duplicates the book: inputs, outputs and working
+    files all travel with it."""
+    paths = OutputPaths(tmp_path / "books" / "my-book")
+    assert paths.interior == tmp_path / "books" / "my-book" / "output" / "book-interior.pdf"
+    assert paths.page_plan == tmp_path / "books" / "my-book" / "build" / "page-plan.json"
+
+
+def test_only_uploads_land_in_output(tmp_path: Path) -> None:
+    """The folder's whole job is that you can open it and know what to do."""
+    paths = OutputPaths(tmp_path / "my-book")
+    uploads = {paths.interior, paths.cover}
+    others = {
+        paths.editable, paths.page_plan, paths.preflight, paths.contact_sheet,
+        paths.normalized_book, paths.interior_text, paths.maze_json(1),
+        paths.page_pdf(1),
+    }
+    assert all(p.parent == paths.output for p in uploads)
+    assert not any(paths.output in p.parents for p in others)
 
 
 def test_maze_indexes_are_zero_padded_so_they_sort(tmp_path: Path) -> None:
@@ -129,7 +157,7 @@ def test_the_assets_digest_changes_when_an_asset_is_redrawn(
     config = load_book_config(path)
     before = assets_digest(load_catalog(config))
 
-    svg = path / "assets" / "maze-vectors" / "collectibles" / "candy_01.svg"
+    svg = path / "input" / "assets" / "maze-vectors" / "collectibles" / "candy_01.svg"
     svg.write_text(
         svg.read_text(encoding="utf-8").replace("</svg>", "<path d=\"M10 10 L90 90 Z\"/></svg>"),
         encoding="utf-8",
