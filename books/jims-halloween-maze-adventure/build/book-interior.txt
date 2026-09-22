@@ -1,0 +1,1425 @@
+                Copyright © 2026 Aditya Bhatia.
+
+                       All rights reserved.
+
+This interior was generated deterministically by maze-book v1.0.0.
+                                       HOW TO PLAY
+1. Find a path from Jim to the candy bucket. Wherever he is going, the bucket marks the
+    finish.
+
+2. You cannot walk through a wall.
+
+3. Pick up as much candy as you can on the way.
+
+4. Color in one box for every candy you get.
+
+5. Write how many you got in the Total box.
+
+6. See how close you came to the “Best possible” score.
+
+7. Stuck? The answers are at the back.
+
+8. The mazes get bigger as you go: 1 to 20 suit ages 6 and 7, 21 to 40 ages 8 and 9, and 41
+    to 50 ages 10 and up.
+
+
+
+COLLECT THESE
+
+
+
+THESE ARE JUST SPOOKY
+
+
+
+The spooky ones are smaller, and they are worth nothing.
+                         Meet Jim
+Jim is going trick-or-treating, and he is going the long way round,
+     because the long way round is where the good candy is.
+         He needs somebody to find the path. That is you.
+ For everyone who takes the long way round. Happy Halloween.
+                      GETTING READY
+
+
+
+                             1
+
+WHERE'S THE COSTUME BOX?
+ Up in the attic, behind everything else. Jim has until dark.
+    START
+
+
+
+
+                                                       FINISH
+
+
+
+
+Color in one box for every candy you collect
+                                               Total
+
+Best possible: 6 candies
+
+
+
+
+                                                         Maze 1
+                             GETTING READY
+
+
+
+                                    2
+
+                THE STUCK ZIPPER
+The ghost suit is inside out and the zipper will not budge. Can you get Jim
+                         across to the sewing box?
+    START
+
+
+
+
+                                                       FINISH
+Color in one box for every candy you collect
+                                               Total
+
+Best possible: 6 candies
+
+
+
+
+                                                                Maze 2
+                           GETTING READY
+
+
+
+                                  3
+
+             TWO WHITE SWIRLS
+Jim paints a white swirl on each cheek. Now he needs the tall mirror to
+               find out if they came out spooky or silly.
+    START
+
+
+
+
+                                                       FINISH
+Color in one box for every candy you collect
+                                               Total
+
+Best possible: 6 candies
+
+
+
+
+                                                                Maze 3
+          GETTING READY
+
+
+
+                4
+
+SOUP BEFORE SWEETS
+   Soup before sweets, says Mom.
+                           START
+
+
+
+
+                                                       FINISH
+Color in one box for every candy you collect
+                                               Total
+
+Best possible: 7 candies
+
+
+
+
+                                                                Maze 4
+                             GETTING READY
+
+
+
+                                    5
+
+       UNDER THE COUCH AGAIN
+That is where the flashlight rolled. Pillows, boots, one lost sock. Help Jim
+                                 dig it out.
+                           START
+
+
+
+
+                                                       FINISH
+
+
+
+
+Color in one box for every candy you collect
+                                               Total
+
+Best possible: 5 candies
+
+
+
+
+                                                         Maze 5
+                          GETTING READY
+
+
+
+                                 6
+
+   HIGH ON THE CLOSET SHELF
+The pumpkin bucket is up where Jim can only just see it. Which way to
+                           the closet?
+    START
+
+
+
+
+                                                       FINISH
+Color in one box for every candy you collect
+                                               Total
+
+Best possible: 7 candies
+
+
+
+
+                                                                Maze 6
+                             GETTING READY
+
+
+
+                                    7
+
+           ONE BOOT, TWO BOOT
+One is waiting by the door. The other is hiding under the stairs, and Jim is
+                                hopping.
+    START
+
+
+
+
+                                                       FINISH
+Color in one box for every candy you collect
+                                               Total
+
+Best possible: 6 candies
+
+
+
+
+                                                                Maze 7
+                            GETTING READY
+
+
+
+                                   8
+
+           OUT THE FRONT DOOR
+The porch light is on and the night smells like wet leaves. Only the coats
+                     between Jim and the door now.
+    START
+
+
+
+
+                                                       FINISH
+
+
+
+
+Color in one box for every candy you collect
+                                               Total
+
+Best possible: 6 candies
+
+
+
+
+                                                         Maze 8
+                          GETTING READY
+
+
+
+                                 9
+
+ACROSS THE STEPPING STONES
+Wet leaves have covered every one of them. Can you find Jim a dry way
+                      to the little apple tree?
+    START
+
+
+
+
+                                                       FINISH
+
+
+
+
+Color in one box for every candy you collect
+                                               Total
+
+Best possible: 7 candies
+
+
+
+
+                                                         Maze 9
+                            GETTING READY
+
+
+
+                                  10
+
+             THE SQUEAKY GATE
+Squeeeak. That is the gate at the end of the yard, and the flower pots are
+                                in the way.
+                                       START
+
+
+
+
+                                                       FINISH
+Color in one box for every candy you collect
+                                               Total
+
+Best possible: 6 candies
+
+
+
+
+                                                                Maze 10
+                           THE NEIGHBORHOOD
+
+
+
+                                    11
+
+                  THE FIRST PORCH
+A grinning pumpkin sits by the steps. Jim practices saying trick or treat the
+                             whole way up.
+    START
+
+
+
+
+                                                       FINISH
+
+
+
+
+Color in one box for every candy you collect
+                                               Total
+
+Best possible: 9 candies
+
+
+
+
+                                                        Maze 11
+                         THE NEIGHBORHOOD
+
+
+
+                                 12
+
+         GOOD DOG, QUIET DOG
+The dog behind the fence is barking his head off and wagging his tail at
+                  the same time. Past him, quietly.
+             START
+
+
+
+
+                                                       FINISH
+Color in one box for every candy you collect
+                                               Total
+
+Best possible: 8 candies
+
+
+
+
+                                                                Maze 12
+                        THE NEIGHBORHOOD
+
+
+
+                                13
+
+           THE SPRINKLER IS ON
+A wet ghost is not a scary ghost. Time the dashes and keep Jim's sheet
+                                  dry.
+             START
+
+
+
+
+                                                       FINISH
+Color in one box for every candy you collect
+                                               Total
+
+Best possible: 8 candies
+
+
+
+
+                                                                Maze 13
+                       THE NEIGHBORHOOD
+
+
+
+                               14
+
+             TALLER THAN DAD
+That is how high these hedges are. Find the gaps and keep Jim going.
+    START
+
+
+
+
+                                                       FINISH
+
+
+
+
+Color in one box for every candy you collect
+                                               Total
+
+Best possible: 9 candies
+
+
+
+
+                                                        Maze 14
+                         THE NEIGHBORHOOD
+
+
+
+                                  15
+
+            SHEETS ON THE LINE
+White sheets flap on the line, and for a second Jim thinks they are other
+                ghosts. The back gate is behind them.
+             START
+
+
+
+
+                                                       FINISH
+Color in one box for every candy you collect
+                                               Total
+
+Best possible: 9 candies
+
+
+
+
+                                                                Maze 15
+                         THE NEIGHBORHOOD
+
+
+
+                                 16
+
+             THE CORNER STORE
+Orange lights fill the window. Jim wants the candy counter at the back,
+                       down one very narrow aisle.
+    START
+
+
+
+
+                                                       FINISH
+
+
+
+
+Color in one box for every candy you collect
+                                               Total
+
+Best possible: 8 candies
+
+
+
+
+                                                        Maze 16
+                         THE NEIGHBORHOOD
+
+
+
+                                 17
+
+                          CRUNCH
+Somebody raked the whole street into one pile and Jim is going straight
+                through it. Hold on to that bucket!
+                                 START
+
+
+
+
+                                                       FINISH
+
+
+
+
+Color in one box for every candy you collect
+                                               Total
+
+Best possible: 8 candies
+
+
+
+
+                                                        Maze 17
+                         THE NEIGHBORHOOD
+
+
+
+                                 18
+
+         PIRATES EVERYWHERE
+Pirates and robots and one very small dragon, all shouting at once. Can
+                you get Jim through to the next porch?
+    START
+
+
+
+
+                                                       FINISH
+
+
+
+
+Color in one box for every candy you collect
+                                               Total
+
+Best possible: 9 candies
+
+
+
+
+                                                        Maze 18
+                          THE NEIGHBORHOOD
+
+
+
+                                  19
+
+            THE SPIDER MAILBOX
+A rubber spider swings from the mailbox. Jim knows it is rubber. Jim still
+                                ducks.
+    START
+
+
+
+
+                                                       FINISH
+Color in one box for every candy you collect
+                                               Total
+
+Best possible: 8 candies
+
+
+
+
+                                                                Maze 19
+                         THE NEIGHBORHOOD
+
+
+
+                                  20
+
+            THE LONG DRIVEWAY
+The last house on the street sits way back from the road. A long walk for
+                  one candy, but Jim is going anyway.
+                                 START
+
+
+
+
+                                                       FINISH
+Color in one box for every candy you collect
+                                               Total
+
+Best possible: 9 candies
+
+
+
+
+                                                                Maze 20
+                   THE DARK END OF THE STREET
+
+
+
+                                 21
+
+                  INTO THE PARK
+The gate is open, the sky has gone purple, and these trees looked a lot
+                         shorter this morning.
+                     START
+
+
+
+
+                                                       FINISH
+Color in one box for every candy you collect
+                                               Total
+
+
+
+Best possible: 10 candies
+
+
+
+
+                                                                Maze 21
+                     THE DARK END OF THE STREET
+
+
+
+                                  22
+
+                  THE DUCK POND
+Ducks bob about under the first stars. Jim needs the stone bridge, and the
+                       mud in between is deep.
+    START
+
+
+
+
+                                                       FINISH
+Color in one box for every candy you collect
+                                               Total
+
+
+
+Best possible: 10 candies
+
+
+
+
+                                                                Maze 22
+                   THE DARK END OF THE STREET
+
+
+
+                                23
+
+            THE PUMPKIN PATCH
+Rows and rows of fat pumpkins, every one of them sitting in mud. Which
+                        way to the wagon?
+                     START
+
+
+
+
+                                                       FINISH
+Color in one box for every candy you collect
+                                               Total
+
+Best possible: 9 candies
+
+
+
+
+                                                                Maze 23
+                 THE DARK END OF THE STREET
+
+
+
+                              24
+
+         WALLS MADE OF HAY
+The bales are stacked higher than Jim's head, and somewhere in the
+                middle of them a lantern is glowing.
+                             START
+
+
+
+
+                                                       FINISH
+Color in one box for every candy you collect
+                                               Total
+
+
+
+Best possible: 10 candies
+
+
+
+
+                                                                Maze 24
+                  THE DARK END OF THE STREET
+
+
+
+                              25
+
+      NOBODY ON THE SWINGS
+They are moving anyway. Across the blacktop, somebody has left the
+                           gate open.
+                             START
+
+
+
+
+                                                       FINISH
+
+
+
+
+Color in one box for every candy you collect
+                                               Total
+
+Best possible: 9 candies
+
+
+
+
+                                                        Maze 25
+                  THE DARK END OF THE STREET
+
+
+
+                               26
+
+           KAZOOS AND BONES
+A skeleton band is playing on the bandstand, badly. Jim would like a
+                         much closer look.
+                             START
+
+
+
+
+                                                       FINISH
+Color in one box for every candy you collect
+                                               Total
+
+Best possible: 8 candies
+
+
+
+
+                                                                Maze 26
+                   THE DARK END OF THE STREET
+
+
+
+                                27
+
+                 THE BAT ALLEY
+Bats swoop over the alley lights, squeaking away. They are only saying
+                        hello to Jim. Probably.
+                     START
+
+
+
+
+                                                       FINISH
+Color in one box for every candy you collect
+                                               Total
+
+
+
+Best possible: 10 candies
+
+
+
+
+                                                                Maze 27
+                  THE DARK END OF THE STREET
+
+
+
+                               28
+
+       THE FOUNTAIN SQUARE
+Water splashes in the old stone fountain. Can you weave Jim past all
+                these benches to the candy stand?
+    START
+
+
+
+
+                                                       FINISH
+
+
+
+
+Color in one box for every candy you collect
+                                               Total
+
+Best possible: 8 candies
+
+
+
+
+                                                        Maze 28
+                   THE DARK END OF THE STREET
+
+
+
+                                 29
+
+                           DRUMS!
+The costume parade has filled the whole street, and Jim is on the wrong
+                               side of it.
+    START
+
+
+
+
+                                                       FINISH
+
+
+
+
+Color in one box for every candy you collect
+                                               Total
+
+Best possible: 9 candies
+
+
+
+
+                                                        Maze 29
+                    THE DARK END OF THE STREET
+
+
+
+                                 30
+
+     THE TREAT BOWL IS GOING
+Paper bats swing over the library steps. Jim can see the bowl from here.
+                                 Quick.
+    START
+
+
+
+
+                                                       FINISH
+
+
+
+
+Color in one box for every candy you collect
+                                               Total
+
+Best possible: 9 candies
+
+
+
+
+                                                        Maze 30
+                      THE HAUNTED HALF HOUR
+
+
+
+                                  31
+
+              THE OLD ORCHARD
+The apple trees lean right out over the grass, and Jim is looking for the
+                       stone wall on the far side.
+            START
+
+
+
+
+                                                       FINISH
+Color in one box for every candy you collect
+                                               Total
+
+Best possible: 9 candies
+
+
+
+
+                                                                Maze 31
+                     THE HAUNTED HALF HOUR
+
+
+
+                                 32
+
+             THE COBWEB SHED
+Silver webs cover the shed door, every inch of it. There is a lantern in
+                       there, and Jim wants it.
+                          START
+
+
+
+
+                                                       FINISH
+Color in one box for every candy you collect
+                                               Total
+
+Best possible: 9 candies
+
+
+
+
+                                                                Maze 32
+                     THE HAUNTED HALF HOUR
+
+
+
+                                 33
+
+               FOG IN THE LANE
+Thick as soup. Follow the fence posts with Jim and the streetlight will
+                         turn up eventually.
+    START
+
+
+
+
+                                                       FINISH
+
+
+
+
+Color in one box for every candy you collect
+                                               Total
+
+
+
+Best possible: 10 candies
+
+
+
+
+                                                        Maze 33
+                      THE HAUNTED HALF HOUR
+
+
+
+                                 34
+
+      THE CAT WILL NOT MOVE
+A black cat has sat down in the middle of the lane, started purring, and
+                      will not move for anybody.
+                   START
+
+
+
+
+                                                       FINISH
+Color in one box for every candy you collect
+                                               Total
+
+
+
+Best possible: 11 candies
+
+
+
+
+                                                                Maze 34
+                     THE HAUNTED HALF HOUR
+
+
+
+                                35
+
+ALONG THE GRAVEYARD FENCE
+Old stones stand in rows behind the iron rails. Jim keeps close to the
+                   fence and does not look twice.
+                   START
+
+
+
+
+                                                       FINISH
+Color in one box for every candy you collect
+                                               Total
+
+
+
+Best possible: 10 candies
+
+
+
+
+                                                                Maze 35
+                      THE HAUNTED HALF HOUR
+
+
+
+                                 36
+
+             THE CREAKY BRIDGE
+It creaks over a chuckling stream. Some of these boards are dry and some
+                    are not. Can you pick the dry ones?
+                          START
+
+
+
+
+                                                       FINISH
+Color in one box for every candy you collect
+                                               Total
+
+
+
+Best possible: 11 candies
+
+
+
+
+                                                                Maze 36
+                      THE HAUNTED HALF HOUR
+
+
+
+                                  37
+
+      THE WHISPERING WILLOW
+The willow trails its branches right across the path. They only feel like
+                                 fingers.
+                   START
+
+
+
+
+                                                       FINISH
+
+
+
+
+Color in one box for every candy you collect
+                                               Total
+
+
+
+Best possible: 11 candies
+
+
+
+
+                                                        Maze 37
+                   THE HAUNTED HALF HOUR
+
+
+
+                              38
+
+      UP TO THE LIGHTHOUSE
+The beam swings over the rocks and back again. The keeper keeps a
+            candy dish at the top of all those steps.
+                   START
+
+
+
+
+                                                       FINISH
+
+
+
+
+Color in one box for every candy you collect
+                                               Total
+
+
+
+Best possible: 11 candies
+
+
+
+
+                                                        Maze 38
+                       THE HAUNTED HALF HOUR
+
+
+
+                                  39
+
+                  TAP, TAP, CLACK
+The skeletons are dancing in the old barn and the fiddler shows no sign of
+                       stopping. Jim taps one foot.
+                          START
+
+
+
+
+                                                       FINISH
+Color in one box for every candy you collect
+                                               Total
+
+
+
+Best possible: 10 candies
+
+
+
+
+                                                                Maze 39
+                      THE HAUNTED HALF HOUR
+
+
+
+                                 40
+
+          THE OWL IN THE LOFT
+A very round owl blinks down at Jim. Jim blinks back, then goes looking
+                          for the open door.
+    START
+
+
+
+
+                                                       FINISH
+Color in one box for every candy you collect
+                                               Total
+
+
+
+Best possible: 11 candies
+
+
+
+
+                                                                Maze 40
+                          THE LONG WAY HOME
+
+
+
+                                    41
+
+             THE MANSION GATES
+Tall iron gates at the top of the hill, and one of them is open. Jim just has
+                             to work out which.
+    START
+
+
+
+
+                                                       FINISH
+Color in one box for every candy you collect
+                                               Total
+
+
+
+Best possible: 12 candies
+
+
+
+
+                                                                Maze 41
+                         THE LONG WAY HOME
+
+
+
+                                  42
+
+          A MAZE INSIDE A MAZE
+There is a stone bench right at the middle of this one. Can you get Jim to
+                                    it?
+    START
+
+
+
+
+                                                       FINISH
+Color in one box for every candy you collect
+                                               Total
+
+
+
+Best possible: 10 candies
+
+
+
+
+                                                                Maze 42
+                      THE LONG WAY HOME
+
+
+
+                              43
+
+            THE GRAND PORCH
+Cobwebs hang all the way across. Behind them somewhere is a brass
+                    bell the size of Jim's head.
+    START
+
+
+
+
+                                                       FINISH
+
+
+
+
+Color in one box for every candy you collect
+                                               Total
+
+
+
+Best possible: 12 candies
+
+
+
+
+                                                        Maze 43
+                        THE LONG WAY HOME
+
+
+
+                                 44
+
+               THE GREAT HALL
+Candles flicker the whole length of it, and the ghost that waltzes past
+                      does not even look at Jim.
+                  START
+
+
+
+
+                                                       FINISH
+Color in one box for every candy you collect
+                                               Total
+
+
+
+Best possible: 11 candies
+
+
+
+
+                                                                Maze 44
+                          THE LONG WAY HOME
+
+
+
+                                   45
+
+       DOWN THE CELLAR STEPS
+Jars of pickles line the wall, hundreds of them. Jim needs the light switch,
+                        and it is past all these crates.
+                  START
+
+
+
+
+                                                       FINISH
+Color in one box for every candy you collect
+                                               Total
+
+
+
+Best possible: 11 candies
+
+
+
+
+                                                                Maze 45
+                         THE LONG WAY HOME
+
+
+
+                                  46
+
+               UP AND UP AND UP
+The tower stairs curl around forever, and the bats do not mind sharing so
+                          long as Jim keeps left.
+                  START
+
+
+
+
+                                                       FINISH
+Color in one box for every candy you collect
+                                               Total
+
+
+
+Best possible: 11 candies
+
+
+
+
+                                                                Maze 46
+                        THE LONG WAY HOME
+
+
+
+                                 47
+
+                  STILL PLAYING
+Nobody has been in this ballroom for years. Help Jim across to the tall
+                             glass doors.
+           START
+
+
+
+
+                                                       FINISH
+Color in one box for every candy you collect
+                                               Total
+
+
+
+Best possible: 11 candies
+
+
+
+
+                                                                Maze 47
+                          THE LONG WAY HOME
+
+
+
+                                   48
+
+              THE MANSION ATTIC
+Trunks, old hats, and a smell like the back of a closet. Jim can see a round
+                          window at the far end.
+                  START
+
+
+
+
+                                                       FINISH
+
+
+
+
+Color in one box for every candy you collect
+                                               Total
+
+
+
+Best possible: 11 candies
+
+
+
+
+                                                        Maze 48
+                                 FINALE
+
+
+
+                                  49
+
+            THE LAST BIG HOUSE
+Paper ghosts float over the porch. Last door of the night, and Jim finally
+                    gets trick or treat exactly right.
+    START
+
+
+
+
+                                                       FINISH
+
+
+
+
+Color in one box for every candy you collect
+                                               Total
+
+
+
+Best possible: 11 candies
+
+
+
+
+                                                        Maze 49
+                                FINALE
+
+
+
+                                 50
+
+                  HOME AT LAST
+Jim's own porch light is glowing warm and yellow. Get him to the steps,
+                   then tip out the bucket and count.
+    START
+
+
+
+
+                                                       FINISH
+
+
+
+
+Color in one box for every candy you collect
+                                               Total
+
+
+
+Best possible: 12 candies
+
+
+
+
+                                                        Maze 50
+1. Best possible: 6 candies   2. Best possible: 6 candies   3. Best possible: 6 candies
+
+
+
+
+4. Best possible: 7 candies   5. Best possible: 5 candies   6. Best possible: 7 candies
+
+
+
+
+7. Best possible: 6 candies   8. Best possible: 6 candies   9. Best possible: 7 candies
+10. Best possible: 6 candies   11. Best possible: 9 candies   12. Best possible: 8 candies
+
+
+
+
+13. Best possible: 8 candies   14. Best possible: 9 candies   15. Best possible: 9 candies
+
+
+
+
+16. Best possible: 8 candies   17. Best possible: 8 candies   18. Best possible: 9 candies
+19. Best possible: 8 candies    20. Best possible: 9 candies   21. Best possible: 10 candies
+
+
+
+
+22. Best possible: 10 candies   23. Best possible: 9 candies   24. Best possible: 10 candies
+
+
+
+
+25. Best possible: 9 candies    26. Best possible: 8 candies   27. Best possible: 10 candies
+28. Best possible: 8 candies    29. Best possible: 9 candies    30. Best possible: 9 candies
+
+
+
+
+31. Best possible: 9 candies    32. Best possible: 9 candies    33. Best possible: 10 candies
+
+
+
+
+34. Best possible: 11 candies   35. Best possible: 10 candies   36. Best possible: 11 candies
+37. Best possible: 11 candies   38. Best possible: 11 candies   39. Best possible: 10 candies
+
+
+
+
+40. Best possible: 11 candies   41. Best possible: 12 candies   42. Best possible: 10 candies
+
+
+
+
+43. Best possible: 12 candies   44. Best possible: 11 candies   45. Best possible: 11 candies
+46. Best possible: 11 candies   47. Best possible: 11 candies   48. Best possible: 11 candies
+
+
+
+
+49. Best possible: 11 candies   50. Best possible: 12 candies
+                  The End
+Tip it all out on the floor and count. Jim always does.
+

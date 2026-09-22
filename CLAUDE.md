@@ -44,6 +44,23 @@ CLI, output paths, exit codes) and overrides any looser wording earlier in the d
 `additional-context-old-file.md` is an earlier single-book PRD kept for provenance; the
 parts worth keeping have already been merged into §17/§18. Do not treat it as normative.
 
+## New here? Onboard in this order
+
+1. **`README.md` → "Start here"** — three commands from a fresh clone to a built
+   book, plus the two external binaries preflight needs. `uv sync --extra dev`
+   is the whole setup; never `pip`, never `python -m venv`, never bare `python`.
+2. **`README.md` → "Make a second book"** — the actual workflow, and the one
+   thing this repository is for. Copy a folder, drop pictures in
+   `input/artwork/`, edit `input/book.json`, run three commands.
+3. **This file** — the architecture, and the decisions that are load-bearing
+   enough that changing them breaks something non-obvious.
+4. **`.claude/skills/new-book/SKILL.md`** — before writing or changing any book.
+   It carries the judgement `src/` cannot make.
+
+`maze-book-repository-prd.md` §17 is the normative locked contract. Where this
+file and the PRD disagree, the PRD wins on contract and this file wins on
+"why it is like that".
+
 ## Environment: uv only
 
 This project uses **uv exclusively** — never `pip`, `python -m venv`, or a bare `python`.

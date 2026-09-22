@@ -3,18 +3,46 @@
 A deterministic, data-driven generator for KDP-ready puzzle-book interiors.
 
 The engine knows nothing about Halloween, about Jim, or about candy. A book is a
-**data-only package**: a folder, some SVGs, and one `book.json`. Point the CLI at
-it and you get a print-ready interior PDF, an answer key, and a machine-readable
-report saying why it is safe to upload.
+**data-only package**: a folder holding `input/`, and the build fills in
+`output/` and `build/` beside it. Point the CLI at the folder and you get a
+print-ready interior PDF, a cover, an answer key, and a machine-readable report
+saying why it is safe to upload.
+
+## Start here
+
+Three commands, from a fresh clone to a finished book:
 
 ```bash
-uv sync --extra dev
-uv run maze-book book build books/jims-halloween-maze-adventure
+uv sync --extra dev                                        # 1. install everything
+uv run pytest -q                                           # 2. check it works (740 tests)
+uv run maze-book book build books/jims-halloween-maze-adventure   # 3. build the book
 ```
 
-That produces a 112-page 8.5 × 11 in interior — 50 mazes, 50 story pages, six
+Step 1 is the only setup there is. `uv sync` reads `uv.lock` and creates `.venv`
+with the exact pinned versions — you do not create a virtualenv, you do not
+`pip install`, and you do not activate anything. Every command in this README
+starts with `uv run`, which resolves that environment before running.
+
+You also need **qpdf**, **poppler** (for `pdftotext` and `pdftoppm`) and a
+working `fonts/` folder, all of which preflight checks for and names if missing:
+
+```bash
+brew install qpdf poppler        # macOS
+```
+
+Step 3 produces a 110-page 8.5 × 11 in interior — 50 mazes, 50 story pages, six
 solution pages — in about twenty seconds, and exits non-zero if any one of
-nineteen preflight checks fails.
+twenty preflight checks fails. The two files to upload land in
+`books/jims-halloween-maze-adventure/output/`.
+
+**Then read [Make a second book](#make-a-second-book).** That is the whole
+workflow: copy a folder, drop in pictures, edit one JSON, run three commands.
+
+> **If you are an AI agent onboarding to this repository:** read `CLAUDE.md`
+> next for the architecture and the decisions that are load-bearing, then
+> `.claude/skills/new-book/SKILL.md` before writing or changing any book. The
+> README tells you how to run it; those two tell you why it is built this way
+> and what the engine cannot decide for you.
 
 ---
 

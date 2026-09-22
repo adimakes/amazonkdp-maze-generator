@@ -1,18 +1,23 @@
-# Python
+# Only three things stay out of this repository, and each for a reason that is
+# not "it is big": committing it would be wrong, not merely wasteful.
+
+# A virtualenv is machine-specific. It holds compiled binaries and absolute
+# paths from whoever created it, so a committed one is broken for everyone else.
+# `uv sync --extra dev` rebuilds it from uv.lock in seconds -- see the README.
+.venv/
+
+# Generated from the source beside it, and regenerated whenever Python feels
+# like it. Committing it means a diff every time someone runs the tests.
 __pycache__/
 *.py[cod]
 *.egg-info/
-
-# uv
-.venv/
 .pytest_cache/
 .ruff_cache/
 
-# A book's working files are regenerable from its input/, so they do not belong
-# in history. The two PDFs in output/ are products, not sources; the folder is
-# kept so a fresh clone still reads as input / output / build.
-books/*/build/
-books/*/output/*.pdf
+# Per-machine, by design: `.claude/settings.local.json` is the local override of
+# the shared `.claude/settings.json`, which IS committed. Secrets and personal
+# paths belong here, which is exactly why it does not travel.
+.claude/settings.local.json
 
-# OS
+# macOS.
 .DS_Store

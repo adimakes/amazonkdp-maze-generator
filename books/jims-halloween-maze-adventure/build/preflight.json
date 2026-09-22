@@ -1,0 +1,108 @@
+{
+  "pdf": "/Users/adityabhatia/Developer/Personal/amazonkdp-maze-generator/books/jims-halloween-maze-adventure/output/book-interior.pdf",
+  "passed": true,
+  "checks": [
+    {
+      "check": "pdf-exists",
+      "status": "pass",
+      "detail": "512 KiB"
+    },
+    {
+      "check": "external-tools",
+      "status": "pass",
+      "detail": "qpdf, pdftotext and pdftoppm available"
+    },
+    {
+      "check": "page-count",
+      "status": "pass",
+      "detail": "110 pages, expected 110"
+    },
+    {
+      "check": "page-count-even",
+      "status": "pass",
+      "detail": "110 pages"
+    },
+    {
+      "check": "page-size",
+      "status": "pass",
+      "detail": "expected 612x792 pt; every page matches"
+    },
+    {
+      "check": "page-rotation",
+      "status": "pass",
+      "detail": "no rotation flags"
+    },
+    {
+      "check": "fonts-embedded",
+      "status": "pass",
+      "detail": "3 font(s), all embedded"
+    },
+    {
+      "check": "color-space-devicegray",
+      "status": "pass",
+      "detail": "DeviceGray only"
+    },
+    {
+      "check": "ink-pure-black",
+      "status": "pass",
+      "detail": "no tints between 0 and 1"
+    },
+    {
+      "check": "images-print-ready",
+      "status": "pass",
+      "detail": "861 placement(s), bitonal, worst 600 dpi"
+    },
+    {
+      "check": "transparency-flattened",
+      "status": "pass",
+      "detail": "no transparency groups or soft alpha"
+    },
+    {
+      "check": "story-maze-parity",
+      "status": "pass",
+      "detail": "every spread is story-left, maze-right"
+    },
+    {
+      "check": "gutter-within-inside-margin",
+      "status": "pass",
+      "detail": "inside margin 0.625 in vs gutter 0.625 in"
+    },
+    {
+      "check": "text-markers",
+      "status": "pass",
+      "detail": "scene titles and solution labels present"
+    },
+    {
+      "check": "best-possible-cross-check",
+      "status": "pass",
+      "detail": "100 printed total(s) agree with the answer key"
+    },
+    {
+      "check": "safe-area",
+      "status": "pass",
+      "detail": "110 page(s) clear of the 0.25 in trim band"
+    },
+    {
+      "check": "declared-margins",
+      "status": "pass",
+      "detail": "110 page(s) inside the margins the book declares"
+    },
+    {
+      "check": "renders-every-page",
+      "status": "pass",
+      "detail": "pdftoppm rendered 110 of 110 page(s)"
+    },
+    {
+      "check": "qpdf-structure",
+      "status": "pass",
+      "detail": "no structural problems"
+    },
+    {
+      "check": "editable-fonts-embedded",
+      "status": "pass",
+      "detail": "3 font(s), all embedded"
+    }
+  ],
+  "failed": [],
+  "skipped": []
+}

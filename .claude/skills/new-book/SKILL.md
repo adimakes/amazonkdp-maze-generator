@@ -19,7 +19,9 @@ profile may promise, and what a page has to show a six-year-old. All of it was
 learned by building one book and having it reviewed twice against real printed
 pages.
 
-**Read `CLAUDE.md` first** for the architecture and the locked contract, then
+**Set the environment up first** with `uv sync --extra dev`, and read
+`README.md`'s "Start here" and "Make a second book" for the commands.
+**Then read `CLAUDE.md`** for the architecture and the locked contract, then
 this for the judgement. When the two disagree, `CLAUDE.md` wins on mechanism and
 this wins on taste.
 
