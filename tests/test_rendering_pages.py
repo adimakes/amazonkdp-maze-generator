@@ -556,14 +556,33 @@ def test_thumbnail_widths_default_to_18_6_and_are_overridable() -> None:
     where the maze is 6.75 in rather than 2.1 in: at thumbnail scale the
     profile's 1.2-1.4 pt wall against its 1.8-1.9 pt route leaves the answer line
     barely heavier than the maze it runs through.
+
+    The route is 3 pt, four times the wall: weight is the only way to set the
+    answer apart on a one-ink press, and 1.5 pt was lost among the walls.
     """
     import inspect
 
-    assert (sol.WALL_WIDTH_PT, sol.ROUTE_WIDTH_PT) == (0.75, 1.5)
+    assert (sol.WALL_WIDTH_PT, sol.ROUTE_WIDTH_PT) == (0.75, 3.0)
     for function in (sol.draw_solution_thumbnail, sol.draw_solutions_page):
         parameters = inspect.signature(function).parameters
         assert parameters["wall_width"].default == sol.WALL_WIDTH_PT
         assert parameters["route_width"].default == sol.ROUTE_WIDTH_PT
+
+
+@pytest.mark.parametrize("profile_id", ["halloween_6_10", "child_6_7", "older_child", "adult"])
+def test_the_thumbnail_route_keeps_18_4_clearance_in_the_finest_grid(
+    repo_root: Path, profile_id: str
+) -> None:
+    """18.4: the answer line keeps 2 pt from every wall at the size it is drawn.
+    A heavier route is only clearer until it starts touching the walls, and the
+    finest grid a profile ships is where it touches first."""
+    from maze_book.model.profile import load_profile
+
+    profile = load_profile(repo_root / "profiles", profile_id)
+    cells = max(max(band.rows, band.cols) for band in profile.bands)
+    cell = sol.THUMBNAIL_IN * PT_PER_IN / cells
+    clearance = (cell - sol.WALL_WIDTH_PT - sol.ROUTE_WIDTH_PT) / 2.0
+    assert clearance >= 2.0, f"{profile_id}: {cells}x{cells} leaves {clearance:.2f} pt"
 
 
 def test_the_profile_solution_widths_are_not_dead_config(repo_root: Path) -> None:
@@ -574,3 +593,37 @@ def test_the_profile_solution_widths_are_not_dead_config(repo_root: Path) -> Non
     )
     assert "band.solution_wall_width_pt" in source
     assert "band.solution_route_width_pt" in source
+
+
+def test_the_end_page_breaks_between_sentences_and_stays_inside_the_line(
+    repo_root: Path,
+) -> None:
+    """Drawn as one line, a two-sentence goodbye ran through the left margin and
+    only the rasterized safe-area check caught it. Wrapped greedily, it left one
+    word alone on the second line."""
+    from reportlab.pdfbase.pdfmetrics import stringWidth
+
+    from maze_book.book.assemble import END_PAGE_TEXT_SIZE, end_page_lines
+    from maze_book.rendering.svg_to_pdf import BODY_FONT, register_fonts
+
+    register_fonts(repo_root / "fonts")
+    width = 7.375 * PT_PER_IN
+
+    lines = end_page_lines(
+        "Tip it all out on the floor and count. "
+        "Jimmy's first Halloween was one to remember.",
+        width=width,
+    )
+    assert lines == [
+        "Tip it all out on the floor and count.",
+        "Jimmy's first Halloween was one to remember.",
+    ]
+    assert end_page_lines("Count it all. Every piece.", width=width) == [
+        "Count it all. Every piece."
+    ]
+
+    long_sentence = " ".join(["candy"] * 40) + "."
+    wrapped = end_page_lines(long_sentence, width=width)
+    assert len(wrapped) > 1
+    for line in wrapped:
+        assert stringWidth(line, BODY_FONT, END_PAGE_TEXT_SIZE) <= width

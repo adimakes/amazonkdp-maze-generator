@@ -1,10 +1,8 @@
-                Copyright © 2026 Aditya Bhatia.
+Copyright © 2026 Felicia Bauer.
 
-                       All rights reserved.
-
-This interior was generated deterministically by maze-book v1.0.0.
+      All rights reserved.
                                        HOW TO PLAY
-1. Find a path from Jim to the candy bucket. Wherever he is going, the bucket marks the
+1. Find a path from Jimmy to the candy bucket. Wherever he is going, the bucket marks the
     finish.
 
 2. You cannot walk through a wall.
@@ -33,19 +31,20 @@ THESE ARE JUST SPOOKY
 
 
 The spooky ones are smaller, and they are worth nothing.
-                         Meet Jim
-Jim is going trick-or-treating, and he is going the long way round,
-     because the long way round is where the good candy is.
-         He needs somebody to find the path. That is you.
- For everyone who takes the long way round. Happy Halloween.
-                      GETTING READY
+                            Meet Jimmy
+ It is Jimmy's very first Halloween, and he has never been trick-or-treating.
+He does not quite know how it works yet, but he is going the long way round,
+            because the long way round is where the good candy is.
+               He needs somebody to find the path. That is you.
+        For everyone who takes the long way round. Happy Halloween.
+                       GETTING READY
 
 
 
-                             1
+                              1
 
 WHERE'S THE COSTUME BOX?
- Up in the attic, behind everything else. Jim has until dark.
+ Up in the attic, behind everything else. Jimmy has until dark.
     START
 
 
@@ -65,15 +64,15 @@ Best possible: 6 candies
 
 
                                                          Maze 1
-                             GETTING READY
+                           GETTING READY
 
 
 
-                                    2
+                                  2
 
-                THE STUCK ZIPPER
-The ghost suit is inside out and the zipper will not budge. Can you get Jim
-                         across to the sewing box?
+              THE STUCK ZIPPER
+The ghost suit is inside out and the zipper will not budge. Can you get
+                    Jimmy across to the sewing box?
     START
 
 
@@ -89,15 +88,15 @@ Best possible: 6 candies
 
 
                                                                 Maze 2
-                           GETTING READY
+                            GETTING READY
 
 
 
-                                  3
+                                   3
 
-             TWO WHITE SWIRLS
-Jim paints a white swirl on each cheek. Now he needs the tall mirror to
-               find out if they came out spooky or silly.
+              TWO WHITE SWIRLS
+Jimmy paints a white swirl on each cheek. Now he needs the tall mirror to
+                find out if they came out spooky or silly.
     START
 
 
@@ -136,15 +135,15 @@ Best possible: 7 candies
 
 
                                                                 Maze 4
-                             GETTING READY
+                           GETTING READY
 
 
 
-                                    5
+                                  5
 
-       UNDER THE COUCH AGAIN
-That is where the flashlight rolled. Pillows, boots, one lost sock. Help Jim
-                                 dig it out.
+     UNDER THE COUCH AGAIN
+That is where the flashlight rolled. Pillows, boots, one lost sock. Help
+                           Jimmy dig it out.
                            START
 
 
@@ -164,15 +163,15 @@ Best possible: 5 candies
 
 
                                                          Maze 5
-                          GETTING READY
+                           GETTING READY
 
 
 
-                                 6
+                                  6
 
-   HIGH ON THE CLOSET SHELF
-The pumpkin bucket is up where Jim can only just see it. Which way to
-                           the closet?
+    HIGH ON THE CLOSET SHELF
+The pumpkin bucket is up where Jimmy can only just see it. Which way to
+                             the closet?
     START
 
 
@@ -195,8 +194,8 @@ Best possible: 7 candies
                                     7
 
            ONE BOOT, TWO BOOT
-One is waiting by the door. The other is hiding under the stairs, and Jim is
-                                hopping.
+One is waiting by the door. The other is hiding under the stairs, and Jimmy
+                               is hopping.
     START
 
 
@@ -220,7 +219,7 @@ Best possible: 6 candies
 
            OUT THE FRONT DOOR
 The porch light is on and the night smells like wet leaves. Only the coats
-                     between Jim and the door now.
+                    between Jimmy and the door now.
     START
 
 
@@ -240,15 +239,15 @@ Best possible: 6 candies
 
 
                                                          Maze 8
-                          GETTING READY
+                         GETTING READY
 
 
 
-                                 9
+                                9
 
 ACROSS THE STEPPING STONES
-Wet leaves have covered every one of them. Can you find Jim a dry way
-                      to the little apple tree?
+Wet leaves have covered every one of them. Can you find Jimmy a dry
+                   way to the little apple tree?
     START
 
 
@@ -292,15 +291,15 @@ Best possible: 6 candies
 
 
                                                                 Maze 10
-                           THE NEIGHBORHOOD
+                          THE NEIGHBORHOOD
 
 
 
-                                    11
+                                   11
 
-                  THE FIRST PORCH
-A grinning pumpkin sits by the steps. Jim practices saying trick or treat the
-                             whole way up.
+                 THE FIRST PORCH
+A grinning pumpkin sits by the steps. Jimmy practices saying trick or treat
+                           the whole way up.
     START
 
 
@@ -344,15 +343,15 @@ Best possible: 8 candies
 
 
                                                                 Maze 12
-                        THE NEIGHBORHOOD
+                         THE NEIGHBORHOOD
 
 
 
-                                13
+                                 13
 
-           THE SPRINKLER IS ON
-A wet ghost is not a scary ghost. Time the dashes and keep Jim's sheet
-                                  dry.
+             THE SPRINKLER IS ON
+A wet ghost is not a scary ghost. Time the dashes and keep Jimmy's sheet
+                                    dry.
              START
 
 
@@ -368,14 +367,14 @@ Best possible: 8 candies
 
 
                                                                 Maze 13
-                       THE NEIGHBORHOOD
+                        THE NEIGHBORHOOD
 
 
 
-                               14
+                                14
 
-             TALLER THAN DAD
-That is how high these hedges are. Find the gaps and keep Jim going.
+              TALLER THAN DAD
+That is how high these hedges are. Find the gaps and keep Jimmy going.
     START
 
 
@@ -395,15 +394,15 @@ Best possible: 9 candies
 
 
                                                         Maze 14
-                         THE NEIGHBORHOOD
+                       THE NEIGHBORHOOD
 
 
 
-                                  15
+                                15
 
-            SHEETS ON THE LINE
-White sheets flap on the line, and for a second Jim thinks they are other
-                ghosts. The back gate is behind them.
+           SHEETS ON THE LINE
+White sheets flap on the line, and for a second Jimmy thinks they are
+           other ghosts. The back gate is behind them.
              START
 
 
@@ -419,15 +418,15 @@ Best possible: 9 candies
 
 
                                                                 Maze 15
-                         THE NEIGHBORHOOD
+                          THE NEIGHBORHOOD
 
 
 
-                                 16
+                                  16
 
-             THE CORNER STORE
-Orange lights fill the window. Jim wants the candy counter at the back,
-                       down one very narrow aisle.
+              THE CORNER STORE
+Orange lights fill the window. Jimmy wants the candy counter at the back,
+                        down one very narrow aisle.
     START
 
 
@@ -447,15 +446,15 @@ Best possible: 8 candies
 
 
                                                         Maze 16
-                         THE NEIGHBORHOOD
+                     THE NEIGHBORHOOD
 
 
 
-                                 17
+                             17
 
-                          CRUNCH
-Somebody raked the whole street into one pile and Jim is going straight
-                through it. Hold on to that bucket!
+                      CRUNCH
+Somebody raked the whole street into one pile and Jimmy is going
+          straight through it. Hold on to that bucket!
                                  START
 
 
@@ -483,7 +482,7 @@ Best possible: 8 candies
 
          PIRATES EVERYWHERE
 Pirates and robots and one very small dragon, all shouting at once. Can
-                you get Jim through to the next porch?
+               you get Jimmy through to the next porch?
     START
 
 
@@ -503,15 +502,15 @@ Best possible: 9 candies
 
 
                                                         Maze 18
-                          THE NEIGHBORHOOD
+                         THE NEIGHBORHOOD
 
 
 
-                                  19
+                                 19
 
             THE SPIDER MAILBOX
-A rubber spider swings from the mailbox. Jim knows it is rubber. Jim still
-                                ducks.
+A rubber spider swings from the mailbox. Jimmy knows it is rubber. Jimmy
+                              still ducks.
     START
 
 
@@ -535,7 +534,7 @@ Best possible: 8 candies
 
             THE LONG DRIVEWAY
 The last house on the street sits way back from the road. A long walk for
-                  one candy, but Jim is going anyway.
+                one candy, but Jimmy is going anyway.
                                  START
 
 
@@ -577,15 +576,15 @@ Best possible: 10 candies
 
 
                                                                 Maze 21
-                     THE DARK END OF THE STREET
+                    THE DARK END OF THE STREET
 
 
 
-                                  22
+                                 22
 
-                  THE DUCK POND
-Ducks bob about under the first stars. Jim needs the stone bridge, and the
-                       mud in between is deep.
+                 THE DUCK POND
+Ducks bob about under the first stars. Jimmy needs the stone bridge, and
+                    the mud in between is deep.
     START
 
 
@@ -627,15 +626,15 @@ Best possible: 9 candies
 
 
                                                                 Maze 23
-                 THE DARK END OF THE STREET
+                  THE DARK END OF THE STREET
 
 
 
-                              24
+                               24
 
-         WALLS MADE OF HAY
-The bales are stacked higher than Jim's head, and somewhere in the
-                middle of them a lantern is glowing.
+          WALLS MADE OF HAY
+The bales are stacked higher than Jimmy's head, and somewhere in the
+                 middle of them a lantern is glowing.
                              START
 
 
@@ -681,15 +680,15 @@ Best possible: 9 candies
 
 
                                                         Maze 25
-                  THE DARK END OF THE STREET
+                   THE DARK END OF THE STREET
 
 
 
-                               26
+                                26
 
-           KAZOOS AND BONES
-A skeleton band is playing on the bandstand, badly. Jim would like a
-                         much closer look.
+            KAZOOS AND BONES
+A skeleton band is playing on the bandstand, badly. Jimmy would like a
+                           much closer look.
                              START
 
 
@@ -713,7 +712,7 @@ Best possible: 8 candies
 
                  THE BAT ALLEY
 Bats swoop over the alley lights, squeaking away. They are only saying
-                        hello to Jim. Probably.
+                      hello to Jimmy. Probably.
                      START
 
 
@@ -731,15 +730,15 @@ Best possible: 10 candies
 
 
                                                                 Maze 27
-                  THE DARK END OF THE STREET
+                   THE DARK END OF THE STREET
 
 
 
-                               28
+                                28
 
-       THE FOUNTAIN SQUARE
-Water splashes in the old stone fountain. Can you weave Jim past all
-                these benches to the candy stand?
+        THE FOUNTAIN SQUARE
+Water splashes in the old stone fountain. Can you weave Jimmy past all
+                  these benches to the candy stand?
     START
 
 
@@ -759,15 +758,15 @@ Best possible: 8 candies
 
 
                                                         Maze 28
-                   THE DARK END OF THE STREET
+                 THE DARK END OF THE STREET
 
 
 
-                                 29
+                               29
 
-                           DRUMS!
-The costume parade has filled the whole street, and Jim is on the wrong
-                               side of it.
+                         DRUMS!
+The costume parade has filled the whole street, and Jimmy is on the
+                        wrong side of it.
     START
 
 
@@ -787,15 +786,15 @@ Best possible: 9 candies
 
 
                                                         Maze 29
-                    THE DARK END OF THE STREET
+                  THE DARK END OF THE STREET
 
 
 
-                                 30
+                               30
 
-     THE TREAT BOWL IS GOING
-Paper bats swing over the library steps. Jim can see the bowl from here.
-                                 Quick.
+    THE TREAT BOWL IS GOING
+Paper bats swing over the library steps. Jimmy can see the bowl from
+                             here. Quick.
     START
 
 
@@ -815,15 +814,15 @@ Best possible: 9 candies
 
 
                                                         Maze 30
-                      THE HAUNTED HALF HOUR
+                       THE HAUNTED HALF HOUR
 
 
 
-                                  31
+                                   31
 
-              THE OLD ORCHARD
-The apple trees lean right out over the grass, and Jim is looking for the
-                       stone wall on the far side.
+               THE OLD ORCHARD
+The apple trees lean right out over the grass, and Jimmy is looking for the
+                        stone wall on the far side.
             START
 
 
@@ -847,7 +846,7 @@ Best possible: 9 candies
 
              THE COBWEB SHED
 Silver webs cover the shed door, every inch of it. There is a lantern in
-                       there, and Jim wants it.
+                     there, and Jimmy wants it.
                           START
 
 
@@ -863,15 +862,15 @@ Best possible: 9 candies
 
 
                                                                 Maze 32
-                     THE HAUNTED HALF HOUR
+                       THE HAUNTED HALF HOUR
 
 
 
-                                 33
+                                  33
 
-               FOG IN THE LANE
-Thick as soup. Follow the fence posts with Jim and the streetlight will
-                         turn up eventually.
+                FOG IN THE LANE
+Thick as soup. Follow the fence posts with Jimmy and the streetlight will
+                           turn up eventually.
     START
 
 
@@ -919,15 +918,15 @@ Best possible: 11 candies
 
 
                                                                 Maze 34
-                     THE HAUNTED HALF HOUR
+                      THE HAUNTED HALF HOUR
 
 
 
-                                35
+                                 35
 
 ALONG THE GRAVEYARD FENCE
-Old stones stand in rows behind the iron rails. Jim keeps close to the
-                   fence and does not look twice.
+Old stones stand in rows behind the iron rails. Jimmy keeps close to the
+                     fence and does not look twice.
                    START
 
 
@@ -1039,7 +1038,7 @@ Best possible: 11 candies
 
                   TAP, TAP, CLACK
 The skeletons are dancing in the old barn and the fiddler shows no sign of
-                       stopping. Jim taps one foot.
+                     stopping. Jimmy taps one foot.
                           START
 
 
@@ -1057,15 +1056,15 @@ Best possible: 10 candies
 
 
                                                                 Maze 39
-                      THE HAUNTED HALF HOUR
+                    THE HAUNTED HALF HOUR
 
 
 
-                                 40
+                               40
 
-          THE OWL IN THE LOFT
-A very round owl blinks down at Jim. Jim blinks back, then goes looking
-                          for the open door.
+         THE OWL IN THE LOFT
+A very round owl blinks down at Jimmy. Jimmy blinks back, then goes
+                     looking for the open door.
     START
 
 
@@ -1083,15 +1082,15 @@ Best possible: 11 candies
 
 
                                                                 Maze 40
-                          THE LONG WAY HOME
+                         THE LONG WAY HOME
 
 
 
-                                    41
+                                   41
 
-             THE MANSION GATES
-Tall iron gates at the top of the hill, and one of them is open. Jim just has
-                             to work out which.
+            THE MANSION GATES
+Tall iron gates at the top of the hill, and one of them is open. Jimmy just
+                          has to work out which.
     START
 
 
@@ -1116,8 +1115,8 @@ Best possible: 12 candies
                                   42
 
           A MAZE INSIDE A MAZE
-There is a stone bench right at the middle of this one. Can you get Jim to
-                                    it?
+There is a stone bench right at the middle of this one. Can you get Jimmy
+                                   to it?
     START
 
 
@@ -1143,7 +1142,7 @@ Best possible: 10 candies
 
             THE GRAND PORCH
 Cobwebs hang all the way across. Behind them somewhere is a brass
-                    bell the size of Jim's head.
+                   bell the size of Jimmy's head.
     START
 
 
@@ -1173,7 +1172,7 @@ Best possible: 12 candies
 
                THE GREAT HALL
 Candles flicker the whole length of it, and the ghost that waltzes past
-                      does not even look at Jim.
+                     does not even look at Jimmy.
                   START
 
 
@@ -1191,15 +1190,15 @@ Best possible: 11 candies
 
 
                                                                 Maze 44
-                          THE LONG WAY HOME
+                       THE LONG WAY HOME
 
 
 
-                                   45
+                                45
 
-       DOWN THE CELLAR STEPS
-Jars of pickles line the wall, hundreds of them. Jim needs the light switch,
-                        and it is past all these crates.
+     DOWN THE CELLAR STEPS
+Jars of pickles line the wall, hundreds of them. Jimmy needs the light
+                  switch, and it is past all these crates.
                   START
 
 
@@ -1225,7 +1224,7 @@ Best possible: 11 candies
 
                UP AND UP AND UP
 The tower stairs curl around forever, and the bats do not mind sharing so
-                          long as Jim keeps left.
+                         long as Jimmy keeps left.
                   START
 
 
@@ -1243,15 +1242,15 @@ Best possible: 11 candies
 
 
                                                                 Maze 46
-                        THE LONG WAY HOME
+                         THE LONG WAY HOME
 
 
 
-                                 47
+                                  47
 
-                  STILL PLAYING
-Nobody has been in this ballroom for years. Help Jim across to the tall
-                             glass doors.
+                    STILL PLAYING
+Nobody has been in this ballroom for years. Help Jimmy across to the tall
+                              glass doors.
            START
 
 
@@ -1269,15 +1268,15 @@ Best possible: 11 candies
 
 
                                                                 Maze 47
-                          THE LONG WAY HOME
+                        THE LONG WAY HOME
 
 
 
-                                   48
+                                 48
 
-              THE MANSION ATTIC
-Trunks, old hats, and a smell like the back of a closet. Jim can see a round
-                          window at the far end.
+            THE MANSION ATTIC
+Trunks, old hats, and a smell like the back of a closet. Jimmy can see a
+                     round window at the far end.
                   START
 
 
@@ -1299,15 +1298,15 @@ Best possible: 11 candies
 
 
                                                         Maze 48
-                                 FINALE
+                                FINALE
 
 
 
                                   49
 
-            THE LAST BIG HOUSE
-Paper ghosts float over the porch. Last door of the night, and Jim finally
-                    gets trick or treat exactly right.
+           THE LAST BIG HOUSE
+Paper ghosts, last porch of the night. Knock, trick or treat, bucket out,
+thank you. A whole night of practice, and Jimmy gets it exactly right.
     START
 
 
@@ -1329,15 +1328,15 @@ Best possible: 11 candies
 
 
                                                         Maze 49
-                                FINALE
+                             FINALE
 
 
 
-                                 50
+                              50
 
-                  HOME AT LAST
-Jim's own porch light is glowing warm and yellow. Get him to the steps,
-                   then tip out the bucket and count.
+                HOME AT LAST
+Jimmy's own porch light is glowing warm and yellow. Get him to the
+             steps, then tip out the bucket and count.
     START
 
 
@@ -1420,6 +1419,7 @@ Best possible: 12 candies
 
 
 49. Best possible: 11 candies   50. Best possible: 12 candies
-                  The End
-Tip it all out on the floor and count. Jim always does.
+             The End
+     Tip it all out on the floor and count.
+Jimmy's first Halloween was one to remember.
 

@@ -1713,7 +1713,7 @@ outside top corner, story pages only. The page is deliberately mostly empty — 
 is what makes a two-color interior read as designed rather than thin.
 
 **Solutions pages:** 9 mazes per page in a 3×3 grid, each thumbnail 2.1 × 2.1 in; best
-route drawn as a 1.5 pt solid line with rounded joins against 0.75 pt walls; candies on the
+route drawn as a 3 pt solid line with rounded joins against 0.75 pt walls; candies on the
 best route drawn as small filled dots, never full icons (icons are illegible at that
 scale); caption `"<n>. Best: <total> candies"` under each thumbnail.
 

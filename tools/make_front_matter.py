@@ -60,8 +60,6 @@ PAGE_HEIGHT_PT = 11.0 * 72.0
 # margin, "outside" is the trim-edge-side margin (PRD 18.6/17.10).
 SAFE_MARGINS_IN = {"inside": 0.625, "outside": 0.5, "top": 0.5, "bottom": 0.5}
 
-GENERATOR_LABEL = "maze-book v1.0.0"
-
 
 def register_fonts() -> None:
     """Register the interior's own faces, from the interior's own list.
@@ -372,7 +370,6 @@ def build_front_matter(book_dir: Path, out_path: Path) -> None:
     copyright_lines = [
         f"Copyright © {year} {holder}.",
         "All rights reserved.",
-        f"This interior was generated deterministically by {GENERATOR_LABEL}.",
     ]
     # KDP's AI disclosure is made in the publishing form, and is required
     # whether or not this line is printed. Printing it as well is a choice the

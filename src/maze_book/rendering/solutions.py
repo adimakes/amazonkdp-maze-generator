@@ -1,7 +1,7 @@
 """Solution pages: a 3x3 grid of answer thumbnails (PRD 18.6, 8.5).
 
 18.6: "9 mazes per page in a 3x3 grid, each thumbnail 2.1 x 2.1 in; best route
-drawn as a 1.5 pt solid line with rounded joins against 0.75 pt walls; candies on
+drawn as a 3 pt solid line with rounded joins against 0.75 pt walls; candies on
 the best route drawn as small filled dots, never full icons (icons are illegible
 at that scale); caption "<n>. Best possible: <total> candies" under each thumbnail, in
 the same words the maze page used, so a child comparing the two is
@@ -38,8 +38,14 @@ CAPTION_SIZE = 9.5
 #: route leaves the answer line barely heavier than the maze it runs through,
 #: with the candy dots lost in the ink. 18.6 requires these to be defaults and
 #: to be overridable, which is what the draw functions' parameters are for.
+#:
+#: The route is four times the wall, not twice. The walls cannot go grey to
+#: set the answer apart, because a tint halftones on a one-ink press, so weight
+#: is the only signal; at 1.5 pt a child following the line kept losing it in
+#: the walls. 3 pt is as heavy as 18.4's 2 pt solution clearance allows in the
+#: finale's 8.4 pt cells: (8.4 - 0.75 - 3.0) / 2 = 2.3 pt either side.
 WALL_WIDTH_PT = 0.75
-ROUTE_WIDTH_PT = 1.5
+ROUTE_WIDTH_PT = 3.0
 COLUMNS = 3
 ROWS = 3
 
@@ -108,23 +114,26 @@ def draw_solution_thumbnail(
 
     frame.segments(wall_segments(maze, geometry), wall_width)
 
-    # Which end is which. A thumbnail with a route through it and no marked
-    # ends is a picture of a line: the parent checking the answer has to find
-    # the start themselves, on a grid too small to look for a doorway in.
-    _mark_endpoints(frame, maze, geometry, wall_width)
-
     route = list(analysis.best_route)
     if route:
         candies = maze.collectible_cells()
         on_route = [cell for cell in route if cell in candies]
         if on_route:
             # Sized off the cell, not fixed: at 18x18 a fixed dot swallows the
-            # corridor it marks, and at 8x8 it disappears.
+            # corridor it marks, and at 8x8 it disappears. It must also stand
+            # proud of the route either side, or a black dot on a black line of
+            # the same width is not there at all.
             frame.dots(
                 (geometry.cell_centre(cell) for cell in on_route),
-                max(0.9, geometry.cell * 0.17),
+                max(0.9, geometry.cell * 0.17, route_width / 2.0 + 0.9),
             )
         frame.polyline(route_polyline(route, geometry), route_width)
+
+    # Which end is which. A thumbnail with a route through it and no marked
+    # ends is a picture of a line: the parent checking the answer has to find
+    # the start themselves, on a grid too small to look for a doorway in.
+    # Drawn after the route, because the route's round cap covers its own end.
+    _mark_endpoints(frame, maze, geometry, wall_width, route_width)
 
     canvas = frame.canvas
     canvas.saveState()
@@ -138,24 +147,31 @@ def draw_solution_thumbnail(
 
 
 def _mark_endpoints(
-    frame: PdfFrame, maze: MazeData, geometry: MazeGeometry, wall_width: float
+    frame: PdfFrame,
+    maze: MazeData,
+    geometry: MazeGeometry,
+    wall_width: float,
+    route_width: float = ROUTE_WIDTH_PT,
 ) -> None:
     """An open ring at the start, a solid square at the finish.
 
     Two shapes rather than two sizes of the same one, because at thumbnail
     scale a ring and a disc are the last pair still telling themselves apart,
-    and the route's own ends are already round.
+    and the route's own ends are already round. Both are drawn over the route
+    and wider than it; the ring is filled white so it stays open where the
+    line runs into it. White is paper, not a tint, so it prints.
     """
-    size = max(1.6, geometry.cell * 0.34)
+    size = max(1.6, geometry.cell * 0.34, route_width * 1.8)
     canvas = frame.canvas
     canvas.saveState()
     canvas.setStrokeGray(0.0)
-    canvas.setFillGray(0.0)
 
     x, y = geometry.cell_centre(maze.start)
+    canvas.setFillGray(1.0)
     canvas.setLineWidth(max(0.5, wall_width * 0.9))
-    canvas.circle(x, frame.y(y), size / 2.0, stroke=1, fill=0)
+    canvas.circle(x, frame.y(y), size / 2.0, stroke=1, fill=1)
 
+    canvas.setFillGray(0.0)
     x, y = geometry.cell_centre(maze.finish)
     canvas.rect(x - size / 2.0, frame.y(y) - size / 2.0, size, size, stroke=0, fill=1)
     canvas.restoreState()

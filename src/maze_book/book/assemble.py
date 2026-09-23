@@ -24,6 +24,7 @@ production profile add outlining to one without touching the other's contract.
 from __future__ import annotations
 
 import io
+import re
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Callable, Sequence
@@ -36,6 +37,7 @@ from ..content.loader import (
     SceneText,
     page_vector_path,
     prepare_scenes,
+    wrap_to_width,
 )
 from ..errors import RenderingError
 from ..model import seeds
@@ -95,6 +97,46 @@ DEFAULT_END_PAGE = ("THE END", "")
 
 #: Jim on the end page, big enough to be a goodbye rather than a footnote.
 END_PAGE_FIGURE_IN = 2.0
+
+#: The end page's closing words: body size, the story pages' 1.5 spacing, and
+#: no more lines than fit above the figure.
+END_PAGE_TEXT_SIZE = 16.0
+END_PAGE_LEADING = END_PAGE_TEXT_SIZE * 1.5
+END_PAGE_MAX_LINES = 2
+
+
+def end_page_lines(text: str, *, width: float) -> list[str]:
+    """Break the end page's words between sentences before breaking inside one.
+
+    The page holds a sentence or two of goodbye, and a greedy word wrap leaves
+    the last word of the second sentence alone on a line of its own. A sentence
+    too long for the line is word-wrapped as usual.
+    """
+    from reportlab.pdfbase.pdfmetrics import stringWidth
+
+    def fits(line: str) -> bool:
+        return stringWidth(line, BODY_FONT, END_PAGE_TEXT_SIZE) <= width
+
+    lines: list[str] = []
+    current = ""
+    for sentence in re.split(r"(?<=[.!?])\s+", text.strip()):
+        candidate = f"{current} {sentence}".strip()
+        if fits(candidate):
+            current = candidate
+            continue
+        if current:
+            lines.append(current)
+        if fits(sentence):
+            current = sentence
+        else:
+            wrapped = wrap_to_width(
+                sentence, font=BODY_FONT, size=END_PAGE_TEXT_SIZE, width=width
+            )
+            lines.extend(wrapped[:-1])
+            current = wrapped[-1]
+    if current:
+        lines.append(current)
+    return lines
 
 
 @dataclass(slots=True)
@@ -243,9 +285,20 @@ class BookAssembler:
         canvas.setFillGray(0.0)
         canvas.setFont(TITLE_FONT, 34.0)
         canvas.drawCentredString(centre_x, frame.y(live_y0 + 230.0), title)
-        if text:
-            canvas.setFont(BODY_FONT, 16.0)
-            canvas.drawCentredString(centre_x, frame.y(live_y0 + 290.0), text)
+        # Wrapped to the live width. Drawn as one line, a closing sentence of
+        # any length ran straight through the margin and only preflight's
+        # raster check noticed.
+        lines = end_page_lines(text, width=live_x1 - live_x0)
+        if len(lines) > END_PAGE_MAX_LINES:
+            raise RenderingError(
+                f"content.endPage.text needs {len(lines)} lines; the end page "
+                f"fits {END_PAGE_MAX_LINES} above the figure"
+            )
+        canvas.setFont(BODY_FONT, END_PAGE_TEXT_SIZE)
+        for index, line in enumerate(lines):
+            canvas.drawCentredString(
+                centre_x, frame.y(live_y0 + 290.0 + index * END_PAGE_LEADING), line
+            )
         canvas.restoreState()
 
         # The last page a child sees held two lines of type on a blank sheet.
