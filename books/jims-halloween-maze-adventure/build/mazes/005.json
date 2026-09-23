@@ -692,7 +692,7 @@
       "rotationDeg": 0.0
     },
     {
-      "assetId": "candy_bucket.png",
+      "assetId": "flashlight.png",
       "role": "finish",
       "cell": [
         5,
@@ -804,10 +804,10 @@
     "generatorVersion": "mazelib-0.9.16"
   },
   "cacheKey": {
-    "bookHash": "5a4e693e2ceb7e688e620372e2b45bb133f165dcc445ca2865171fbc21e5bcf4",
+    "bookHash": "34ed223139d3327cb79d6f6d3c3867ce1478d7c2f945e74ef0883a4b7331f8ee",
     "profileHash": "42717f2619b4091bf452a5f2c234ae2eb5f4a265d42fa3a0cb23c24ca688a62a",
     "generatorVersion": "1.0.0",
-    "assetsHash": "bc161d90973192de5982e949e4597bab4ee43d4884f2e5b369545ef6ea573c26",
+    "assetsHash": "e0e396f9433d46093f3ebfa3288d62bc4743e3293251b0b5a3243b6cc307822a",
     "mazeIndex": 5,
     "seed": 7878392002545383396
   }

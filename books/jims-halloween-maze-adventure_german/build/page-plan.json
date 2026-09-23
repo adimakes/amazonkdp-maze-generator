@@ -1,0 +1,868 @@
+{
+  "totalPages": 110,
+  "frontMatterPages": 3,
+  "pages": [
+    {
+      "pageNumber": 1,
+      "side": "right",
+      "kind": "front-matter"
+    },
+    {
+      "pageNumber": 2,
+      "side": "left",
+      "kind": "front-matter"
+    },
+    {
+      "pageNumber": 3,
+      "side": "right",
+      "kind": "front-matter"
+    },
+    {
+      "pageNumber": 4,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 1,
+      "facingPairId": "scene-001"
+    },
+    {
+      "pageNumber": 5,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 1,
+      "mazeIndex": 1,
+      "facingPairId": "scene-001"
+    },
+    {
+      "pageNumber": 6,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 2,
+      "facingPairId": "scene-002"
+    },
+    {
+      "pageNumber": 7,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 2,
+      "mazeIndex": 2,
+      "facingPairId": "scene-002"
+    },
+    {
+      "pageNumber": 8,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 3,
+      "facingPairId": "scene-003"
+    },
+    {
+      "pageNumber": 9,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 3,
+      "mazeIndex": 3,
+      "facingPairId": "scene-003"
+    },
+    {
+      "pageNumber": 10,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 4,
+      "facingPairId": "scene-004"
+    },
+    {
+      "pageNumber": 11,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 4,
+      "mazeIndex": 4,
+      "facingPairId": "scene-004"
+    },
+    {
+      "pageNumber": 12,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 5,
+      "facingPairId": "scene-005"
+    },
+    {
+      "pageNumber": 13,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 5,
+      "mazeIndex": 5,
+      "facingPairId": "scene-005"
+    },
+    {
+      "pageNumber": 14,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 6,
+      "facingPairId": "scene-006"
+    },
+    {
+      "pageNumber": 15,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 6,
+      "mazeIndex": 6,
+      "facingPairId": "scene-006"
+    },
+    {
+      "pageNumber": 16,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 7,
+      "facingPairId": "scene-007"
+    },
+    {
+      "pageNumber": 17,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 7,
+      "mazeIndex": 7,
+      "facingPairId": "scene-007"
+    },
+    {
+      "pageNumber": 18,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 8,
+      "facingPairId": "scene-008"
+    },
+    {
+      "pageNumber": 19,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 8,
+      "mazeIndex": 8,
+      "facingPairId": "scene-008"
+    },
+    {
+      "pageNumber": 20,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 9,
+      "facingPairId": "scene-009"
+    },
+    {
+      "pageNumber": 21,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 9,
+      "mazeIndex": 9,
+      "facingPairId": "scene-009"
+    },
+    {
+      "pageNumber": 22,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 10,
+      "facingPairId": "scene-010"
+    },
+    {
+      "pageNumber": 23,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 10,
+      "mazeIndex": 10,
+      "facingPairId": "scene-010"
+    },
+    {
+      "pageNumber": 24,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 11,
+      "facingPairId": "scene-011"
+    },
+    {
+      "pageNumber": 25,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 11,
+      "mazeIndex": 11,
+      "facingPairId": "scene-011"
+    },
+    {
+      "pageNumber": 26,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 12,
+      "facingPairId": "scene-012"
+    },
+    {
+      "pageNumber": 27,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 12,
+      "mazeIndex": 12,
+      "facingPairId": "scene-012"
+    },
+    {
+      "pageNumber": 28,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 13,
+      "facingPairId": "scene-013"
+    },
+    {
+      "pageNumber": 29,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 13,
+      "mazeIndex": 13,
+      "facingPairId": "scene-013"
+    },
+    {
+      "pageNumber": 30,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 14,
+      "facingPairId": "scene-014"
+    },
+    {
+      "pageNumber": 31,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 14,
+      "mazeIndex": 14,
+      "facingPairId": "scene-014"
+    },
+    {
+      "pageNumber": 32,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 15,
+      "facingPairId": "scene-015"
+    },
+    {
+      "pageNumber": 33,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 15,
+      "mazeIndex": 15,
+      "facingPairId": "scene-015"
+    },
+    {
+      "pageNumber": 34,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 16,
+      "facingPairId": "scene-016"
+    },
+    {
+      "pageNumber": 35,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 16,
+      "mazeIndex": 16,
+      "facingPairId": "scene-016"
+    },
+    {
+      "pageNumber": 36,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 17,
+      "facingPairId": "scene-017"
+    },
+    {
+      "pageNumber": 37,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 17,
+      "mazeIndex": 17,
+      "facingPairId": "scene-017"
+    },
+    {
+      "pageNumber": 38,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 18,
+      "facingPairId": "scene-018"
+    },
+    {
+      "pageNumber": 39,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 18,
+      "mazeIndex": 18,
+      "facingPairId": "scene-018"
+    },
+    {
+      "pageNumber": 40,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 19,
+      "facingPairId": "scene-019"
+    },
+    {
+      "pageNumber": 41,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 19,
+      "mazeIndex": 19,
+      "facingPairId": "scene-019"
+    },
+    {
+      "pageNumber": 42,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 20,
+      "facingPairId": "scene-020"
+    },
+    {
+      "pageNumber": 43,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 20,
+      "mazeIndex": 20,
+      "facingPairId": "scene-020"
+    },
+    {
+      "pageNumber": 44,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 21,
+      "facingPairId": "scene-021"
+    },
+    {
+      "pageNumber": 45,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 21,
+      "mazeIndex": 21,
+      "facingPairId": "scene-021"
+    },
+    {
+      "pageNumber": 46,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 22,
+      "facingPairId": "scene-022"
+    },
+    {
+      "pageNumber": 47,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 22,
+      "mazeIndex": 22,
+      "facingPairId": "scene-022"
+    },
+    {
+      "pageNumber": 48,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 23,
+      "facingPairId": "scene-023"
+    },
+    {
+      "pageNumber": 49,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 23,
+      "mazeIndex": 23,
+      "facingPairId": "scene-023"
+    },
+    {
+      "pageNumber": 50,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 24,
+      "facingPairId": "scene-024"
+    },
+    {
+      "pageNumber": 51,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 24,
+      "mazeIndex": 24,
+      "facingPairId": "scene-024"
+    },
+    {
+      "pageNumber": 52,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 25,
+      "facingPairId": "scene-025"
+    },
+    {
+      "pageNumber": 53,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 25,
+      "mazeIndex": 25,
+      "facingPairId": "scene-025"
+    },
+    {
+      "pageNumber": 54,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 26,
+      "facingPairId": "scene-026"
+    },
+    {
+      "pageNumber": 55,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 26,
+      "mazeIndex": 26,
+      "facingPairId": "scene-026"
+    },
+    {
+      "pageNumber": 56,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 27,
+      "facingPairId": "scene-027"
+    },
+    {
+      "pageNumber": 57,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 27,
+      "mazeIndex": 27,
+      "facingPairId": "scene-027"
+    },
+    {
+      "pageNumber": 58,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 28,
+      "facingPairId": "scene-028"
+    },
+    {
+      "pageNumber": 59,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 28,
+      "mazeIndex": 28,
+      "facingPairId": "scene-028"
+    },
+    {
+      "pageNumber": 60,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 29,
+      "facingPairId": "scene-029"
+    },
+    {
+      "pageNumber": 61,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 29,
+      "mazeIndex": 29,
+      "facingPairId": "scene-029"
+    },
+    {
+      "pageNumber": 62,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 30,
+      "facingPairId": "scene-030"
+    },
+    {
+      "pageNumber": 63,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 30,
+      "mazeIndex": 30,
+      "facingPairId": "scene-030"
+    },
+    {
+      "pageNumber": 64,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 31,
+      "facingPairId": "scene-031"
+    },
+    {
+      "pageNumber": 65,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 31,
+      "mazeIndex": 31,
+      "facingPairId": "scene-031"
+    },
+    {
+      "pageNumber": 66,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 32,
+      "facingPairId": "scene-032"
+    },
+    {
+      "pageNumber": 67,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 32,
+      "mazeIndex": 32,
+      "facingPairId": "scene-032"
+    },
+    {
+      "pageNumber": 68,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 33,
+      "facingPairId": "scene-033"
+    },
+    {
+      "pageNumber": 69,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 33,
+      "mazeIndex": 33,
+      "facingPairId": "scene-033"
+    },
+    {
+      "pageNumber": 70,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 34,
+      "facingPairId": "scene-034"
+    },
+    {
+      "pageNumber": 71,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 34,
+      "mazeIndex": 34,
+      "facingPairId": "scene-034"
+    },
+    {
+      "pageNumber": 72,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 35,
+      "facingPairId": "scene-035"
+    },
+    {
+      "pageNumber": 73,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 35,
+      "mazeIndex": 35,
+      "facingPairId": "scene-035"
+    },
+    {
+      "pageNumber": 74,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 36,
+      "facingPairId": "scene-036"
+    },
+    {
+      "pageNumber": 75,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 36,
+      "mazeIndex": 36,
+      "facingPairId": "scene-036"
+    },
+    {
+      "pageNumber": 76,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 37,
+      "facingPairId": "scene-037"
+    },
+    {
+      "pageNumber": 77,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 37,
+      "mazeIndex": 37,
+      "facingPairId": "scene-037"
+    },
+    {
+      "pageNumber": 78,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 38,
+      "facingPairId": "scene-038"
+    },
+    {
+      "pageNumber": 79,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 38,
+      "mazeIndex": 38,
+      "facingPairId": "scene-038"
+    },
+    {
+      "pageNumber": 80,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 39,
+      "facingPairId": "scene-039"
+    },
+    {
+      "pageNumber": 81,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 39,
+      "mazeIndex": 39,
+      "facingPairId": "scene-039"
+    },
+    {
+      "pageNumber": 82,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 40,
+      "facingPairId": "scene-040"
+    },
+    {
+      "pageNumber": 83,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 40,
+      "mazeIndex": 40,
+      "facingPairId": "scene-040"
+    },
+    {
+      "pageNumber": 84,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 41,
+      "facingPairId": "scene-041"
+    },
+    {
+      "pageNumber": 85,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 41,
+      "mazeIndex": 41,
+      "facingPairId": "scene-041"
+    },
+    {
+      "pageNumber": 86,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 42,
+      "facingPairId": "scene-042"
+    },
+    {
+      "pageNumber": 87,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 42,
+      "mazeIndex": 42,
+      "facingPairId": "scene-042"
+    },
+    {
+      "pageNumber": 88,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 43,
+      "facingPairId": "scene-043"
+    },
+    {
+      "pageNumber": 89,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 43,
+      "mazeIndex": 43,
+      "facingPairId": "scene-043"
+    },
+    {
+      "pageNumber": 90,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 44,
+      "facingPairId": "scene-044"
+    },
+    {
+      "pageNumber": 91,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 44,
+      "mazeIndex": 44,
+      "facingPairId": "scene-044"
+    },
+    {
+      "pageNumber": 92,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 45,
+      "facingPairId": "scene-045"
+    },
+    {
+      "pageNumber": 93,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 45,
+      "mazeIndex": 45,
+      "facingPairId": "scene-045"
+    },
+    {
+      "pageNumber": 94,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 46,
+      "facingPairId": "scene-046"
+    },
+    {
+      "pageNumber": 95,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 46,
+      "mazeIndex": 46,
+      "facingPairId": "scene-046"
+    },
+    {
+      "pageNumber": 96,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 47,
+      "facingPairId": "scene-047"
+    },
+    {
+      "pageNumber": 97,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 47,
+      "mazeIndex": 47,
+      "facingPairId": "scene-047"
+    },
+    {
+      "pageNumber": 98,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 48,
+      "facingPairId": "scene-048"
+    },
+    {
+      "pageNumber": 99,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 48,
+      "mazeIndex": 48,
+      "facingPairId": "scene-048"
+    },
+    {
+      "pageNumber": 100,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 49,
+      "facingPairId": "scene-049"
+    },
+    {
+      "pageNumber": 101,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 49,
+      "mazeIndex": 49,
+      "facingPairId": "scene-049"
+    },
+    {
+      "pageNumber": 102,
+      "side": "left",
+      "kind": "story",
+      "sceneNumber": 50,
+      "facingPairId": "scene-050"
+    },
+    {
+      "pageNumber": 103,
+      "side": "right",
+      "kind": "maze",
+      "sceneNumber": 50,
+      "mazeIndex": 50,
+      "facingPairId": "scene-050"
+    },
+    {
+      "pageNumber": 104,
+      "side": "left",
+      "kind": "solutions",
+      "solutionIndices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "pageNumber": 105,
+      "side": "right",
+      "kind": "solutions",
+      "solutionIndices": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ]
+    },
+    {
+      "pageNumber": 106,
+      "side": "left",
+      "kind": "solutions",
+      "solutionIndices": [
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27
+      ]
+    },
+    {
+      "pageNumber": 107,
+      "side": "right",
+      "kind": "solutions",
+      "solutionIndices": [
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ]
+    },
+    {
+      "pageNumber": 108,
+      "side": "left",
+      "kind": "solutions",
+      "solutionIndices": [
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45
+      ]
+    },
+    {
+      "pageNumber": 109,
+      "side": "right",
+      "kind": "solutions",
+      "solutionIndices": [
+        46,
+        47,
+        48,
+        49,
+        50
+      ]
+    },
+    {
+      "pageNumber": 110,
+      "side": "left",
+      "kind": "end"
+    }
+  ]
+}

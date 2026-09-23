@@ -21,6 +21,7 @@ from typing import Sequence
 from ..assets.catalog import AssetCatalog
 from ..errors import RenderingError
 from ..model.analysis import MazeAnalysis
+from ..model.labels import DEFAULT_LABELS, Labels
 from ..model.maze_data import MazeData
 from ..model.profile import Band
 from .geometry import (
@@ -43,6 +44,9 @@ TALLY_COLUMN_IN = 1.2
 MAZE_SQUARE_RIGHT_TALLY_IN = 5.9
 
 MAZE_NUMBER_SIZE = 11.0
+#: How far a descender drops below the baseline, as a fraction of the size.
+#: A bound rather than the face's exact metric, like the front matter's.
+FOLIO_DESCENT = 0.25
 TALLY_LABEL_SIZE = 9.5
 TALLY_VALUE_SIZE = 11.0
 
@@ -56,7 +60,6 @@ DECOR_SIZE_IN = 0.46
 DECOR_MARGIN_PT = 10.0
 
 #: The two words a child looks for first.
-MARKER_LABELS = {"start": "START", "finish": "FINISH"}
 MARKER_LABEL_SIZE = 9.0
 MARKER_LABEL_GAP = 3.5
 
@@ -103,6 +106,7 @@ def plan_maze_page(
     show_maze_number: bool = True,
     outside_marker_fraction: float = 0.0,
     decoration_count: int = 0,
+    total_label: str = DEFAULT_LABELS.total,
 ) -> MazePageLayout:
     if tally_position not in ("below", "right"):
         raise RenderingError(
@@ -139,11 +143,17 @@ def plan_maze_page(
     # anything drawn beyond this box is outside the safe area preflight checks.
     marker_size = outside_marker_fraction * square
 
-    ticks, total_box, labels = _plan_tally(tally_box, candy_count, tally_position)
+    ticks, total_box, labels = _plan_tally(
+        tally_box, candy_count, tally_position,
+        label_room=_total_label_room(total_label),
+    )
 
     number_origin = None
     if show_maze_number:
-        number_origin = (metrics.outside_x(side), live_y1)
+        # The baseline sits a descender above the live edge, not on it: "Maze"
+        # has no descender, but "Labyrinth" does, and its y reached into the
+        # bottom margin on every maze page of the German edition.
+        number_origin = (metrics.outside_x(side), live_y1 - MAZE_NUMBER_SIZE * FOLIO_DESCENT)
 
     decor_boxes = _plan_decorations(
         count=decoration_count,
@@ -245,8 +255,23 @@ MAX_TICKS_PER_ROW = 9
 TOTAL_LABEL_ROOM_PT = 40.0
 
 
+def _total_label_room(label: str) -> float:
+    """At least the room "Total" always had, and more for a longer word.
+
+    The word is right-aligned 6 pt short of the box, so anything wider than the
+    room would print over the last tick box -- a German "Gesamt" does. The
+    English word is the one the room was sized for, so planning an English page
+    needs no font metrics at all.
+    """
+    if label == DEFAULT_LABELS.total:
+        return TOTAL_LABEL_ROOM_PT
+    from reportlab.pdfbase.pdfmetrics import stringWidth
+
+    return max(TOTAL_LABEL_ROOM_PT, stringWidth(label, BODY_FONT, TALLY_VALUE_SIZE) + 14.0)
+
+
 def _plan_tally(
-    box: Box, candy_count: int, position: str
+    box: Box, candy_count: int, position: str, *, label_room: float = TOTAL_LABEL_ROOM_PT
 ) -> tuple[tuple[Box, ...], Box, tuple[tuple[float, float], ...]]:
     """Tick boxes, the Total box, and the three text origins.
 
@@ -270,7 +295,7 @@ def _plan_tally(
 
     width = x1 - x0
     if position == "below":
-        room = int((width - total_w - 40.0 + TICK_GAP_PT) // (tick + TICK_GAP_PT))
+        room = int((width - total_w - label_room + TICK_GAP_PT) // (tick + TICK_GAP_PT))
         per_row = max(1, min(MAX_TICKS_PER_ROW, room))
     else:
         per_row = max(1, int((width + TICK_GAP_PT) // (tick + TICK_GAP_PT)))
@@ -289,7 +314,7 @@ def _plan_tally(
         # Total sits at the end of the first tick row, which is where the eye
         # already is once the last box is ticked. The gap has to hold the word
         # as well as the box, or "Total" prints over the last tick.
-        total_x = x0 + per_row * (tick + TICK_GAP_PT) + TOTAL_LABEL_ROOM_PT
+        total_x = x0 + per_row * (tick + TICK_GAP_PT) + label_room
         total_x = min(total_x, x1 - total_w)
         total_y = ticks_top + (tick - total_h) / 2.0
         total_box = (total_x, total_y, total_x + total_w, total_y + total_h)
@@ -321,6 +346,7 @@ def draw_maze_page(
     body_font: str = BODY_FONT,
     bold_font: str = BOLD_FONT,
     decoration_rng: random.Random | None = None,
+    labels: Labels = DEFAULT_LABELS,
 ) -> None:
     geometry = layout.geometry
 
@@ -342,17 +368,23 @@ def draw_maze_page(
         place_document(frame, document, footprint.rect)
 
     if layout.marker_size > 0.0:
-        _label_markers(frame, maze, geometry, placements, font=bold_font)
+        _label_markers(
+            frame, maze, geometry, placements,
+            font=bold_font, labels=labels, bounds=layout.maze_box,
+        )
 
     _draw_decorations(frame, layout, catalog=catalog, cache=cache, rng=decoration_rng)
 
     _draw_tally(
         frame, layout, analysis,
         show_best_possible=show_best_possible, body_font=body_font, bold_font=bold_font,
+        labels=labels,
     )
 
     if layout.number_origin is not None:
-        _draw_maze_number(frame, layout, maze.maze_index, font=body_font)
+        _draw_maze_number(
+            frame, layout, labels.maze_label(maze.maze_index), font=body_font
+        )
 
 
 def _label_markers(
@@ -362,6 +394,8 @@ def _label_markers(
     placements: Sequence,
     *,
     font: str,
+    labels: Labels = DEFAULT_LABELS,
+    bounds: Box | None = None,
 ) -> None:
     """Print START and FINISH beside the two markers.
 
@@ -369,15 +403,25 @@ def _label_markers(
     page for the first time should not have to work out which figure is Jim and
     which is scenery. The word goes on the side of the marker facing away from
     the grid, so it never sits between the marker and its opening.
+
+    It is centred on the marker unless that would carry it out of ``bounds``:
+    a marker sits at the very edge of the maze square, and a word longer than
+    FINISH -- a Spanish LLEGADA -- would otherwise reach into the page margin.
     """
+    from reportlab.pdfbase.pdfmetrics import stringWidth
+
+    words = {"start": labels.start, "finish": labels.finish}
     openings = border_opening(maze)
     for footprint in placements:
-        label = MARKER_LABELS.get(footprint.asset.role)
+        label = words.get(footprint.asset.role)
         side = openings.get(footprint.asset.cell)
         if label is None or side is None:
             continue
         x0, y0, x1, y1 = footprint.rect
         centre_x = (x0 + x1) / 2.0
+        if bounds is not None:
+            half = stringWidth(label, font, MARKER_LABEL_SIZE) / 2.0
+            centre_x = min(max(centre_x, bounds[0] + half), bounds[2] - half)
         if side == "N":
             y = y0 - MARKER_LABEL_GAP
         elif side == "S":
@@ -427,6 +471,7 @@ def _draw_tally(
     show_best_possible: bool,
     body_font: str,
     bold_font: str,
+    labels: Labels = DEFAULT_LABELS,
 ) -> None:
     canvas = frame.canvas
 
@@ -440,26 +485,25 @@ def _draw_tally(
     canvas.setFont(body_font, TALLY_LABEL_SIZE)
     canvas.drawString(
         layout.tick_label_origin[0], frame.y(layout.tick_label_origin[1]),
-        "Color in one box for every candy you collect",
+        labels.tally_prompt,
     )
 
     canvas.setFont(body_font, TALLY_VALUE_SIZE)
     canvas.drawRightString(
-        layout.total_label_origin[0], frame.y(layout.total_label_origin[1]), "Total"
+        layout.total_label_origin[0], frame.y(layout.total_label_origin[1]), labels.total
     )
 
     if show_best_possible:
         canvas.setFont(bold_font, TALLY_VALUE_SIZE)
         canvas.drawString(
             layout.best_label_origin[0], frame.y(layout.best_label_origin[1]),
-            f"Best possible: {analysis.best_candy_total} "
-            f"{'candy' if analysis.best_candy_total == 1 else 'candies'}",
+            labels.best_possible(analysis.best_candy_total),
         )
     canvas.restoreState()
 
 
 def _draw_maze_number(
-    frame: PdfFrame, layout: MazePageLayout, index: int, *, font: str
+    frame: PdfFrame, layout: MazePageLayout, label: str, *, font: str
 ) -> None:
     x, y = layout.number_origin
     canvas = frame.canvas
@@ -469,7 +513,6 @@ def _draw_maze_number(
     # "Maze 18", not "18". A bare number in the folio position reads as a page
     # number, and this book has none -- so a reader told to turn to 41 goes to
     # the wrong place, and a reader looking for maze 41 never thinks to use it.
-    label = f"Maze {index}"
     if layout.side == "right":
         canvas.drawRightString(x, frame.y(y), label)
     else:

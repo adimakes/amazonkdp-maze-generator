@@ -1,9 +1,9 @@
 {
   "bookId": "jims-halloween-maze-adventure",
   "generatorVersion": "1.0.0",
-  "bookHash": "5a4e693e2ceb7e688e620372e2b45bb133f165dcc445ca2865171fbc21e5bcf4",
+  "bookHash": "34ed223139d3327cb79d6f6d3c3867ce1478d7c2f945e74ef0883a4b7331f8ee",
   "profileHash": "42717f2619b4091bf452a5f2c234ae2eb5f4a265d42fa3a0cb23c24ca688a62a",
-  "assetsHash": "bc161d90973192de5982e949e4597bab4ee43d4884f2e5b369545ef6ea573c26",
+  "assetsHash": "e0e396f9433d46093f3ebfa3288d62bc4743e3293251b0b5a3243b6cc307822a",
   "profileId": "halloween_6_10",
   "seed": 42001,
   "mazeCount": 50,
@@ -16,6 +16,7 @@
       "subtitle": "50 Mazes with a Spooky Story, Ages 6 to 10",
       "locale": "en-US",
       "seed": 42001,
+      "seedId": "jims-halloween-maze-adventure",
       "mazeCount": 50,
       "profileId": "halloween_6_10",
       "contentOrigin": {
@@ -91,301 +92,351 @@
           "number": 1,
           "title": "Where's The Costume Box?",
           "text": "Up in the attic, behind everything else. Jimmy has until dark.",
-          "pageVector": "jim_with_bucket.png"
+          "pageVector": "jim_with_bucket.png",
+          "finishVector": "costume_trunk.png"
         },
         {
           "number": 2,
           "title": "The Stuck Zipper",
           "text": "The ghost suit is inside out and the zipper will not budge. Can you get Jimmy across to the sewing box?",
-          "pageVector": "jim_in_sheet.png"
+          "pageVector": "jim_in_sheet.png",
+          "finishVector": "sewing_box.png"
         },
         {
           "number": 3,
           "title": "Two White Swirls",
           "text": "Jimmy paints a white swirl on each cheek. Now he needs the tall mirror to find out if they came out spooky or silly.",
-          "pageVector": "jim_in_sheet.png"
+          "pageVector": "jim_in_sheet.png",
+          "finishVector": "mirror.png"
         },
         {
           "number": 4,
           "title": "Soup Before Sweets",
           "text": "Soup before sweets, says Mom.",
-          "pageVector": "jim_with_bucket.png"
+          "pageVector": "jim_with_bucket.png",
+          "finishVector": "soup_bowl.png"
         },
         {
           "number": 5,
           "title": "Under The Couch Again",
           "text": "That is where the flashlight rolled. Pillows, boots, one lost sock. Help Jimmy dig it out.",
-          "pageVector": "jim_with_bucket.png"
+          "pageVector": "jim_with_bucket.png",
+          "finishVector": "flashlight.png"
         },
         {
           "number": 6,
           "title": "High On The Closet Shelf",
           "text": "The pumpkin bucket is up where Jimmy can only just see it. Which way to the closet?",
-          "pageVector": "jim_with_bucket.png"
+          "pageVector": "jim_with_bucket.png",
+          "finishVector": "candy_bucket.png"
         },
         {
           "number": 7,
           "title": "One Boot, Two Boot",
           "text": "One is waiting by the door. The other is hiding under the stairs, and Jimmy is hopping.",
-          "pageVector": "jim_with_bucket.png"
+          "pageVector": "jim_with_bucket.png",
+          "finishVector": "boot.png"
         },
         {
           "number": 8,
           "title": "Out The Front Door",
           "text": "The porch light is on and the night smells like wet leaves. Only the coats between Jimmy and the door now.",
-          "pageVector": "jim_walking.png"
+          "pageVector": "jim_walking.png",
+          "finishVector": "door.png"
         },
         {
           "number": 9,
           "title": "Across The Stepping Stones",
-          "text": "Wet leaves have covered every one of them. Can you find Jimmy a dry way to the little apple tree?",
-          "pageVector": "spooky_tree.png"
+          "text": "Wet leaves have covered every one of them. Can you find Jimmy a dry way to the old tree?",
+          "pageVector": "spooky_tree.png",
+          "finishVector": "tree.png"
         },
         {
           "number": 10,
           "title": "The Squeaky Gate",
           "text": "Squeeeak. That is the gate at the end of the yard, and the flower pots are in the way.",
-          "pageVector": "jim_walking.png"
+          "pageVector": "jim_walking.png",
+          "finishVector": "gate.png"
         },
         {
           "number": 11,
           "title": "The First Porch",
           "text": "A grinning pumpkin sits by the steps. Jimmy practices saying trick or treat the whole way up.",
-          "pageVector": "jim_walking.png"
+          "pageVector": "jim_walking.png",
+          "finishVector": "pumpkin.png"
         },
         {
           "number": 12,
           "title": "Good Dog, Quiet Dog",
-          "text": "The dog behind the fence is barking his head off and wagging his tail at the same time. Past him, quietly.",
-          "pageVector": "jim_walking.png"
+          "text": "The dog behind the fence is barking his head off and wagging his tail at the same time. Past him, quietly, to the house next door.",
+          "pageVector": "jim_walking.png",
+          "finishVector": "house.png"
         },
         {
           "number": 13,
           "title": "The Sprinkler Is On",
-          "text": "A wet ghost is not a scary ghost. Time the dashes and keep Jimmy's sheet dry.",
-          "pageVector": "jim_in_sheet.png"
+          "text": "A wet ghost is not a scary ghost. Time the dashes and keep Jimmy's sheet dry all the way to the pumpkin on the porch.",
+          "pageVector": "jim_in_sheet.png",
+          "finishVector": "pumpkin.png"
         },
         {
           "number": 14,
           "title": "Taller Than Dad",
-          "text": "That is how high these hedges are. Find the gaps and keep Jimmy going.",
-          "pageVector": "spooky_tree.png"
+          "text": "That is how high these hedges are. Find the gaps and get Jimmy to the bench in the middle.",
+          "pageVector": "spooky_tree.png",
+          "finishVector": "bench.png"
         },
         {
           "number": 15,
           "title": "Sheets On The Line",
           "text": "White sheets flap on the line, and for a second Jimmy thinks they are other ghosts. The back gate is behind them.",
-          "pageVector": "jim_in_sheet.png"
+          "pageVector": "jim_in_sheet.png",
+          "finishVector": "gate.png"
         },
         {
           "number": 16,
           "title": "The Corner Store",
           "text": "Orange lights fill the window. Jimmy wants the candy counter at the back, down one very narrow aisle.",
-          "pageVector": "jim_walking.png"
+          "pageVector": "jim_walking.png",
+          "finishVector": "candy_jar.png"
         },
         {
           "number": 17,
           "title": "Crunch",
           "text": "Somebody raked the whole street into one pile and Jimmy is going straight through it. Hold on to that bucket!",
-          "pageVector": "jim_walking.png"
+          "pageVector": "jim_walking.png",
+          "finishVector": "leaf.png"
         },
         {
           "number": 18,
           "title": "Pirates Everywhere",
-          "text": "Pirates and robots and one very small dragon, all shouting at once. Can you get Jimmy through to the next porch?",
-          "pageVector": "jim_walking.png"
+          "text": "Pirates and robots and one very small dragon, all shouting at once. Can you get Jimmy through to the next house?",
+          "pageVector": "jim_walking.png",
+          "finishVector": "house.png"
         },
         {
           "number": 19,
           "title": "The Spider Mailbox",
           "text": "A rubber spider swings from the mailbox. Jimmy knows it is rubber. Jimmy still ducks.",
-          "pageVector": "web_corner.png"
+          "pageVector": "web_corner.png",
+          "finishVector": "mailbox.png"
         },
         {
           "number": 20,
           "title": "The Long Driveway",
           "text": "The last house on the street sits way back from the road. A long walk for one candy, but Jimmy is going anyway.",
-          "pageVector": "jim_walking.png"
+          "pageVector": "jim_walking.png",
+          "finishVector": "house.png"
         },
         {
           "number": 21,
           "title": "Into The Park",
           "text": "The gate is open, the sky has gone purple, and these trees looked a lot shorter this morning.",
-          "pageVector": "spooky_tree.png"
+          "pageVector": "spooky_tree.png",
+          "finishVector": "tree.png"
         },
         {
           "number": 22,
           "title": "The Duck Pond",
           "text": "Ducks bob about under the first stars. Jimmy needs the stone bridge, and the mud in between is deep.",
-          "pageVector": "jim_walking.png"
+          "pageVector": "jim_walking.png",
+          "finishVector": "bridge.png"
         },
         {
           "number": 23,
           "title": "The Pumpkin Patch",
-          "text": "Rows and rows of fat pumpkins, every one of them sitting in mud. Which way to the wagon?",
-          "pageVector": "jim_walking.png"
+          "text": "Rows and rows of fat pumpkins, every one of them sitting in mud. Which way to the biggest one?",
+          "pageVector": "jim_walking.png",
+          "finishVector": "pumpkin.png"
         },
         {
           "number": 24,
           "title": "Walls Made Of Hay",
           "text": "The bales are stacked higher than Jimmy's head, and somewhere in the middle of them a lantern is glowing.",
-          "pageVector": "jim_walking.png"
+          "pageVector": "jim_walking.png",
+          "finishVector": "lantern.png"
         },
         {
           "number": 25,
           "title": "Nobody On The Swings",
           "text": "They are moving anyway. Across the blacktop, somebody has left the gate open.",
-          "pageVector": "jim_walking.png"
+          "pageVector": "jim_walking.png",
+          "finishVector": "gate.png"
         },
         {
           "number": 26,
           "title": "Kazoos And Bones",
-          "text": "A skeleton band is playing on the bandstand, badly. Jimmy would like a much closer look.",
-          "pageVector": "jim_walking.png"
+          "text": "A skeleton band is playing on the bandstand, badly. Jimmy would like a much closer look at that drum.",
+          "pageVector": "jim_walking.png",
+          "finishVector": "drum.png"
         },
         {
           "number": 27,
           "title": "The Bat Alley",
-          "text": "Bats swoop over the alley lights, squeaking away. They are only saying hello to Jimmy. Probably.",
-          "pageVector": "jim_walking.png"
+          "text": "Bats swoop around the lamp at the end of the alley. They are only saying hello to Jimmy. Probably.",
+          "pageVector": "jim_walking.png",
+          "finishVector": "streetlight.png"
         },
         {
           "number": 28,
           "title": "The Fountain Square",
           "text": "Water splashes in the old stone fountain. Can you weave Jimmy past all these benches to the candy stand?",
-          "pageVector": "jim_walking.png"
+          "pageVector": "jim_walking.png",
+          "finishVector": "candy_jar.png"
         },
         {
           "number": 29,
           "title": "Drums!",
-          "text": "The costume parade has filled the whole street, and Jimmy is on the wrong side of it.",
-          "pageVector": "jim_walking.png"
+          "text": "The costume parade has filled the whole street, and Jimmy is on the wrong side of it. Head for the big drum!",
+          "pageVector": "jim_walking.png",
+          "finishVector": "drum.png"
         },
         {
           "number": 30,
           "title": "The Treat Bowl Is Going",
           "text": "Paper bats swing over the library steps. Jimmy can see the bowl from here. Quick.",
-          "pageVector": "jim_walking.png"
+          "pageVector": "jim_walking.png",
+          "finishVector": "treat_bowl.png"
         },
         {
           "number": 31,
           "title": "The Old Orchard",
-          "text": "The apple trees lean right out over the grass, and Jimmy is looking for the stone wall on the far side.",
-          "pageVector": "spooky_tree.png"
+          "text": "The apple trees lean right out over the grass. Jimmy has spotted one shiny apple left, way over on the far side.",
+          "pageVector": "spooky_tree.png",
+          "finishVector": "apple.png"
         },
         {
           "number": 32,
           "title": "The Cobweb Shed",
           "text": "Silver webs cover the shed door, every inch of it. There is a lantern in there, and Jimmy wants it.",
-          "pageVector": "web_wedge.png"
+          "pageVector": "web_wedge.png",
+          "finishVector": "lantern.png"
         },
         {
           "number": 33,
           "title": "Fog In The Lane",
           "text": "Thick as soup. Follow the fence posts with Jimmy and the streetlight will turn up eventually.",
-          "pageVector": "jim_walking.png"
+          "pageVector": "jim_walking.png",
+          "finishVector": "streetlight.png"
         },
         {
           "number": 34,
           "title": "The Cat Will Not Move",
-          "text": "A black cat has sat down in the middle of the lane, started purring, and will not move for anybody.",
-          "pageVector": "jim_walking.png"
+          "text": "A black cat has sat down in the middle of the lane and will not move for anybody. Can you get Jimmy round her to the house?",
+          "pageVector": "jim_walking.png",
+          "finishVector": "house.png"
         },
         {
           "number": 35,
           "title": "Along The Graveyard Fence",
-          "text": "Old stones stand in rows behind the iron rails. Jimmy keeps close to the fence and does not look twice.",
-          "pageVector": "haunted_house.png"
+          "text": "Old stones stand in rows behind the iron rails. Jimmy keeps close to the fence all the way to the gate, and does not look twice.",
+          "pageVector": "haunted_house.png",
+          "finishVector": "gate.png"
         },
         {
           "number": 36,
           "title": "The Creaky Bridge",
           "text": "It creaks over a chuckling stream. Some of these boards are dry and some are not. Can you pick the dry ones?",
-          "pageVector": "jim_walking.png"
+          "pageVector": "jim_walking.png",
+          "finishVector": "bridge.png"
         },
         {
           "number": 37,
           "title": "The Whispering Willow",
-          "text": "The willow trails its branches right across the path. They only feel like fingers.",
-          "pageVector": "spooky_tree.png"
+          "text": "The old willow trails its branches right across the path. They only feel like fingers. Can you get Jimmy to its trunk?",
+          "pageVector": "spooky_tree.png",
+          "finishVector": "tree.png"
         },
         {
           "number": 38,
           "title": "Up To The Lighthouse",
           "text": "The beam swings over the rocks and back again. The keeper keeps a candy dish at the top of all those steps.",
-          "pageVector": "jim_walking.png"
+          "pageVector": "jim_walking.png",
+          "finishVector": "treat_bowl.png"
         },
         {
           "number": 39,
           "title": "Tap, Tap, Clack",
-          "text": "The skeletons are dancing in the old barn and the fiddler shows no sign of stopping. Jimmy taps one foot.",
-          "pageVector": "jim_walking.png"
+          "text": "The skeletons are dancing in the old barn and the drummer shows no sign of stopping. Jimmy taps his way over to the drum.",
+          "pageVector": "jim_walking.png",
+          "finishVector": "drum.png"
         },
         {
           "number": 40,
           "title": "The Owl In The Loft",
           "text": "A very round owl blinks down at Jimmy. Jimmy blinks back, then goes looking for the open door.",
-          "pageVector": "jim_walking.png"
+          "pageVector": "jim_walking.png",
+          "finishVector": "door.png"
         },
         {
           "number": 41,
           "title": "The Mansion Gates",
           "text": "Tall iron gates at the top of the hill, and one of them is open. Jimmy just has to work out which.",
-          "pageVector": "haunted_house.png"
+          "pageVector": "haunted_house.png",
+          "finishVector": "gate.png"
         },
         {
           "number": 42,
           "title": "A Maze Inside A Maze",
           "text": "There is a stone bench right at the middle of this one. Can you get Jimmy to it?",
-          "pageVector": "jim_walking.png"
+          "pageVector": "jim_walking.png",
+          "finishVector": "bench.png"
         },
         {
           "number": 43,
           "title": "The Grand Porch",
           "text": "Cobwebs hang all the way across. Behind them somewhere is a brass bell the size of Jimmy's head.",
-          "pageVector": "web_corner.png"
+          "pageVector": "web_corner.png",
+          "finishVector": "bell.png"
         },
         {
           "number": 44,
           "title": "The Great Hall",
           "text": "Candles flicker the whole length of it, and the ghost that waltzes past does not even look at Jimmy.",
-          "pageVector": "jim_walking.png"
+          "pageVector": "jim_walking.png",
+          "finishVector": "candle.png"
         },
         {
           "number": 45,
           "title": "Down The Cellar Steps",
-          "text": "Jars of pickles line the wall, hundreds of them. Jimmy needs the light switch, and it is past all these crates.",
-          "pageVector": "jim_with_bucket.png"
+          "text": "Jars of pickles line the wall, hundreds of them. Jimmy needs the lantern, and it is past all these crates.",
+          "pageVector": "jim_with_bucket.png",
+          "finishVector": "lantern.png"
         },
         {
           "number": 46,
           "title": "Up And Up And Up",
-          "text": "The tower stairs curl around forever, and the bats do not mind sharing so long as Jimmy keeps left.",
-          "pageVector": "jim_walking.png"
+          "text": "The tower stairs curl around forever, and the bats do not mind sharing so long as Jimmy keeps left. The bell is at the top.",
+          "pageVector": "jim_walking.png",
+          "finishVector": "bell.png"
         },
         {
           "number": 47,
           "title": "Still Playing",
           "text": "Nobody has been in this ballroom for years. Help Jimmy across to the tall glass doors.",
-          "pageVector": "jim_walking.png"
+          "pageVector": "jim_walking.png",
+          "finishVector": "door.png"
         },
         {
           "number": 48,
           "title": "The Mansion Attic",
           "text": "Trunks, old hats, and a smell like the back of a closet. Jimmy can see a round window at the far end.",
-          "pageVector": "haunted_house.png"
+          "pageVector": "haunted_house.png",
+          "finishVector": "round_window.png"
         },
         {
           "number": 49,
           "title": "The Last Big House",
           "text": "Paper ghosts, last porch of the night. Knock, trick or treat, bucket out, thank you. A whole night of practice, and Jimmy gets it exactly right.",
-          "pageVector": "jim_walking.png"
+          "pageVector": "jim_walking.png",
+          "finishVector": "door.png"
         },
         {
           "number": 50,
           "title": "Home At Last",
           "text": "Jimmy's own porch light is glowing warm and yellow. Get him to the steps, then tip out the bucket and count.",
-          "pageVector": "jim_with_bucket.png"
+          "pageVector": "jim_with_bucket.png",
+          "finishVector": "house.png"
         }
       ],
       "endPage": {
@@ -393,7 +444,7 @@
         "text": "Tip it all out on the floor and count. Jimmy's first Halloween was one to remember."
       },
       "howToPlay": [
-        "Find a path from Jimmy to the candy bucket. Wherever he is going, the bucket marks the finish.",
+        "Find a path from Jimmy to the finish. The finish is whatever the story sends him to find.",
         "You cannot walk through a wall.",
         "Pick up as much candy as you can on the way.",
         "Color in one box for every candy you get.",

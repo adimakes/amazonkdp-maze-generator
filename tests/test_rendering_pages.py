@@ -208,7 +208,12 @@ def test_the_maze_number_sits_in_the_outside_bottom_corner() -> None:
     )
     assert right.number_origin[0] == pytest.approx(m.outside_x("right"))
     assert left.number_origin[0] == pytest.approx(m.outside_x("left"))
-    assert right.number_origin[1] == pytest.approx(m.live_box("right")[3])
+    # A descender above the live edge, so "Labyrinth 4" keeps its y inside it.
+    from maze_book.rendering.maze_page import FOLIO_DESCENT, MAZE_NUMBER_SIZE
+
+    assert right.number_origin[1] == pytest.approx(
+        m.live_box("right")[3] - MAZE_NUMBER_SIZE * FOLIO_DESCENT
+    )
 
 
 def test_the_maze_number_can_be_switched_off() -> None:

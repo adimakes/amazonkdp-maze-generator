@@ -23,6 +23,7 @@ from dataclasses import dataclass
 from typing import Sequence
 
 from ..model.analysis import MazeAnalysis
+from ..model.labels import DEFAULT_LABELS, Labels
 from ..model.maze_data import MazeData
 from .geometry import MazeGeometry, route_polyline, wall_segments
 from .page import PT_PER_IN, Box, PageMetrics
@@ -94,10 +95,10 @@ def plan_solutions_page(
     return SolutionPageLayout(side=side, slots=tuple(slots))
 
 
-def caption_for(maze_index: int, analysis: MazeAnalysis) -> str:
-    total = analysis.best_candy_total
-    unit = "candy" if total == 1 else "candies"
-    return f"{maze_index}. Best possible: {total} {unit}"
+def caption_for(
+    maze_index: int, analysis: MazeAnalysis, labels: Labels = DEFAULT_LABELS
+) -> str:
+    return f"{maze_index}. {labels.best_possible(analysis.best_candy_total)}"
 
 
 def draw_solution_thumbnail(
@@ -109,6 +110,7 @@ def draw_solution_thumbnail(
     caption_font: str = BODY_FONT,
     wall_width: float = WALL_WIDTH_PT,
     route_width: float = ROUTE_WIDTH_PT,
+    labels: Labels = DEFAULT_LABELS,
 ) -> None:
     geometry = MazeGeometry.fitted(maze.rows, maze.cols, box=slot.box)
 
@@ -141,7 +143,7 @@ def draw_solution_thumbnail(
     canvas.setFont(caption_font, CAPTION_SIZE)
     canvas.drawCentredString(
         slot.caption_centre[0], frame.y(slot.caption_centre[1]),
-        caption_for(maze.maze_index, analysis),
+        caption_for(maze.maze_index, analysis, labels),
     )
     canvas.restoreState()
 
@@ -185,11 +187,12 @@ def draw_solutions_page(
     caption_font: str = BODY_FONT,
     wall_width: float = WALL_WIDTH_PT,
     route_width: float = ROUTE_WIDTH_PT,
+    labels: Labels = DEFAULT_LABELS,
 ) -> None:
     for (maze, analysis), slot in zip(entries, layout.slots):
         draw_solution_thumbnail(
             frame, maze, analysis, slot, caption_font=caption_font,
-            wall_width=wall_width, route_width=route_width,
+            wall_width=wall_width, route_width=route_width, labels=labels,
         )
 
 

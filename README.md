@@ -90,8 +90,9 @@ cp -r books/jims-halloween-maze-adventure books/my-new-book
 
 Then four edits, in this order:
 
-**1. Put your pictures in `input/artwork/`.** Anything PIL can open. Black line
-art on white is what works; the tracer decides which pixels are ink and stops.
+**1. Put your pictures in `input/artwork/`.** Anything PIL can open, or an SVG
+(rendered with `rsvg-convert`, so strokes are fine). Black line art on white is
+what works; the importer decides which pixels are ink and stops.
 
 **2. Tell it which picture is which**, in `input/artwork/artwork.json`:
 
@@ -123,6 +124,11 @@ always change:
 `book.id` must match the folder name. `seed` is what makes your mazes yours —
 change it and you get a different fifty.
 
+Each scene can name its own finish marker with `finishVector`, a file in
+`input/assets/finish/`: the thing the story sends the character to, so the
+maze ends at the costume box in the attic scene and at the gate in the garden
+scene. A scene without one finishes at `assets.finishAsset`.
+
 **4. Build.**
 
 ```bash
@@ -139,13 +145,33 @@ else in it.
 Copy the folder again and change only the words:
 
 ```bash
-cp -r books/my-new-book books/my-new-book-es
-# edit books/my-new-book-es/input/book.json: id, title, locale, scenes
-uv run maze-book book build books/my-new-book-es
+cp -r books/my-new-book books/my-new-book_spanish
+# edit books/my-new-book_spanish/input/book.json: id, title, subtitle, locale,
+# the scenes, the front matter, and content.labels
+uv run python tools/make_front_matter.py --book books/my-new-book_spanish
+uv run maze-book book build books/my-new-book_spanish
 ```
 
-Same artwork, same seed, same fifty mazes, different language. Nothing else
-needs to change, and nothing outside that folder is touched.
+Set `book.seedId` to the original's id in every edition. Mazes are seeded from
+it rather than from `book.id`, so every edition prints the same fifty mazes and
+the same answer key.
+
+`content.labels` translates the words the engine prints on every page: START
+and FINISH, the tally prompt, "Total", the "Best possible" line (preflight reads
+the score back with the same template, so keep words before `{n}`), the "Maze
+{n}" folio, the band names, and the front matter's headings and copyright line.
+Any key left out stays in English. The Halloween book has two editions,
+`books/jims-halloween-maze-adventure_spanish` and `_german`.
+
+**Editions must stay in step.** Everything except the words has to be
+identical: print, layout, generation, assets, outputs, the seed, and each
+scene's `pageVector` and `finishVector`. `tests/test_editions.py` fails when
+they drift. Change one edition's config or artwork and you change all of them.
+
+The cover is the one thing a copy cannot bring along: a cover whose artwork has
+the title painted in needs new artwork per language, and KDP requires the cover
+title to match the book's metadata. The editions have no `cover` block until
+that artwork exists.
 
 ### What lives where
 

@@ -1040,7 +1040,7 @@ Path-resolution rules are normative:
 The JSON Schema MUST enforce at least:
 
 - `schemaVersion`, `book`, `print`, `generation`, `layout`, `assets`, `content`, and `outputs` are present.
-- `book.id` is a safe lowercase kebab-case identifier and matches the book-folder name (the folder holding `input/`, not `input` itself).
+- `book.id` is a safe lowercase kebab-case identifier, optionally with `_`-separated suffixes for language editions (`jims-halloween-maze-adventure_spanish`), and matches the book-folder name (the folder holding `input/`, not `input` itself). Maze seeds derive from `book.seedId` when set, else from `book.id`, so editions that share a `seedId` print identical mazes.
 - `mazeCount` is a positive integer.
 - `content.scenes` contains exactly `mazeCount` entries.
 - Scene numbers are unique, consecutive, and equal to `1..mazeCount`.

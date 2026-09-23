@@ -208,7 +208,7 @@ def place_assets(
             scale=band.start_scale,
         ),
         PlacedAsset(
-            asset_id=catalog.finish.asset_id,
+            asset_id=catalog.finish_for(maze.maze_index).asset_id,
             role=ROLE_FINISH,
             cell=maze.finish,
             scale=band.finish_scale,
@@ -279,7 +279,7 @@ def _run_attempt(
     endpoint_pairs: list[tuple[Cell, Cell]],
 ) -> _Attempt:
     book_seed = config.book.seed
-    book_id = config.book.id
+    book_id = config.book.seed_id
     rows, cols = band.rows, band.cols
 
     def derived(purpose: str) -> random.Random:

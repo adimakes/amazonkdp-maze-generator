@@ -263,11 +263,11 @@ class MazeStore:
 
         So this is a stable proxy rather than the maze's seed, and the two differ
         in the written JSON. It still does the one job a key needs: it is a pure
-        function of ``(book.seed, book.id, mazeIndex)``, so changing any of them
+        function of ``(book.seed, book.seedId, mazeIndex)``, so changing any of them
         invalidates the entry, and changing none of them never does.
         """
         return derive_seed(
-            self.config.book.seed, self.config.book.id, maze_index, 0, "topology"
+            self.config.book.seed, self.config.book.seed_id, maze_index, 0, "topology"
         )
 
     def key_for(self, maze_index: int) -> CacheKey:

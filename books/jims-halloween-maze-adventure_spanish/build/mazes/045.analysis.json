@@ -1,0 +1,2981 @@
+{
+  "schemaVersion": "1.0",
+  "mazeId": "jims-halloween-maze-adventure-045",
+  "mazeIndex": 45,
+  "exact": true,
+  "reachable": 256,
+  "reachableFraction": 1.0,
+  "loopCount": 10,
+  "simplePathCount": 162,
+  "deadEndCells": [
+    [
+      0,
+      15
+    ],
+    [
+      5,
+      3
+    ],
+    [
+      7,
+      1
+    ],
+    [
+      8,
+      3
+    ],
+    [
+      9,
+      12
+    ],
+    [
+      10,
+      4
+    ],
+    [
+      11,
+      13
+    ],
+    [
+      13,
+      12
+    ],
+    [
+      14,
+      1
+    ]
+  ],
+  "shortestRouteLength": 50,
+  "bestRouteLength": 80,
+  "bestCandyTotal": 11,
+  "secondBestCandyTotal": 10,
+  "uniqueHighestCandy": true,
+  "bestRoute": [
+    [
+      0,
+      1
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      2,
+      0
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      2,
+      2
+    ],
+    [
+      2,
+      3
+    ],
+    [
+      1,
+      3
+    ],
+    [
+      1,
+      4
+    ],
+    [
+      2,
+      4
+    ],
+    [
+      3,
+      4
+    ],
+    [
+      3,
+      5
+    ],
+    [
+      3,
+      6
+    ],
+    [
+      4,
+      6
+    ],
+    [
+      4,
+      5
+    ],
+    [
+      5,
+      5
+    ],
+    [
+      5,
+      6
+    ],
+    [
+      6,
+      6
+    ],
+    [
+      7,
+      6
+    ],
+    [
+      7,
+      7
+    ],
+    [
+      6,
+      7
+    ],
+    [
+      6,
+      8
+    ],
+    [
+      7,
+      8
+    ],
+    [
+      7,
+      9
+    ],
+    [
+      6,
+      9
+    ],
+    [
+      6,
+      10
+    ],
+    [
+      6,
+      11
+    ],
+    [
+      5,
+      11
+    ],
+    [
+      5,
+      10
+    ],
+    [
+      5,
+      9
+    ],
+    [
+      4,
+      9
+    ],
+    [
+      3,
+      9
+    ],
+    [
+      2,
+      9
+    ],
+    [
+      1,
+      9
+    ],
+    [
+      1,
+      8
+    ],
+    [
+      0,
+      8
+    ],
+    [
+      0,
+      9
+    ],
+    [
+      0,
+      10
+    ],
+    [
+      0,
+      11
+    ],
+    [
+      1,
+      11
+    ],
+    [
+      2,
+      11
+    ],
+    [
+      2,
+      12
+    ],
+    [
+      1,
+      12
+    ],
+    [
+      0,
+      12
+    ],
+    [
+      0,
+      13
+    ],
+    [
+      0,
+      14
+    ],
+    [
+      1,
+      14
+    ],
+    [
+      1,
+      13
+    ],
+    [
+      2,
+      13
+    ],
+    [
+      2,
+      14
+    ],
+    [
+      3,
+      14
+    ],
+    [
+      4,
+      14
+    ],
+    [
+      4,
+      15
+    ],
+    [
+      5,
+      15
+    ],
+    [
+      6,
+      15
+    ],
+    [
+      6,
+      14
+    ],
+    [
+      5,
+      14
+    ],
+    [
+      5,
+      13
+    ],
+    [
+      4,
+      13
+    ],
+    [
+      3,
+      13
+    ],
+    [
+      3,
+      12
+    ],
+    [
+      4,
+      12
+    ],
+    [
+      5,
+      12
+    ],
+    [
+      6,
+      12
+    ],
+    [
+      6,
+      13
+    ],
+    [
+      7,
+      13
+    ],
+    [
+      7,
+      12
+    ],
+    [
+      8,
+      12
+    ],
+    [
+      8,
+      13
+    ],
+    [
+      8,
+      14
+    ],
+    [
+      7,
+      14
+    ],
+    [
+      7,
+      15
+    ],
+    [
+      8,
+      15
+    ],
+    [
+      9,
+      15
+    ],
+    [
+      10,
+      15
+    ],
+    [
+      11,
+      15
+    ],
+    [
+      12,
+      15
+    ],
+    [
+      13,
+      15
+    ],
+    [
+      14,
+      15
+    ],
+    [
+      15,
+      15
+    ]
+  ],
+  "temptingRouteCount": 38,
+  "routeSummaries": [
+    {
+      "routeIndex": 73,
+      "length": 80,
+      "candyTotal": 11,
+      "cells": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          6,
+          6
+        ],
+        [
+          7,
+          6
+        ],
+        [
+          7,
+          7
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          6,
+          8
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          7,
+          9
+        ],
+        [
+          6,
+          9
+        ],
+        [
+          6,
+          10
+        ],
+        [
+          6,
+          11
+        ],
+        [
+          5,
+          11
+        ],
+        [
+          5,
+          10
+        ],
+        [
+          5,
+          9
+        ],
+        [
+          4,
+          9
+        ],
+        [
+          3,
+          9
+        ],
+        [
+          2,
+          9
+        ],
+        [
+          1,
+          9
+        ],
+        [
+          1,
+          8
+        ],
+        [
+          0,
+          8
+        ],
+        [
+          0,
+          9
+        ],
+        [
+          0,
+          10
+        ],
+        [
+          0,
+          11
+        ],
+        [
+          1,
+          11
+        ],
+        [
+          2,
+          11
+        ],
+        [
+          2,
+          12
+        ],
+        [
+          1,
+          12
+        ],
+        [
+          0,
+          12
+        ],
+        [
+          0,
+          13
+        ],
+        [
+          0,
+          14
+        ],
+        [
+          1,
+          14
+        ],
+        [
+          1,
+          13
+        ],
+        [
+          2,
+          13
+        ],
+        [
+          2,
+          14
+        ],
+        [
+          3,
+          14
+        ],
+        [
+          4,
+          14
+        ],
+        [
+          4,
+          15
+        ],
+        [
+          5,
+          15
+        ],
+        [
+          6,
+          15
+        ],
+        [
+          6,
+          14
+        ],
+        [
+          5,
+          14
+        ],
+        [
+          5,
+          13
+        ],
+        [
+          4,
+          13
+        ],
+        [
+          3,
+          13
+        ],
+        [
+          3,
+          12
+        ],
+        [
+          4,
+          12
+        ],
+        [
+          5,
+          12
+        ],
+        [
+          6,
+          12
+        ],
+        [
+          6,
+          13
+        ],
+        [
+          7,
+          13
+        ],
+        [
+          7,
+          12
+        ],
+        [
+          8,
+          12
+        ],
+        [
+          8,
+          13
+        ],
+        [
+          8,
+          14
+        ],
+        [
+          7,
+          14
+        ],
+        [
+          7,
+          15
+        ],
+        [
+          8,
+          15
+        ],
+        [
+          9,
+          15
+        ],
+        [
+          10,
+          15
+        ],
+        [
+          11,
+          15
+        ],
+        [
+          12,
+          15
+        ],
+        [
+          13,
+          15
+        ],
+        [
+          14,
+          15
+        ],
+        [
+          15,
+          15
+        ]
+      ]
+    },
+    {
+      "routeIndex": 58,
+      "length": 76,
+      "candyTotal": 10,
+      "cells": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          6,
+          6
+        ],
+        [
+          7,
+          6
+        ],
+        [
+          7,
+          7
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          6,
+          8
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          7,
+          9
+        ],
+        [
+          6,
+          9
+        ],
+        [
+          6,
+          10
+        ],
+        [
+          6,
+          11
+        ],
+        [
+          5,
+          11
+        ],
+        [
+          5,
+          10
+        ],
+        [
+          4,
+          10
+        ],
+        [
+          4,
+          11
+        ],
+        [
+          3,
+          11
+        ],
+        [
+          3,
+          10
+        ],
+        [
+          2,
+          10
+        ],
+        [
+          1,
+          10
+        ],
+        [
+          1,
+          11
+        ],
+        [
+          2,
+          11
+        ],
+        [
+          2,
+          12
+        ],
+        [
+          1,
+          12
+        ],
+        [
+          0,
+          12
+        ],
+        [
+          0,
+          13
+        ],
+        [
+          0,
+          14
+        ],
+        [
+          1,
+          14
+        ],
+        [
+          1,
+          13
+        ],
+        [
+          2,
+          13
+        ],
+        [
+          2,
+          14
+        ],
+        [
+          3,
+          14
+        ],
+        [
+          4,
+          14
+        ],
+        [
+          4,
+          15
+        ],
+        [
+          5,
+          15
+        ],
+        [
+          6,
+          15
+        ],
+        [
+          6,
+          14
+        ],
+        [
+          5,
+          14
+        ],
+        [
+          5,
+          13
+        ],
+        [
+          4,
+          13
+        ],
+        [
+          3,
+          13
+        ],
+        [
+          3,
+          12
+        ],
+        [
+          4,
+          12
+        ],
+        [
+          5,
+          12
+        ],
+        [
+          6,
+          12
+        ],
+        [
+          6,
+          13
+        ],
+        [
+          7,
+          13
+        ],
+        [
+          7,
+          12
+        ],
+        [
+          8,
+          12
+        ],
+        [
+          8,
+          13
+        ],
+        [
+          8,
+          14
+        ],
+        [
+          7,
+          14
+        ],
+        [
+          7,
+          15
+        ],
+        [
+          8,
+          15
+        ],
+        [
+          9,
+          15
+        ],
+        [
+          10,
+          15
+        ],
+        [
+          11,
+          15
+        ],
+        [
+          12,
+          15
+        ],
+        [
+          13,
+          15
+        ],
+        [
+          14,
+          15
+        ],
+        [
+          15,
+          15
+        ]
+      ]
+    },
+    {
+      "routeIndex": 154,
+      "length": 82,
+      "candyTotal": 10,
+      "cells": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          2,
+          6
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          6,
+          6
+        ],
+        [
+          7,
+          6
+        ],
+        [
+          7,
+          7
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          6,
+          8
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          7,
+          9
+        ],
+        [
+          6,
+          9
+        ],
+        [
+          6,
+          10
+        ],
+        [
+          6,
+          11
+        ],
+        [
+          5,
+          11
+        ],
+        [
+          5,
+          10
+        ],
+        [
+          5,
+          9
+        ],
+        [
+          4,
+          9
+        ],
+        [
+          3,
+          9
+        ],
+        [
+          2,
+          9
+        ],
+        [
+          1,
+          9
+        ],
+        [
+          1,
+          8
+        ],
+        [
+          0,
+          8
+        ],
+        [
+          0,
+          9
+        ],
+        [
+          0,
+          10
+        ],
+        [
+          0,
+          11
+        ],
+        [
+          1,
+          11
+        ],
+        [
+          2,
+          11
+        ],
+        [
+          2,
+          12
+        ],
+        [
+          1,
+          12
+        ],
+        [
+          0,
+          12
+        ],
+        [
+          0,
+          13
+        ],
+        [
+          0,
+          14
+        ],
+        [
+          1,
+          14
+        ],
+        [
+          1,
+          13
+        ],
+        [
+          2,
+          13
+        ],
+        [
+          2,
+          14
+        ],
+        [
+          3,
+          14
+        ],
+        [
+          4,
+          14
+        ],
+        [
+          4,
+          15
+        ],
+        [
+          5,
+          15
+        ],
+        [
+          6,
+          15
+        ],
+        [
+          6,
+          14
+        ],
+        [
+          5,
+          14
+        ],
+        [
+          5,
+          13
+        ],
+        [
+          4,
+          13
+        ],
+        [
+          3,
+          13
+        ],
+        [
+          3,
+          12
+        ],
+        [
+          4,
+          12
+        ],
+        [
+          5,
+          12
+        ],
+        [
+          6,
+          12
+        ],
+        [
+          6,
+          13
+        ],
+        [
+          7,
+          13
+        ],
+        [
+          7,
+          12
+        ],
+        [
+          8,
+          12
+        ],
+        [
+          8,
+          13
+        ],
+        [
+          8,
+          14
+        ],
+        [
+          7,
+          14
+        ],
+        [
+          7,
+          15
+        ],
+        [
+          8,
+          15
+        ],
+        [
+          9,
+          15
+        ],
+        [
+          10,
+          15
+        ],
+        [
+          11,
+          15
+        ],
+        [
+          12,
+          15
+        ],
+        [
+          13,
+          15
+        ],
+        [
+          14,
+          15
+        ],
+        [
+          15,
+          15
+        ]
+      ]
+    },
+    {
+      "routeIndex": 139,
+      "length": 78,
+      "candyTotal": 9,
+      "cells": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          2,
+          6
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          6,
+          6
+        ],
+        [
+          7,
+          6
+        ],
+        [
+          7,
+          7
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          6,
+          8
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          7,
+          9
+        ],
+        [
+          6,
+          9
+        ],
+        [
+          6,
+          10
+        ],
+        [
+          6,
+          11
+        ],
+        [
+          5,
+          11
+        ],
+        [
+          5,
+          10
+        ],
+        [
+          4,
+          10
+        ],
+        [
+          4,
+          11
+        ],
+        [
+          3,
+          11
+        ],
+        [
+          3,
+          10
+        ],
+        [
+          2,
+          10
+        ],
+        [
+          1,
+          10
+        ],
+        [
+          1,
+          11
+        ],
+        [
+          2,
+          11
+        ],
+        [
+          2,
+          12
+        ],
+        [
+          1,
+          12
+        ],
+        [
+          0,
+          12
+        ],
+        [
+          0,
+          13
+        ],
+        [
+          0,
+          14
+        ],
+        [
+          1,
+          14
+        ],
+        [
+          1,
+          13
+        ],
+        [
+          2,
+          13
+        ],
+        [
+          2,
+          14
+        ],
+        [
+          3,
+          14
+        ],
+        [
+          4,
+          14
+        ],
+        [
+          4,
+          15
+        ],
+        [
+          5,
+          15
+        ],
+        [
+          6,
+          15
+        ],
+        [
+          6,
+          14
+        ],
+        [
+          5,
+          14
+        ],
+        [
+          5,
+          13
+        ],
+        [
+          4,
+          13
+        ],
+        [
+          3,
+          13
+        ],
+        [
+          3,
+          12
+        ],
+        [
+          4,
+          12
+        ],
+        [
+          5,
+          12
+        ],
+        [
+          6,
+          12
+        ],
+        [
+          6,
+          13
+        ],
+        [
+          7,
+          13
+        ],
+        [
+          7,
+          12
+        ],
+        [
+          8,
+          12
+        ],
+        [
+          8,
+          13
+        ],
+        [
+          8,
+          14
+        ],
+        [
+          7,
+          14
+        ],
+        [
+          7,
+          15
+        ],
+        [
+          8,
+          15
+        ],
+        [
+          9,
+          15
+        ],
+        [
+          10,
+          15
+        ],
+        [
+          11,
+          15
+        ],
+        [
+          12,
+          15
+        ],
+        [
+          13,
+          15
+        ],
+        [
+          14,
+          15
+        ],
+        [
+          15,
+          15
+        ]
+      ]
+    },
+    {
+      "routeIndex": 71,
+      "length": 124,
+      "candyTotal": 9,
+      "cells": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          6,
+          6
+        ],
+        [
+          7,
+          6
+        ],
+        [
+          7,
+          7
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          6,
+          8
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          7,
+          9
+        ],
+        [
+          6,
+          9
+        ],
+        [
+          6,
+          10
+        ],
+        [
+          6,
+          11
+        ],
+        [
+          5,
+          11
+        ],
+        [
+          5,
+          10
+        ],
+        [
+          5,
+          9
+        ],
+        [
+          4,
+          9
+        ],
+        [
+          3,
+          9
+        ],
+        [
+          2,
+          9
+        ],
+        [
+          1,
+          9
+        ],
+        [
+          1,
+          8
+        ],
+        [
+          0,
+          8
+        ],
+        [
+          0,
+          9
+        ],
+        [
+          0,
+          10
+        ],
+        [
+          0,
+          11
+        ],
+        [
+          1,
+          11
+        ],
+        [
+          2,
+          11
+        ],
+        [
+          2,
+          12
+        ],
+        [
+          1,
+          12
+        ],
+        [
+          0,
+          12
+        ],
+        [
+          0,
+          13
+        ],
+        [
+          0,
+          14
+        ],
+        [
+          1,
+          14
+        ],
+        [
+          1,
+          13
+        ],
+        [
+          2,
+          13
+        ],
+        [
+          2,
+          14
+        ],
+        [
+          3,
+          14
+        ],
+        [
+          4,
+          14
+        ],
+        [
+          4,
+          15
+        ],
+        [
+          5,
+          15
+        ],
+        [
+          6,
+          15
+        ],
+        [
+          6,
+          14
+        ],
+        [
+          5,
+          14
+        ],
+        [
+          5,
+          13
+        ],
+        [
+          4,
+          13
+        ],
+        [
+          3,
+          13
+        ],
+        [
+          3,
+          12
+        ],
+        [
+          4,
+          12
+        ],
+        [
+          5,
+          12
+        ],
+        [
+          6,
+          12
+        ],
+        [
+          6,
+          13
+        ],
+        [
+          7,
+          13
+        ],
+        [
+          7,
+          12
+        ],
+        [
+          7,
+          11
+        ],
+        [
+          8,
+          11
+        ],
+        [
+          9,
+          11
+        ],
+        [
+          9,
+          10
+        ],
+        [
+          10,
+          10
+        ],
+        [
+          10,
+          11
+        ],
+        [
+          10,
+          12
+        ],
+        [
+          10,
+          13
+        ],
+        [
+          9,
+          13
+        ],
+        [
+          9,
+          14
+        ],
+        [
+          10,
+          14
+        ],
+        [
+          11,
+          14
+        ],
+        [
+          12,
+          14
+        ],
+        [
+          12,
+          13
+        ],
+        [
+          12,
+          12
+        ],
+        [
+          11,
+          12
+        ],
+        [
+          11,
+          11
+        ],
+        [
+          11,
+          10
+        ],
+        [
+          11,
+          9
+        ],
+        [
+          11,
+          8
+        ],
+        [
+          11,
+          7
+        ],
+        [
+          12,
+          7
+        ],
+        [
+          12,
+          6
+        ],
+        [
+          11,
+          6
+        ],
+        [
+          10,
+          6
+        ],
+        [
+          10,
+          5
+        ],
+        [
+          11,
+          5
+        ],
+        [
+          12,
+          5
+        ],
+        [
+          12,
+          4
+        ],
+        [
+          11,
+          4
+        ],
+        [
+          11,
+          3
+        ],
+        [
+          12,
+          3
+        ],
+        [
+          13,
+          3
+        ],
+        [
+          13,
+          4
+        ],
+        [
+          13,
+          5
+        ],
+        [
+          13,
+          6
+        ],
+        [
+          13,
+          7
+        ],
+        [
+          13,
+          8
+        ],
+        [
+          12,
+          8
+        ],
+        [
+          12,
+          9
+        ],
+        [
+          12,
+          10
+        ],
+        [
+          12,
+          11
+        ],
+        [
+          13,
+          11
+        ],
+        [
+          13,
+          10
+        ],
+        [
+          14,
+          10
+        ],
+        [
+          15,
+          10
+        ],
+        [
+          15,
+          11
+        ],
+        [
+          14,
+          11
+        ],
+        [
+          14,
+          12
+        ],
+        [
+          15,
+          12
+        ],
+        [
+          15,
+          13
+        ],
+        [
+          14,
+          13
+        ],
+        [
+          13,
+          13
+        ],
+        [
+          13,
+          14
+        ],
+        [
+          14,
+          14
+        ],
+        [
+          15,
+          14
+        ],
+        [
+          15,
+          15
+        ]
+      ]
+    },
+    {
+      "routeIndex": 72,
+      "length": 128,
+      "candyTotal": 9
+    },
+    {
+      "routeIndex": 70,
+      "length": 146,
+      "candyTotal": 9
+    },
+    {
+      "routeIndex": 69,
+      "length": 148,
+      "candyTotal": 9
+    },
+    {
+      "routeIndex": 56,
+      "length": 120,
+      "candyTotal": 8
+    },
+    {
+      "routeIndex": 57,
+      "length": 124,
+      "candyTotal": 8
+    },
+    {
+      "routeIndex": 11,
+      "length": 126,
+      "candyTotal": 8
+    },
+    {
+      "routeIndex": 38,
+      "length": 126,
+      "candyTotal": 8
+    },
+    {
+      "routeIndex": 152,
+      "length": 126,
+      "candyTotal": 8
+    },
+    {
+      "routeIndex": 18,
+      "length": 130,
+      "candyTotal": 8
+    },
+    {
+      "routeIndex": 45,
+      "length": 130,
+      "candyTotal": 8
+    },
+    {
+      "routeIndex": 153,
+      "length": 130,
+      "candyTotal": 8
+    },
+    {
+      "routeIndex": 24,
+      "length": 138,
+      "candyTotal": 8
+    },
+    {
+      "routeIndex": 51,
+      "length": 138,
+      "candyTotal": 8
+    },
+    {
+      "routeIndex": 55,
+      "length": 142,
+      "candyTotal": 8
+    },
+    {
+      "routeIndex": 54,
+      "length": 144,
+      "candyTotal": 8
+    },
+    {
+      "routeIndex": 151,
+      "length": 148,
+      "candyTotal": 8
+    },
+    {
+      "routeIndex": 150,
+      "length": 150,
+      "candyTotal": 8
+    },
+    {
+      "routeIndex": 68,
+      "length": 64,
+      "candyTotal": 7
+    },
+    {
+      "routeIndex": 2,
+      "length": 122,
+      "candyTotal": 7
+    },
+    {
+      "routeIndex": 29,
+      "length": 122,
+      "candyTotal": 7
+    },
+    {
+      "routeIndex": 137,
+      "length": 122,
+      "candyTotal": 7
+    },
+    {
+      "routeIndex": 15,
+      "length": 126,
+      "candyTotal": 7
+    },
+    {
+      "routeIndex": 42,
+      "length": 126,
+      "candyTotal": 7
+    },
+    {
+      "routeIndex": 138,
+      "length": 126,
+      "candyTotal": 7
+    },
+    {
+      "routeIndex": 92,
+      "length": 128,
+      "candyTotal": 7
+    },
+    {
+      "routeIndex": 119,
+      "length": 128,
+      "candyTotal": 7
+    },
+    {
+      "routeIndex": 99,
+      "length": 132,
+      "candyTotal": 7
+    },
+    {
+      "routeIndex": 126,
+      "length": 132,
+      "candyTotal": 7
+    },
+    {
+      "routeIndex": 21,
+      "length": 134,
+      "candyTotal": 7
+    },
+    {
+      "routeIndex": 48,
+      "length": 134,
+      "candyTotal": 7
+    },
+    {
+      "routeIndex": 105,
+      "length": 140,
+      "candyTotal": 7
+    },
+    {
+      "routeIndex": 132,
+      "length": 140,
+      "candyTotal": 7
+    },
+    {
+      "routeIndex": 136,
+      "length": 144,
+      "candyTotal": 7
+    },
+    {
+      "routeIndex": 135,
+      "length": 146,
+      "candyTotal": 7
+    },
+    {
+      "routeIndex": 63,
+      "length": 50,
+      "candyTotal": 6
+    },
+    {
+      "routeIndex": 149,
+      "length": 66,
+      "candyTotal": 6
+    },
+    {
+      "routeIndex": 78,
+      "length": 80,
+      "candyTotal": 6
+    },
+    {
+      "routeIndex": 74,
+      "length": 116,
+      "candyTotal": 6
+    },
+    {
+      "routeIndex": 76,
+      "length": 124,
+      "candyTotal": 6
+    },
+    {
+      "routeIndex": 83,
+      "length": 124,
+      "candyTotal": 6
+    },
+    {
+      "routeIndex": 110,
+      "length": 124,
+      "candyTotal": 6
+    },
+    {
+      "routeIndex": 96,
+      "length": 128,
+      "candyTotal": 6
+    },
+    {
+      "routeIndex": 123,
+      "length": 128,
+      "candyTotal": 6
+    },
+    {
+      "routeIndex": 102,
+      "length": 136,
+      "candyTotal": 6
+    },
+    {
+      "routeIndex": 129,
+      "length": 136,
+      "candyTotal": 6
+    },
+    {
+      "routeIndex": 9,
+      "length": 170,
+      "candyTotal": 6
+    },
+    {
+      "routeIndex": 36,
+      "length": 170,
+      "candyTotal": 6
+    },
+    {
+      "routeIndex": 10,
+      "length": 174,
+      "candyTotal": 6
+    },
+    {
+      "routeIndex": 37,
+      "length": 174,
+      "candyTotal": 6
+    },
+    {
+      "routeIndex": 144,
+      "length": 52,
+      "candyTotal": 5
+    },
+    {
+      "routeIndex": 159,
+      "length": 82,
+      "candyTotal": 5
+    },
+    {
+      "routeIndex": 66,
+      "length": 108,
+      "candyTotal": 5
+    },
+    {
+      "routeIndex": 67,
+      "length": 112,
+      "candyTotal": 5
+    },
+    {
+      "routeIndex": 155,
+      "length": 118,
+      "candyTotal": 5
+    },
+    {
+      "routeIndex": 157,
+      "length": 126,
+      "candyTotal": 5
+    },
+    {
+      "routeIndex": 65,
+      "length": 130,
+      "candyTotal": 5
+    },
+    {
+      "routeIndex": 64,
+      "length": 132,
+      "candyTotal": 5
+    },
+    {
+      "routeIndex": 0,
+      "length": 166,
+      "candyTotal": 5
+    },
+    {
+      "routeIndex": 27,
+      "length": 166,
+      "candyTotal": 5
+    },
+    {
+      "routeIndex": 1,
+      "length": 170,
+      "candyTotal": 5
+    },
+    {
+      "routeIndex": 28,
+      "length": 170,
+      "candyTotal": 5
+    },
+    {
+      "routeIndex": 90,
+      "length": 172,
+      "candyTotal": 5
+    },
+    {
+      "routeIndex": 117,
+      "length": 172,
+      "candyTotal": 5
+    },
+    {
+      "routeIndex": 91,
+      "length": 176,
+      "candyTotal": 5
+    },
+    {
+      "routeIndex": 118,
+      "length": 176,
+      "candyTotal": 5
+    },
+    {
+      "routeIndex": 79,
+      "length": 72,
+      "candyTotal": 4
+    },
+    {
+      "routeIndex": 80,
+      "length": 76,
+      "candyTotal": 4
+    },
+    {
+      "routeIndex": 77,
+      "length": 88,
+      "candyTotal": 4
+    },
+    {
+      "routeIndex": 75,
+      "length": 90,
+      "candyTotal": 4
+    },
+    {
+      "routeIndex": 61,
+      "length": 94,
+      "candyTotal": 4
+    },
+    {
+      "routeIndex": 62,
+      "length": 98,
+      "candyTotal": 4
+    },
+    {
+      "routeIndex": 8,
+      "length": 110,
+      "candyTotal": 4
+    },
+    {
+      "routeIndex": 35,
+      "length": 110,
+      "candyTotal": 4
+    },
+    {
+      "routeIndex": 147,
+      "length": 110,
+      "candyTotal": 4
+    },
+    {
+      "routeIndex": 17,
+      "length": 114,
+      "candyTotal": 4
+    },
+    {
+      "routeIndex": 44,
+      "length": 114,
+      "candyTotal": 4
+    },
+    {
+      "routeIndex": 148,
+      "length": 114,
+      "candyTotal": 4
+    },
+    {
+      "routeIndex": 60,
+      "length": 116,
+      "candyTotal": 4
+    },
+    {
+      "routeIndex": 59,
+      "length": 118,
+      "candyTotal": 4
+    },
+    {
+      "routeIndex": 23,
+      "length": 122,
+      "candyTotal": 4
+    },
+    {
+      "routeIndex": 50,
+      "length": 122,
+      "candyTotal": 4
+    },
+    {
+      "routeIndex": 146,
+      "length": 132,
+      "candyTotal": 4
+    },
+    {
+      "routeIndex": 145,
+      "length": 134,
+      "candyTotal": 4
+    },
+    {
+      "routeIndex": 81,
+      "length": 168,
+      "candyTotal": 4
+    },
+    {
+      "routeIndex": 108,
+      "length": 168,
+      "candyTotal": 4
+    },
+    {
+      "routeIndex": 82,
+      "length": 172,
+      "candyTotal": 4
+    },
+    {
+      "routeIndex": 109,
+      "length": 172,
+      "candyTotal": 4
+    },
+    {
+      "routeIndex": 160,
+      "length": 74,
+      "candyTotal": 3
+    },
+    {
+      "routeIndex": 161,
+      "length": 78,
+      "candyTotal": 3
+    },
+    {
+      "routeIndex": 158,
+      "length": 90,
+      "candyTotal": 3
+    },
+    {
+      "routeIndex": 156,
+      "length": 92,
+      "candyTotal": 3
+    },
+    {
+      "routeIndex": 5,
+      "length": 96,
+      "candyTotal": 3
+    },
+    {
+      "routeIndex": 32,
+      "length": 96,
+      "candyTotal": 3
+    },
+    {
+      "routeIndex": 142,
+      "length": 96,
+      "candyTotal": 3
+    },
+    {
+      "routeIndex": 16,
+      "length": 100,
+      "candyTotal": 3
+    },
+    {
+      "routeIndex": 19,
+      "length": 100,
+      "candyTotal": 3
+    },
+    {
+      "routeIndex": 43,
+      "length": 100,
+      "candyTotal": 3
+    },
+    {
+      "routeIndex": 46,
+      "length": 100,
+      "candyTotal": 3
+    },
+    {
+      "routeIndex": 143,
+      "length": 100,
+      "candyTotal": 3
+    },
+    {
+      "routeIndex": 12,
+      "length": 102,
+      "candyTotal": 3
+    },
+    {
+      "routeIndex": 39,
+      "length": 102,
+      "candyTotal": 3
+    },
+    {
+      "routeIndex": 22,
+      "length": 108,
+      "candyTotal": 3
+    },
+    {
+      "routeIndex": 25,
+      "length": 108,
+      "candyTotal": 3
+    },
+    {
+      "routeIndex": 49,
+      "length": 108,
+      "candyTotal": 3
+    },
+    {
+      "routeIndex": 52,
+      "length": 108,
+      "candyTotal": 3
+    },
+    {
+      "routeIndex": 89,
+      "length": 112,
+      "candyTotal": 3
+    },
+    {
+      "routeIndex": 116,
+      "length": 112,
+      "candyTotal": 3
+    },
+    {
+      "routeIndex": 98,
+      "length": 116,
+      "candyTotal": 3
+    },
+    {
+      "routeIndex": 125,
+      "length": 116,
+      "candyTotal": 3
+    },
+    {
+      "routeIndex": 141,
+      "length": 118,
+      "candyTotal": 3
+    },
+    {
+      "routeIndex": 140,
+      "length": 120,
+      "candyTotal": 3
+    },
+    {
+      "routeIndex": 104,
+      "length": 124,
+      "candyTotal": 3
+    },
+    {
+      "routeIndex": 131,
+      "length": 124,
+      "candyTotal": 3
+    },
+    {
+      "routeIndex": 86,
+      "length": 98,
+      "candyTotal": 2
+    },
+    {
+      "routeIndex": 113,
+      "length": 98,
+      "candyTotal": 2
+    },
+    {
+      "routeIndex": 97,
+      "length": 102,
+      "candyTotal": 2
+    },
+    {
+      "routeIndex": 100,
+      "length": 102,
+      "candyTotal": 2
+    },
+    {
+      "routeIndex": 124,
+      "length": 102,
+      "candyTotal": 2
+    },
+    {
+      "routeIndex": 127,
+      "length": 102,
+      "candyTotal": 2
+    },
+    {
+      "routeIndex": 93,
+      "length": 104,
+      "candyTotal": 2
+    },
+    {
+      "routeIndex": 120,
+      "length": 104,
+      "candyTotal": 2
+    },
+    {
+      "routeIndex": 103,
+      "length": 110,
+      "candyTotal": 2
+    },
+    {
+      "routeIndex": 106,
+      "length": 110,
+      "candyTotal": 2
+    },
+    {
+      "routeIndex": 130,
+      "length": 110,
+      "candyTotal": 2
+    },
+    {
+      "routeIndex": 133,
+      "length": 110,
+      "candyTotal": 2
+    },
+    {
+      "routeIndex": 6,
+      "length": 154,
+      "candyTotal": 2
+    },
+    {
+      "routeIndex": 33,
+      "length": 154,
+      "candyTotal": 2
+    },
+    {
+      "routeIndex": 7,
+      "length": 158,
+      "candyTotal": 2
+    },
+    {
+      "routeIndex": 34,
+      "length": 158,
+      "candyTotal": 2
+    },
+    {
+      "routeIndex": 26,
+      "length": 72,
+      "candyTotal": 1
+    },
+    {
+      "routeIndex": 53,
+      "length": 72,
+      "candyTotal": 1
+    },
+    {
+      "routeIndex": 20,
+      "length": 74,
+      "candyTotal": 1
+    },
+    {
+      "routeIndex": 47,
+      "length": 74,
+      "candyTotal": 1
+    },
+    {
+      "routeIndex": 13,
+      "length": 94,
+      "candyTotal": 1
+    },
+    {
+      "routeIndex": 40,
+      "length": 94,
+      "candyTotal": 1
+    },
+    {
+      "routeIndex": 14,
+      "length": 98,
+      "candyTotal": 1
+    },
+    {
+      "routeIndex": 41,
+      "length": 98,
+      "candyTotal": 1
+    },
+    {
+      "routeIndex": 3,
+      "length": 140,
+      "candyTotal": 1
+    },
+    {
+      "routeIndex": 30,
+      "length": 140,
+      "candyTotal": 1
+    },
+    {
+      "routeIndex": 4,
+      "length": 144,
+      "candyTotal": 1
+    },
+    {
+      "routeIndex": 31,
+      "length": 144,
+      "candyTotal": 1
+    },
+    {
+      "routeIndex": 87,
+      "length": 156,
+      "candyTotal": 1
+    },
+    {
+      "routeIndex": 114,
+      "length": 156,
+      "candyTotal": 1
+    },
+    {
+      "routeIndex": 88,
+      "length": 160,
+      "candyTotal": 1
+    },
+    {
+      "routeIndex": 115,
+      "length": 160,
+      "candyTotal": 1
+    },
+    {
+      "routeIndex": 107,
+      "length": 74,
+      "candyTotal": 0
+    },
+    {
+      "routeIndex": 134,
+      "length": 74,
+      "candyTotal": 0
+    },
+    {
+      "routeIndex": 101,
+      "length": 76,
+      "candyTotal": 0
+    },
+    {
+      "routeIndex": 128,
+      "length": 76,
+      "candyTotal": 0
+    },
+    {
+      "routeIndex": 94,
+      "length": 96,
+      "candyTotal": 0
+    },
+    {
+      "routeIndex": 121,
+      "length": 96,
+      "candyTotal": 0
+    },
+    {
+      "routeIndex": 95,
+      "length": 100,
+      "candyTotal": 0
+    },
+    {
+      "routeIndex": 122,
+      "length": 100,
+      "candyTotal": 0
+    },
+    {
+      "routeIndex": 84,
+      "length": 142,
+      "candyTotal": 0
+    },
+    {
+      "routeIndex": 111,
+      "length": 142,
+      "candyTotal": 0
+    },
+    {
+      "routeIndex": 85,
+      "length": 146,
+      "candyTotal": 0
+    },
+    {
+      "routeIndex": 112,
+      "length": 146,
+      "candyTotal": 0
+    }
+  ],
+  "validation": {
+    "passed": true,
+    "errors": [],
+    "warnings": [],
+    "constraints": {
+      "C1_uniqueMaxScore": true,
+      "C2_scoreMargin": true,
+      "C3_bestIsNotShortest": true,
+      "C4_bestOverShortest": true,
+      "C5_temptingRoutes": true,
+      "C6_candyCount": true,
+      "C7_candyNotInDeadEndOrTerminal": true,
+      "C8_candySpacing": true,
+      "E1_bestRouteEdgeHugging": true,
+      "E2_reachableFraction": true,
+      "G1_exactEnumeration": true,
+      "G2_startReachesFinish": true,
+      "G3_loopCount": true,
+      "G4_deadEndCount": true,
+      "G5_deadEndDepth": true,
+      "G6_simpleRouteCount": true
+    }
+  }
+}

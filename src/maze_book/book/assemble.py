@@ -194,7 +194,9 @@ class BookAssembler:
         scene = self.scenes[record.scene_number]
         vector = page_vector_path(self.config, scene)
         ornament = self._story_ornament(record.scene_number)
-        act_name = self.profile.band_for(record.scene_number).act_name
+        act_name = self.config.labels.act_name(
+            self.profile.band_for(record.scene_number).act_name
+        )
         layout = plan_story_page(
             scene,
             metrics=self.metrics,
@@ -227,7 +229,7 @@ class BookAssembler:
         if not choices:
             return None
         rng = seeds.rng(
-            self.config.book.seed, self.config.book.id, scene_number,
+            self.config.book.seed, self.config.book.seed_id, scene_number,
             0, seeds.PURPOSE_PAGE_DECORATION,
         )
         return rng.choice(choices).path
@@ -245,6 +247,7 @@ class BookAssembler:
             show_maze_number=self.config.layout.show_maze_number,
             outside_marker_fraction=band.outside_marker_fraction,
             decoration_count=self.config.layout.maze_page_decorations,
+            total_label=self.config.labels.total,
         )
         raise_for_placements(
             loaded.maze,
@@ -257,9 +260,10 @@ class BookAssembler:
             catalog=self.catalog, band=band, cache=self.cache,
             show_best_possible=self.config.layout.show_best_possible_score,
             decoration_rng=seeds.rng(
-                self.config.book.seed, self.config.book.id, record.maze_index,
+                self.config.book.seed, self.config.book.seed_id, record.maze_index,
                 0, seeds.PURPOSE_PAGE_DECORATION,
             ),
+            labels=self.config.labels,
         )
 
     def _draw_solutions(self, frame: PdfFrame, record: PageRecord) -> None:
@@ -271,7 +275,7 @@ class BookAssembler:
             metrics=self.metrics, side=record.side, count=len(entries),
             per_page=self.config.layout.solutions_per_page,
         )
-        draw_solutions_page(frame, entries, layout)
+        draw_solutions_page(frame, entries, layout, labels=self.config.labels)
 
     def _draw_end(self, frame: PdfFrame, record: PageRecord) -> None:
         end_page = self.config.end_page

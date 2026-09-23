@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+<style>
+  g * { fill:#fff; stroke:#000; stroke-width:3.2; stroke-linecap:round; stroke-linejoin:round; }
+  g .k { fill:#000; }
+  g .n { fill:none; }
+  g .w { fill:#fff; stroke:#fff; }
+</style>
+<g>
+<circle cx="50" cy="50" r="40"/>
+<rect x="44" y="4" width="12" height="11" rx="1.5"/>
+<rect x="44" y="85" width="12" height="11" rx="1.5"/>
+<rect x="4" y="44" width="11" height="12" rx="1.5"/>
+<rect x="85" y="44" width="11" height="12" rx="1.5"/>
+<circle cx="50" cy="50" r="31"/>
+<rect x="46" y="19" width="8" height="62"/>
+<rect x="19" y="46" width="62" height="8"/>
+<rect class="w" x="47.6" y="21" width="4.8" height="58" style="stroke-width:0"/>
+<path class="n" d="M28 38 L37 29 M58 72 L67 63"/>
+</g>
+</svg>

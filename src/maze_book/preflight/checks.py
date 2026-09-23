@@ -30,6 +30,7 @@ from typing import Any, Sequence
 
 from ..errors import PreflightError
 from ..model.analysis import MazeAnalysis
+from ..model.labels import DEFAULT_LABELS, Labels, find_best_possible
 from ..model.book_config import BookConfig
 from ..rendering.page import PT_PER_IN
 
@@ -432,6 +433,7 @@ def check_text_markers(
     *,
     plan_obj: dict[str, Any],
     scene_titles: dict[int, str],
+    labels: Labels = DEFAULT_LABELS,
 ) -> None:
     missing: list[str] = []
     for page in plan_obj["pages"]:
@@ -445,7 +447,7 @@ def check_text_markers(
             if title and title not in text:
                 missing.append(f"page {number}: story title {title!r} not found")
         elif page["kind"] == "solutions":
-            if "Best possible:" not in text:
+            if not find_best_possible(labels, text):
                 missing.append(f"page {number}: no solution caption found")
     report.add(
         "text-markers",
@@ -454,15 +456,13 @@ def check_text_markers(
     )
 
 
-_BEST_RE = re.compile(r"Best possible:\s*(\d+)")
-
-
 def check_best_possible_cross_check(
     report: PreflightReport,
     pages_text: list[str],
     *,
     plan_obj: dict[str, Any],
     analyses: dict[int, MazeAnalysis],
+    labels: Labels = DEFAULT_LABELS,
 ) -> None:
     """18.8's mandatory cross-check, read back out of the finished PDF.
 
@@ -478,11 +478,11 @@ def check_best_possible_cross_check(
         if number > len(pages_text):
             problems.append(f"maze {index}: page {number} missing from extracted text")
             continue
-        match = _BEST_RE.search(pages_text[number - 1])
-        if match is None:
+        found = find_best_possible(labels, pages_text[number - 1])
+        if not found:
             problems.append(f"maze {index}: no 'Best possible' number on page {number}")
             continue
-        printed = int(match.group(1))
+        printed = found[0]
         expected = analyses[index].best_candy_total
         if printed != expected:
             problems.append(
@@ -499,7 +499,7 @@ def check_best_possible_cross_check(
         number = page["pageNumber"]
         if number > len(pages_text):
             continue
-        printed = [int(value) for value in _BEST_RE.findall(pages_text[number - 1])]
+        printed = find_best_possible(labels, pages_text[number - 1])
         expected = [analyses[i].best_candy_total for i in page["solutionIndices"]]
         if printed != expected:
             problems.append(

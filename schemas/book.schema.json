@@ -37,7 +37,7 @@
       "properties": {
         "id": {
           "type": "string",
-          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+          "pattern": "^[a-z0-9]+([-_][a-z0-9]+)*$",
           "minLength": 1,
           "maxLength": 100
         },
@@ -58,6 +58,12 @@
         "seed": {
           "type": "integer",
           "minimum": 0
+        },
+        "seedId": {
+          "description": "What maze seeds derive from, in place of book.id. Language editions of one book share a value so they print identical mazes and answer keys. Unset uses book.id.",
+          "type": "string",
+          "pattern": "^[a-z0-9]+([-_][a-z0-9]+)*$",
+          "minLength": 1
         },
         "mazeCount": {
           "type": "integer",
@@ -392,6 +398,17 @@
                     "type": "null"
                   }
                 ]
+              },
+              "finishVector": {
+                "description": "The finish marker for this maze, from assets.endingVectorsDir: the thing the story sends the character to. Unset or null uses assets.finishAsset.",
+                "oneOf": [
+                  {
+                    "$ref": "#/$defs/svgName"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
               }
             }
           }
@@ -460,6 +477,101 @@
                 "minLength": 1
               },
               "maxItems": 5
+            }
+          }
+        },
+        "labels": {
+          "description": "Words the engine prints on every page, for books not in English. Every key is optional; an absent one keeps the English default.",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "start": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Printed under the start marker. Default START."
+            },
+            "finish": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Printed under the finish marker. Default FINISH."
+            },
+            "tallyPrompt": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Above the tick boxes. Default 'Color in one box for every candy you collect'."
+            },
+            "total": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Beside the Total write-in box. Default Total."
+            },
+            "bestPossible": {
+              "description": "The score line on maze pages and answer-key captions; {n} is the number. Preflight reads the number back out of the PDF with these same templates.",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "one",
+                "other"
+              ],
+              "properties": {
+                "one": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\{n\\}",
+                  "description": "Used when the score is 1."
+                },
+                "other": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\{n\\}",
+                  "description": "Used for every other score."
+                }
+              }
+            },
+            "mazeNumber": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\{n\\}",
+              "description": "The folio on a maze page; {n} is the maze number. Default 'Maze {n}'."
+            },
+            "actNames": {
+              "description": "Printed band names, keyed by the profile's actName.",
+              "type": "object",
+              "additionalProperties": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "howToPlayTitle": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Front matter (tools/make_front_matter.py)."
+            },
+            "keyCollect": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Front matter: heading over the collectible icons."
+            },
+            "keyScenery": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Front matter: heading over the dead-end icons."
+            },
+            "keyNote": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Front matter: the line under the icon key."
+            },
+            "copyright": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\{holder\\}",
+              "description": "Front matter: {year} and {holder} are filled in."
+            },
+            "rightsReserved": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Front matter: the line under the copyright notice."
             }
           }
         }

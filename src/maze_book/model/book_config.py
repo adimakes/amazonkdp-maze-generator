@@ -25,6 +25,7 @@ from typing import Any
 
 from ..errors import ConfigError
 from .json_io import read_json
+from .labels import DEFAULT_LABELS, Labels, labels_from_json
 
 #: A package folder holds everything a book is made from under this name, and
 #: everything a build produces beside it. One glance says which is which.
@@ -98,6 +99,14 @@ class BookMeta:
     #: AI disclosure is made in the publishing form and is required either
     #: way; this only decides whether the buyer reads it too.
     print_content_origin: bool = True
+    #: What maze seeds derive from, in place of ``id``. Language editions of one
+    #: book set the same value so they print the same fifty mazes and the same
+    #: answer key; left unset it is the book's own id, as it always was.
+    seed_id: str = ""
+
+    def __post_init__(self) -> None:
+        if not self.seed_id:
+            object.__setattr__(self, "seed_id", self.id)
 
 
 @dataclass(frozen=True)
@@ -173,6 +182,9 @@ class Scene:
     title: str
     text: str
     page_vector: str | None = None
+    #: The finish marker for this maze: the thing the story sends the
+    #: character to. Unset, the book-wide ``assets.finishAsset`` is used.
+    finish_vector: str | None = None
 
 
 @dataclass(frozen=True)
@@ -222,6 +234,7 @@ class BookConfig:
     end_page: EndPage | None
     outputs: OutputsSpec
     raw: dict[str, Any] = field(default_factory=dict)
+    labels: Labels = DEFAULT_LABELS
 
     # ---- resolved paths -------------------------------------------------- #
 
@@ -269,6 +282,14 @@ class BookConfig:
     def finish_asset_path(self) -> Path:
         return safe_join(
             self.ending_vectors_dir, self.assets.finish_asset, field_name="assets.finishAsset"
+        )
+
+    def finish_asset_path_for(self, scene: Scene) -> Path:
+        if scene.finish_vector is None:
+            return self.finish_asset_path
+        return safe_join(
+            self.ending_vectors_dir, scene.finish_vector,
+            field_name=f"content.scenes[{scene.number}].finishVector",
         )
 
     @property
@@ -417,6 +438,18 @@ def _check_paths(config: BookConfig, *, require_assets: bool) -> None:
                 + ", ".join(missing_vectors[:5])
             )
 
+        missing_finishes = [
+            f"scene {scene.number}: {scene.finish_vector}"
+            for scene in config.scenes
+            if scene.finish_vector is not None
+            and not config.finish_asset_path_for(scene).is_file()
+        ]
+        if missing_finishes:
+            problems.append(
+                f"{len(missing_finishes)} scene finishVector file(s) missing: "
+                + ", ".join(missing_finishes[:5])
+            )
+
     if problems:
         raise ConfigError("book.json references paths that do not exist", details=problems)
 
@@ -491,6 +524,7 @@ def load_book_config(
             ),
             author=book.get("author"),
             print_content_origin=bool(book.get("printContentOrigin", True)),
+            seed_id=book.get("seedId") or "",
         ),
         print=PrintSpec(
             trim_width_in=float(printing["trimWidthIn"]),
@@ -549,6 +583,7 @@ def load_book_config(
                 title=scene["title"],
                 text=scene["text"],
                 page_vector=scene.get("pageVector"),
+                finish_vector=scene.get("finishVector"),
             )
             for scene in obj["content"]["scenes"]
         ],
@@ -564,6 +599,7 @@ def load_book_config(
             write_editable_proof_pdf=bool(outputs["writeEditableProofPdf"]),
         ),
         raw=obj,
+        labels=labels_from_json(obj["content"].get("labels")),
     )
 
     # Touching every resolved path here surfaces containment failures at load
@@ -580,6 +616,7 @@ def load_book_config(
     )
     for scene in config.scenes:
         config.page_vector_path(scene)
+        config.finish_asset_path_for(scene)
 
     _check_paths(config, require_assets=require_assets)
     return config

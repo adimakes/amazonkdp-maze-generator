@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+<style>
+  g * { fill:#fff; stroke:#000; stroke-width:3.2; stroke-linecap:round; stroke-linejoin:round; }
+  g .k { fill:#000; }
+  g .n { fill:none; }
+  g .w { fill:#fff; stroke:#fff; }
+</style>
+<g>
+<path class="n" d="M34 38 C 28 32, 40 26, 34 18 M50 36 C 44 30, 56 22, 50 12 M66 38 C 60 32, 72 26, 66 18"/>
+<line class="n" x1="58" y1="50" x2="86" y2="20" style="stroke-width:12.4"/><line class="w" x1="58" y1="50" x2="86" y2="20" style="stroke-width:6"/>
+<ellipse cx="86.5" cy="19.5" rx="5" ry="4" transform="rotate(-47 86.5 19.5)"/>
+<rect x="38" y="80" width="24" height="9" rx="3"/>
+<path d="M10 52 L90 52 Q88 84 50 86 Q12 84 10 52 Z"/>
+<ellipse cx="50" cy="52" rx="40" ry="8"/>
+<circle class="k" cx="36" cy="52" r="2.6"/>
+<circle class="k" cx="48" cy="54.5" r="2.6"/>
+<circle class="k" cx="60" cy="51" r="2.6"/>
+<path class="n" d="M26 66 Q50 72 74 66"/>
+</g>
+</svg>

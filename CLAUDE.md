@@ -305,6 +305,41 @@ down -- a heading placed inside the margin with its capitals outside it.
   because a tint halftones on a monochrome press. Size and letter-spacing do
   that job in solid ink.
 
+## Language editions share everything but their words
+
+`books/jims-halloween-maze-adventure_spanish` and `_german` are editions of the
+English book, not new books. Three settings make that work:
+
+- **`book.seedId`** is what maze seeds derive from, in place of `book.id`. All
+  three editions set it to the English id, so they print identical mazes and
+  answer keys. Without it a renamed copy gets fifty different puzzles.
+- **`content.labels`** holds every word the engine and the front-matter tool
+  print on their own: START/FINISH, the tally prompt, Total, the "Best
+  possible" templates, the maze folio, band names keyed by the profile's
+  `actName`, and the front matter's headings. The English defaults live in
+  `model/labels.py` and `tools/make_front_matter.py`. Preflight's cross-check
+  reads the score back with the book's own template, which is why each template
+  needs words *before* `{n}`.
+- **`scenes[].finishVector`** makes each maze finish at the thing its scene
+  sends Jimmy to. The pictures are shared, so a translation can rewrite a scene
+  freely but must still lead to the same object.
+
+**Keep the editions in step.** Print, layout, generation, assets, outputs,
+seed/seedId and each scene's `pageVector`/`finishVector` must be identical
+across editions, and the `input/assets/` trees byte-identical;
+`tests/test_editions.py` enforces it. A config or artwork change made to one
+edition is made to all three, in the same commit.
+
+Things longer words broke, and how they're held now: a heading with an accented
+capital (CÓMO) was placed by cap height and pierced the top margin, so the
+front-matter tool now measures accented capitals higher; the maze folio sat
+*on* the live edge, invisible until "Labyrinth" brought a descender, so it now
+sits a descender above it; the Total room is measured from the word; and marker
+words are kept inside the maze square.
+
+The cover artwork has English text painted in, so the editions carry no `cover`
+block. They need localized cover art before they can be published.
+
 ## Failure behaviour
 
 Exit codes are a contract (`errors.py`): `0` success, `2` invalid input/config, `3` maze

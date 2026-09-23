@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+<style>
+  g * { fill:#fff; stroke:#000; stroke-width:3.2; stroke-linecap:round; stroke-linejoin:round; }
+  g .k { fill:#000; }
+  g .n { fill:none; }
+  g .w { fill:#fff; stroke:#fff; }
+</style>
+<g>
+<rect x="10" y="86" width="22" height="6" rx="3"/>
+<rect x="68" y="86" width="22" height="6" rx="3"/>
+<rect x="17" y="34" width="8" height="53" rx="3"/>
+<rect x="75" y="34" width="8" height="53" rx="3"/>
+<ellipse cx="50" cy="42" rx="23" ry="33"/>
+<ellipse cx="50" cy="42" rx="16.5" ry="26.5"/>
+<path class="n" d="M39 36 L50 22 M40 46 L55 27"/>
+<circle class="k" cx="21" cy="42" r="3"/>
+<circle class="k" cx="79" cy="42" r="3"/>
+</g>
+</svg>

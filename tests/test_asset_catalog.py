@@ -247,7 +247,7 @@ def test_load_catalog_rejects_an_unsupported_start_asset_on_a_hand_built_config(
     tiny_book_dir: Path, tmp_path: Path
 ) -> None:
     """The guard ``catalog.py`` owns, reached with a config object that never
-    went through schema validation. ``load_catalog`` reads only these five
+    went through schema validation. ``load_catalog`` reads only these
     members, so a stand-in is enough and keeps the test about the suffix."""
     config = load_book_config(tiny_book_dir, require_assets=True)
     decoy = tmp_path / "start.gif"
@@ -260,6 +260,8 @@ def test_load_catalog_rejects_an_unsupported_start_asset_on_a_hand_built_config(
         dead_end_vectors_dir = config.dead_end_vectors_dir
         collectible_vectors_dir = config.collectible_vectors_dir
         assets = config.assets
+        scenes = config.scenes
+        finish_asset_path_for = config.finish_asset_path_for
 
     with pytest.raises(AssetError, match=r"must be one of \.svg, \.png"):
         load_catalog(ConfigStandIn())

@@ -96,9 +96,13 @@ def run_preflight(
     if "pdftotext" not in absent:
         pages_text = extract_pages_text(pdf, text_out)
         titles = {scene.number: scene.title.upper() for scene in config.scenes}
-        check_text_markers(report, pages_text, plan_obj=plan_obj, scene_titles=titles)
+        check_text_markers(
+            report, pages_text, plan_obj=plan_obj, scene_titles=titles,
+            labels=config.labels,
+        )
         check_best_possible_cross_check(
-            report, pages_text, plan_obj=plan_obj, analyses=analyses
+            report, pages_text, plan_obj=plan_obj, analyses=analyses,
+            labels=config.labels,
         )
     else:
         for name in ("text-markers", "best-possible-cross-check"):

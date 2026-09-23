@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+<style>
+  g * { fill:#fff; stroke:#000; stroke-width:3.2; stroke-linecap:round; stroke-linejoin:round; }
+  g .k { fill:#000; }
+  g .n { fill:none; }
+  g .w { fill:#fff; stroke:#fff; }
+</style>
+<g>
+<path class="n" d="M26 62 C 14 64, 8 74, 16 84"/>
+<rect x="18" y="10" width="64" height="12" rx="4"/>
+<rect x="18" y="78" width="64" height="12" rx="4"/>
+<rect x="27" y="22" width="46" height="56"/>
+<path class="n" d="M27 33 L73 33 M27 44 L73 44 M27 55 L73 55 M27 66 L73 66"/>
+<line class="n" x1="46" y1="60" x2="88" y2="20" style="stroke-width:9.4"/><line class="w" x1="46" y1="60" x2="88" y2="20" style="stroke-width:3"/>
+<ellipse class="k" cx="84.5" cy="23.5" rx="1.3" ry="3" transform="rotate(46 84.5 23.5)" style="stroke-width:0.5"/>
+<path class="n" d="M85 22 C 96 34, 92 52, 73 50"/>
+</g>
+</svg>

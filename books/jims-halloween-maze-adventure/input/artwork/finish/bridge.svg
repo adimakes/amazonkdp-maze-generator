@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+<style>
+  g * { fill:#fff; stroke:#000; stroke-width:3.2; stroke-linecap:round; stroke-linejoin:round; }
+  g .k { fill:#000; }
+  g .n { fill:none; }
+  g .w { fill:#fff; stroke:#fff; }
+</style>
+<g>
+<path class="n" d="M6 86 Q16 82 26 86 Q36 90 46 86 M56 86 Q66 82 76 86 Q86 90 94 86"/>
+<path d="M6 70 Q50 40 94 70 L94 82 L82 82 Q50 52 18 82 L6 82 Z"/>
+<path class="n" d="M12 50 Q50 20 88 50"/>
+<path class="n" d="M26 45.8 L26 58.5 M38 38.5 L38 52 M50 35 L50 48.5 M62 38.5 L62 52 M74 45.8 L74 58.5"/>
+<rect x="8" y="46" width="8" height="24" rx="1.5"/>
+<rect x="84" y="46" width="8" height="24" rx="1.5"/>
+<circle class="k" cx="12" cy="44" r="4"/>
+<circle class="k" cx="88" cy="44" r="4"/>
+</g>
+</svg>

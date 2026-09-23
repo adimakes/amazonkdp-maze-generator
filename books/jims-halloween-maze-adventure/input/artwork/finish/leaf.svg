@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+<style>
+  g * { fill:#fff; stroke:#000; stroke-width:3.2; stroke-linecap:round; stroke-linejoin:round; }
+  g .k { fill:#000; }
+  g .n { fill:none; }
+  g .w { fill:#fff; stroke:#fff; }
+</style>
+<g>
+<path class="n" d="M50 66 Q51 80 46 93"/>
+<path d="M50 7 L57 23 L66 18 L64 36 L80 25 L77 38 L92 40 L81 52 L87 58 L66 63 L68 72 L53 66 L50 69 L47 66 L32 72 L34 63 L13 58 L19 52 L8 40 L23 38 L20 25 L36 36 L34 18 L43 23 Z"/>
+<path class="n" d="M50 66 L50 20 M50 66 L76 34 M50 66 L24 34 M50 66 L80 52 M50 66 L20 52"/>
+</g>
+</svg>

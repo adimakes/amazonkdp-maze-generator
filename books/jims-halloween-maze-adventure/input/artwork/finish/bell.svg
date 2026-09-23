@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+<style>
+  g * { fill:#fff; stroke:#000; stroke-width:3.2; stroke-linecap:round; stroke-linejoin:round; }
+  g .k { fill:#000; }
+  g .n { fill:none; }
+  g .w { fill:#fff; stroke:#fff; }
+</style>
+<g>
+<path class="n" d="M14 36 Q8 46 12 56 M86 36 Q92 46 88 56"/>
+<rect x="44" y="4" width="12" height="16" rx="5"/>
+<path d="M50 18 C 32 18, 30 36, 30 50 C 30 64, 22 70, 16 76 L84 76 C 78 70, 70 64, 70 50 C 70 36, 68 18, 50 18 Z"/>
+<circle class="k" cx="50" cy="86" r="6"/>
+<rect x="12" y="74" width="76" height="8" rx="4"/>
+<path class="n" d="M40 30 Q36 42 37 56"/>
+</g>
+</svg>

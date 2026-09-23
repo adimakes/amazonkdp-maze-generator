@@ -1,0 +1,492 @@
+{
+  "schemaVersion": "1.0",
+  "book": {
+    "id": "jims-halloween-maze-adventure_german",
+    "title": "Halloween-Labyrinthe für Kinder",
+    "subtitle": "50 Labyrinthe und eine schaurige Geschichte. Für 6 bis 10 Jahre",
+    "locale": "de-DE",
+    "seed": 42001,
+    "seedId": "jims-halloween-maze-adventure",
+    "mazeCount": 50,
+    "profileId": "halloween_6_10",
+    "contentOrigin": {
+      "text": "ai-drafted-and-human-edited",
+      "images": "ai-generated-and-vector-cleaned",
+      "translations": "ai-generated"
+    },
+    "author": "Felicia Bauer",
+    "printContentOrigin": false
+  },
+  "print": {
+    "trimWidthIn": 8.5,
+    "trimHeightIn": 11.0,
+    "interiorBleed": false,
+    "colorMode": "black-and-white",
+    "paper": "white",
+    "safeMarginsIn": {
+      "inside": 0.625,
+      "outside": 0.5,
+      "top": 0.5,
+      "bottom": 0.5
+    },
+    "gutterIn": 0.625
+  },
+  "generation": {
+    "startRegion": {
+      "rowMin": 0,
+      "rowMax": 2,
+      "colMin": 0,
+      "colMax": 2
+    },
+    "finishRegion": {
+      "rowMin": -3,
+      "rowMax": -1,
+      "colMin": -3,
+      "colMax": -1
+    },
+    "maxAttemptsPerMaze": 500,
+    "baseGenerator": "mazelib_recursive_backtracker",
+    "exactRouteEnumeration": true,
+    "endpointsOnBorder": true
+  },
+  "layout": {
+    "frontMatterPdf": "front-matter.pdf",
+    "storyPageSide": "left",
+    "mazePageSide": "right",
+    "mazeSquareIn": 7.3,
+    "tallyPosition": "below",
+    "showMazeNumber": true,
+    "showBestPossibleScore": true,
+    "solutionsPerPage": 9,
+    "solutionsStartSide": "left",
+    "insertEndPage": true,
+    "insertBlankPagesForParity": true,
+    "expectedPageCount": null,
+    "mazePageDecorations": 0
+  },
+  "assets": {
+    "beginningVectorsDir": "assets/start",
+    "endingVectorsDir": "assets/finish",
+    "deadEndVectorsDir": "assets/dead-ends",
+    "collectibleVectorsDir": "assets/collectibles",
+    "pageVectorsDir": "assets/decorations",
+    "startAsset": "jim_start.png",
+    "finishAsset": "candy_bucket.png",
+    "deadEndAssetPolicy": "random-from-folder",
+    "collectibleAssetPolicy": "random-from-folder",
+    "mazeDecorations": []
+  },
+  "content": {
+    "scenes": [
+      {
+        "number": 1,
+        "title": "Wo steckt die Kostümkiste?",
+        "text": "Oben auf dem Dachboden, ganz hinten hinter dem Krempel. Bis es dunkel wird, muss Jimmy sie gefunden haben.",
+        "pageVector": "jim_with_bucket.png",
+        "finishVector": "costume_trunk.png"
+      },
+      {
+        "number": 2,
+        "title": "Klemmt!",
+        "text": "Das Gespensterkostüm ist auf links, und der Reißverschluss rührt sich keinen Millimeter. Bringst du Jimmy zum Nähkasten?",
+        "pageVector": "jim_in_sheet.png",
+        "finishVector": "sewing_box.png"
+      },
+      {
+        "number": 3,
+        "title": "Zwei weiße Kringel",
+        "text": "Auf jede Wange malt Jimmy einen weißen Kringel. Gruselig oder eher lustig? Das kann ihm nur der große Spiegel verraten.",
+        "pageVector": "jim_in_sheet.png",
+        "finishVector": "mirror.png"
+      },
+      {
+        "number": 4,
+        "title": "Erst Suppe, dann Süßes",
+        "text": "Sagt Mama, und die Schüssel Kürbissuppe dampft schon auf dem Tisch. Da hilft kein Betteln.",
+        "pageVector": "jim_with_bucket.png",
+        "finishVector": "soup_bowl.png"
+      },
+      {
+        "number": 5,
+        "title": "Schon wieder unterm Sofa",
+        "text": "Da ist die Taschenlampe hingekullert. Kissen, Hausschuhe, eine einzelne Socke. Hilf Jimmy beim Wühlen!",
+        "pageVector": "jim_with_bucket.png",
+        "finishVector": "flashlight.png"
+      },
+      {
+        "number": 6,
+        "title": "Ganz oben im Schrank",
+        "text": "Da steht der Kürbiseimer, so hoch, dass Jimmy gerade noch den Rand sieht. Welcher Weg führt zum Schrank?",
+        "pageVector": "jim_with_bucket.png",
+        "finishVector": "candy_bucket.png"
+      },
+      {
+        "number": 7,
+        "title": "Auf einem Bein",
+        "text": "Ein Gummistiefel steht an der Tür. Der andere hat sich unter der Treppe versteckt, also hüpft Jimmy hin.",
+        "pageVector": "jim_with_bucket.png",
+        "finishVector": "boot.png"
+      },
+      {
+        "number": 8,
+        "title": "Endlich raus!",
+        "text": "Das Licht über der Haustür brennt schon, und durch den Türspalt riecht es nach nassem Laub. Nur die Jacken sind noch im Weg.",
+        "pageVector": "jim_walking.png",
+        "finishVector": "door.png"
+      },
+      {
+        "number": 9,
+        "title": "Von Stein zu Stein",
+        "text": "Nasses Laub klebt auf fast jedem Trittstein. Findest du für Jimmy einen trockenen Weg zum alten Baum?",
+        "pageVector": "spooky_tree.png",
+        "finishVector": "tree.png"
+      },
+      {
+        "number": 10,
+        "title": "Quieeetsch!",
+        "text": "So klingt nur das alte Gartentor, und natürlich stehen Mamas Blumentöpfe genau im Weg.",
+        "pageVector": "jim_walking.png",
+        "finishVector": "gate.png"
+      },
+      {
+        "number": 11,
+        "title": "Die erste Haustür",
+        "text": "Neben der Treppe grinst ein Kürbis. Den ganzen Weg hinauf übt Jimmy leise: „Süßes oder Saures, Süßes oder Saures …“",
+        "pageVector": "jim_walking.png",
+        "finishVector": "pumpkin.png"
+      },
+      {
+        "number": 12,
+        "title": "Bellt und wedelt",
+        "text": "Der Hund hinterm Zaun bellt, was das Zeug hält, und wedelt dabei mit dem Schwanz. Ganz leise vorbei, zum Haus nebenan!",
+        "pageVector": "jim_walking.png",
+        "finishVector": "house.png"
+      },
+      {
+        "number": 13,
+        "title": "Pfützenalarm",
+        "text": "Ein nasses Gespenst ist kein gruseliges Gespenst. Kommt Jimmy trocken an allen Pfützen vorbei bis zum Kürbis an der Tür?",
+        "pageVector": "jim_in_sheet.png",
+        "finishVector": "pumpkin.png"
+      },
+      {
+        "number": 14,
+        "title": "Höher als Papa",
+        "text": "So hoch sind diese Hecken. Such die Lücken und bring Jimmy zur Bank in der Mitte.",
+        "pageVector": "spooky_tree.png",
+        "finishVector": "bench.png"
+      },
+      {
+        "number": 15,
+        "title": "Wäsche auf der Leine",
+        "text": "Weiße Bettlaken flattern im Wind, und einen Augenblick lang hält Jimmy sie für echte Gespenster. Dahinter liegt das hintere Gartentor.",
+        "pageVector": "jim_in_sheet.png",
+        "finishVector": "gate.png"
+      },
+      {
+        "number": 16,
+        "title": "Der Laden an der Ecke",
+        "text": "Im Schaufenster leuchten orange Lichter, und ganz hinten steht das große Bonbonglas. Nur der Gang dorthin ist ziemlich eng.",
+        "pageVector": "jim_walking.png",
+        "finishVector": "candy_jar.png"
+      },
+      {
+        "number": 17,
+        "title": "Raschel, knister, knack",
+        "text": "Jemand hat das Laub der ganzen Straße zu einem Riesenhaufen geharkt. Jimmy springt mitten hinein und hält den Eimer gut fest.",
+        "pageVector": "jim_walking.png",
+        "finishVector": "leaf.png"
+      },
+      {
+        "number": 18,
+        "title": "Überall Piraten",
+        "text": "Piraten, Roboter und ein winzig kleiner Drache, und alle rufen durcheinander. Schaffst du es mit Jimmy bis zum nächsten Haus?",
+        "pageVector": "jim_walking.png",
+        "finishVector": "house.png"
+      },
+      {
+        "number": 19,
+        "title": "Die Spinne am Briefkasten",
+        "text": "Vorne am Zaun hängt ein Briefkasten, und daran baumelt eine Spinne. Jimmy weiß, dass sie aus Gummi ist. Jimmy duckt sich trotzdem.",
+        "pageVector": "web_corner.png",
+        "finishVector": "mailbox.png"
+      },
+      {
+        "number": 20,
+        "title": "Das letzte Haus",
+        "text": "Das letzte Haus der Straße steht ganz hinten im Garten. Ein langer Weg für ein einziges Bonbon, aber Jimmy geht hin.",
+        "pageVector": "jim_walking.png",
+        "finishVector": "house.png"
+      },
+      {
+        "number": 21,
+        "title": "Ab in den Park",
+        "text": "Das Tor steht offen, der Himmel ist schon lila, und heute Morgen waren diese Bäume irgendwie kleiner.",
+        "pageVector": "spooky_tree.png",
+        "finishVector": "tree.png"
+      },
+      {
+        "number": 22,
+        "title": "Am Ententeich",
+        "text": "Unter den ersten Sternen dümpeln die Enten auf dem Teich, und bis zur kleinen Steinbrücke ist es ganz schön matschig.",
+        "pageVector": "jim_walking.png",
+        "finishVector": "bridge.png"
+      },
+      {
+        "number": 23,
+        "title": "Kürbis an Kürbis",
+        "text": "Reihe um Reihe dicke Kürbisse, und jeder liegt im Matsch. Wo geht es zum allergrößten?",
+        "pageVector": "jim_walking.png",
+        "finishVector": "pumpkin.png"
+      },
+      {
+        "number": 24,
+        "title": "Wände aus Stroh",
+        "text": "Die Strohballen sind höher gestapelt als Jimmy, und irgendwo mittendrin leuchtet eine Laterne.",
+        "pageVector": "jim_walking.png",
+        "finishVector": "lantern.png"
+      },
+      {
+        "number": 25,
+        "title": "Keiner auf der Schaukel",
+        "text": "Und doch schwingt sie hin und her. Hinter dem Spielplatz hat jemand das Tor offen gelassen.",
+        "pageVector": "jim_walking.png",
+        "finishVector": "gate.png"
+      },
+      {
+        "number": 26,
+        "title": "Die Klapperkapelle",
+        "text": "Im Musikpavillon spielt eine Skelettkapelle, und zwar ziemlich schief. Die große Trommel will Jimmy sich aber unbedingt aus der Nähe ansehen.",
+        "pageVector": "jim_walking.png",
+        "finishVector": "drum.png"
+      },
+      {
+        "number": 27,
+        "title": "Die Fledermausgasse",
+        "text": "Um die Straßenlaterne am Ende der Gasse flattern Fledermäuse. Die wollen Jimmy nur Hallo sagen. Wahrscheinlich.",
+        "pageVector": "jim_walking.png",
+        "finishVector": "streetlight.png"
+      },
+      {
+        "number": 28,
+        "title": "Am Marktbrunnen",
+        "text": "Im alten Brunnen plätschert das Wasser. Wie schlängelt sich Jimmy zwischen den Bänken hindurch zum Stand mit dem Bonbonglas?",
+        "pageVector": "jim_walking.png",
+        "finishVector": "candy_jar.png"
+      },
+      {
+        "number": 29,
+        "title": "Bumm, bumm, bumm!",
+        "text": "Der Kostümumzug füllt die ganze Straße, und Jimmy kommt nicht hinüber. Dann läuft er eben mit, ganz nach vorn zur großen Trommel!",
+        "pageVector": "jim_walking.png",
+        "finishVector": "drum.png"
+      },
+      {
+        "number": 30,
+        "title": "Schnell, schnell!",
+        "text": "Papierfledermäuse baumeln über der Treppe zur Bücherei. Oben steht eine Süßigkeitenschale, und die ist gleich leer!",
+        "pageVector": "jim_walking.png",
+        "finishVector": "treat_bowl.png"
+      },
+      {
+        "number": 31,
+        "title": "Unter den Apfelbäumen",
+        "text": "Die Äste der alten Bäume hängen tief. Ganz hinten leuchtet noch ein einziger Apfel. Findest du hin?",
+        "pageVector": "spooky_tree.png",
+        "finishVector": "apple.png"
+      },
+      {
+        "number": 32,
+        "title": "Spinnweben überall",
+        "text": "Silberne Fäden überziehen die ganze Schuppentür. Drinnen steht eine Laterne, und die will Jimmy haben.",
+        "pageVector": "web_wedge.png",
+        "finishVector": "lantern.png"
+      },
+      {
+        "number": 33,
+        "title": "Nebel wie Watte",
+        "text": "Man sieht die Hand vor Augen nicht. Geh mit Jimmy immer am Zaun entlang, irgendwann taucht die Straßenlaterne auf.",
+        "pageVector": "jim_walking.png",
+        "finishVector": "streetlight.png"
+      },
+      {
+        "number": 34,
+        "title": "Die Katze bleibt sitzen",
+        "text": "Mitten auf dem Weg sitzt eine schwarze Katze und macht für niemanden Platz. Wie kommt Jimmy um sie herum zum Haus?",
+        "pageVector": "jim_walking.png",
+        "finishVector": "house.png"
+      },
+      {
+        "number": 35,
+        "title": "Am Friedhofszaun entlang",
+        "text": "Hinter den Eisenstäben stehen alte Grabsteine in Reihen. Jimmy bleibt dicht am Zaun und schaut bis zum Tor kein zweites Mal hin.",
+        "pageVector": "haunted_house.png",
+        "finishVector": "gate.png"
+      },
+      {
+        "number": 36,
+        "title": "Knarr!",
+        "text": "Die Brücke knarrt über einem gluckernden Bach. Manche Bretter sind trocken, manche glitschig. Welche nimmst du?",
+        "pageVector": "jim_walking.png",
+        "finishVector": "bridge.png"
+      },
+      {
+        "number": 37,
+        "title": "Unter der Trauerweide",
+        "text": "Jimmy will zur alten Weide. Ihre Zweige hängen bis auf den Weg und streichen ihm wie Finger übers Gesicht. Natürlich zieht er den Kopf ein.",
+        "pageVector": "spooky_tree.png",
+        "finishVector": "tree.png"
+      },
+      {
+        "number": 38,
+        "title": "Hoch zum Kirchturm",
+        "text": "Die Turmuhr schlägt sieben. Ganz oben hat der Küster eine Schale Süßigkeiten hingestellt. Wie viele Stufen es wohl sind?",
+        "pageVector": "jim_walking.png",
+        "finishVector": "treat_bowl.png"
+      },
+      {
+        "number": 39,
+        "title": "Klapper, klapper, bumm",
+        "text": "In der alten Scheune tanzen die Skelette, und der Trommler denkt gar nicht ans Aufhören. Jimmy tanzt sich bis zur Trommel durch.",
+        "pageVector": "jim_walking.png",
+        "finishVector": "drum.png"
+      },
+      {
+        "number": 40,
+        "title": "Oben auf dem Heuboden",
+        "text": "Eine kugelrunde Eule blinzelt Jimmy an, Jimmy blinzelt zurück und sucht dann die offene Tür.",
+        "pageVector": "jim_walking.png",
+        "finishVector": "door.png"
+      },
+      {
+        "number": 41,
+        "title": "Hohe Eisentore",
+        "text": "Oben auf dem Hügel steht eine alte Villa, und davor stehen hohe Tore. Nur eins lässt sich öffnen. Welches bloß?",
+        "pageVector": "haunted_house.png",
+        "finishVector": "gate.png"
+      },
+      {
+        "number": 42,
+        "title": "Der Heckenirrgarten",
+        "text": "Hinter der Villa wachsen Hecken, noch viel höher als vorhin. Schaffst du es bis zur Steinbank in der Mitte?",
+        "pageVector": "jim_walking.png",
+        "finishVector": "bench.png"
+      },
+      {
+        "number": 43,
+        "title": "Vor dem großen Portal",
+        "text": "Spinnweben hängen quer über dem Eingang. Irgendwo dahinter hängt die Türglocke aus Messing, so groß wie Jimmys Kopf.",
+        "pageVector": "web_corner.png",
+        "finishVector": "bell.png"
+      },
+      {
+        "number": 44,
+        "title": "Im Kerzensaal",
+        "text": "Jimmy will zur dicken Kerze am anderen Ende. Ein Gespenst tanzt Walzer an ihm vorbei und schaut nicht mal hin.",
+        "pageVector": "jim_walking.png",
+        "finishVector": "candle.png"
+      },
+      {
+        "number": 45,
+        "title": "Ab in den Keller",
+        "text": "An der Wand stehen Hunderte Gläser mit Gewürzgurken. Jimmy braucht die Laterne, und die steht hinter all den Kisten.",
+        "pageVector": "jim_with_bucket.png",
+        "finishVector": "lantern.png"
+      },
+      {
+        "number": 46,
+        "title": "Immer weiter rauf",
+        "text": "Die Turmtreppe windet sich endlos nach oben, und die Fledermäuse rücken höflich zur Seite. Ganz oben hängt die Turmglocke. Bim, bam!",
+        "pageVector": "jim_walking.png",
+        "finishVector": "bell.png"
+      },
+      {
+        "number": 47,
+        "title": "Die Musik spielt noch",
+        "text": "Seit Jahren ist niemand mehr in diesem Ballsaal gewesen, und doch spielt leise Musik. Hilf Jimmy hinüber zu den hohen Glastüren.",
+        "pageVector": "jim_walking.png",
+        "finishVector": "door.png"
+      },
+      {
+        "number": 48,
+        "title": "Noch ein Dachboden",
+        "text": "Truhen, alte Hüte und ein Geruch wie ganz hinten im Kleiderschrank. Am anderen Ende schimmert ein rundes Fenster.",
+        "pageVector": "haunted_house.png",
+        "finishVector": "round_window.png"
+      },
+      {
+        "number": 49,
+        "title": "Wie ein alter Hase",
+        "text": "Die letzte Tür. Klingeln, „Süßes oder Saures!“, Eimer hinhalten, „Danke!“ Den ganzen Abend geübt, jetzt sitzt alles.",
+        "pageVector": "jim_walking.png",
+        "finishVector": "door.png"
+      },
+      {
+        "number": 50,
+        "title": "Endlich zu Hause",
+        "text": "Über Jimmys Haustür leuchtet das Licht warm und gelb. Bring ihn zur Treppe, dann wird ausgekippt und gezählt!",
+        "pageVector": "jim_with_bucket.png",
+        "finishVector": "house.png"
+      }
+    ],
+    "endPage": {
+      "title": "Ende",
+      "text": "Jimmy zählt und zählt und zählt. Sein erstes Halloween wird er so schnell nicht vergessen."
+    },
+    "howToPlay": [
+      "Finde einen Weg von Jimmy bis zum Ziel. Wohin es geht, verrät dir die Geschichte auf der linken Seite.",
+      "Durch Wände darfst du nicht gehen.",
+      "Sammle unterwegs so viele Süßigkeiten ein, wie du kannst.",
+      "Male für jede Süßigkeit ein Kästchen aus.",
+      "Schreib ins Kästchen „Insgesamt“, wie viele du hast.",
+      "Hast du die Höchstzahl geschafft? Sie steht hinter „Höchstens“.",
+      "Du kommst nicht weiter? Hinten im Buch stehen die Lösungen.",
+      "Die Labyrinthe werden immer schwieriger: 1 bis 20 sind für Kinder ab 6, 21 bis 40 ab 8, 41 bis 50 ab 10."
+    ],
+    "meetPage": {
+      "title": "Das ist Jimmy",
+      "lines": [
+        "Heute ist Jimmys allererstes Halloween. Von Tür zu Tür ziehen? Noch nie!",
+        "Wie das genau geht, weiß er noch nicht so recht.",
+        "Eins weiß er aber schon: Auf Umwegen gibt es die meisten Süßigkeiten.",
+        "Jetzt braucht er nur noch jemanden, der den Weg findet. Und das bist du.",
+        "Für alle, die gern Umwege gehen. Schaurig-schönes Halloween!"
+      ]
+    },
+    "labels": {
+      "start": "START",
+      "finish": "ZIEL",
+      "tallyPrompt": "Male für jede Süßigkeit ein Kästchen aus",
+      "total": "Insgesamt",
+      "bestPossible": {
+        "one": "Höchstens: {n} Süßigkeit",
+        "other": "Höchstens: {n} Süßigkeiten"
+      },
+      "mazeNumber": "Labyrinth {n}",
+      "actNames": {
+        "Getting Ready": "Gleich geht's los",
+        "The Neighborhood": "In der Nachbarschaft",
+        "The Dark End of the Street": "Es wird dunkel",
+        "The Haunted Half Hour": "Es wird gruselig",
+        "The Long Way Home": "Die Spukvilla",
+        "Finale": "Das große Finale"
+      },
+      "howToPlayTitle": "SO WIRD GESPIELT",
+      "keyCollect": "DAS SAMMELST DU",
+      "keyScenery": "DIE SIND NUR ZUM GRUSELN",
+      "keyNote": "Die Gruselbilder sind kleiner und zählen nicht mit.",
+      "copyright": "© {year} {holder}.",
+      "rightsReserved": "Alle Rechte vorbehalten."
+    }
+  },
+  "outputs": {
+    "writeMazeJson": true,
+    "writeAnalysisJson": true,
+    "writeMazeSvg": true,
+    "writeStandaloneMazePdf": true,
+    "writeBookPdf": true,
+    "writeContactSheet": true,
+    "writePreflightReport": true,
+    "writeEditableProofPdf": true
+  }
+}

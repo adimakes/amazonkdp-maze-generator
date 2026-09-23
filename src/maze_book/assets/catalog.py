@@ -15,7 +15,7 @@ must reject anything outside the subset. Both read the same sorted listing.
 from __future__ import annotations
 
 import random
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 from ..errors import AssetError
@@ -102,6 +102,12 @@ class AssetCatalog:
     dead_end_policy: str
     collectible_policy: str
     maze_decorations: tuple[str, ...] = ()
+    #: Per-maze finish markers, by maze index, for scenes that name their own.
+    #: A maze missing from this map finishes at ``finish``.
+    scene_finishes: dict[int, AssetFile] = field(default_factory=dict)
+
+    def finish_for(self, maze_index: int) -> AssetFile:
+        return self.scene_finishes.get(maze_index, self.finish)
 
     def choose_dead_end(self, rng: random.Random, ordinal: int) -> AssetFile:
         return _pick(
@@ -120,6 +126,7 @@ class AssetCatalog:
         seen: dict[str, AssetFile] = {}
         for asset in (
             [self.start, self.finish]
+            + sorted(self.scene_finishes.values(), key=lambda a: a.asset_id)
             + self.dead_ends
             + self.collectibles
             + sorted(self.page_vectors.values(), key=lambda a: a.asset_id)
@@ -157,6 +164,8 @@ class AssetCatalog:
         # "printed large" and "must be recognised instantly".
         assignment[str(self.start.path)] = ROLE_START
         assignment[str(self.finish.path)] = ROLE_FINISH
+        for asset in self.scene_finishes.values():
+            assignment[str(asset.path)] = ROLE_FINISH
         return assignment
 
     def path_for(self, asset_id: str) -> Path:
@@ -184,7 +193,19 @@ def load_catalog(config: BookConfig) -> AssetCatalog:
 
     start_path = config.start_asset_path
     finish_path = config.finish_asset_path
-    for name, path in (("assets.startAsset", start_path), ("assets.finishAsset", finish_path)):
+    scene_finishes = {
+        scene.number: config.finish_asset_path_for(scene)
+        for scene in config.scenes
+        if scene.finish_vector is not None
+    }
+    for name, path in (
+        ("assets.startAsset", start_path),
+        ("assets.finishAsset", finish_path),
+        *(
+            (f"content.scenes[{number}].finishVector", path)
+            for number, path in sorted(scene_finishes.items())
+        ),
+    ):
         if not path.is_file():
             raise AssetError(f"{name} does not exist: {path}")
         if path.suffix.lower() not in ASSET_SUFFIXES:
@@ -211,4 +232,8 @@ def load_catalog(config: BookConfig) -> AssetCatalog:
         dead_end_policy=config.assets.dead_end_asset_policy,
         collectible_policy=config.assets.collectible_asset_policy,
         maze_decorations=config.assets.maze_decorations,
+        scene_finishes={
+            number: AssetFile(asset_id=path.name, path=path)
+            for number, path in scene_finishes.items()
+        },
     )

@@ -2,8 +2,7 @@ Copyright © 2026 Felicia Bauer.
 
       All rights reserved.
                                        HOW TO PLAY
-1. Find a path from Jimmy to the candy bucket. Wherever he is going, the bucket marks the
-    finish.
+1. Find a path from Jimmy to the finish. The finish is whatever the story sends him to find.
 
 2. You cannot walk through a wall.
 
@@ -247,7 +246,7 @@ Best possible: 6 candies
 
 ACROSS THE STEPPING STONES
 Wet leaves have covered every one of them. Can you find Jimmy a dry
-                   way to the little apple tree?
+                       way to the old tree?
     START
 
 
@@ -327,7 +326,7 @@ Best possible: 9 candies
 
          GOOD DOG, QUIET DOG
 The dog behind the fence is barking his head off and wagging his tail at
-                  the same time. Past him, quietly.
+       the same time. Past him, quietly, to the house next door.
              START
 
 
@@ -351,7 +350,7 @@ Best possible: 8 candies
 
              THE SPRINKLER IS ON
 A wet ghost is not a scary ghost. Time the dashes and keep Jimmy's sheet
-                                    dry.
+               dry all the way to the pumpkin on the porch.
              START
 
 
@@ -373,8 +372,9 @@ Best possible: 8 candies
 
                                 14
 
-              TALLER THAN DAD
-That is how high these hedges are. Find the gaps and keep Jimmy going.
+             TALLER THAN DAD
+That is how high these hedges are. Find the gaps and get Jimmy to the
+                        bench in the middle.
     START
 
 
@@ -482,7 +482,7 @@ Best possible: 8 candies
 
          PIRATES EVERYWHERE
 Pirates and robots and one very small dragon, all shouting at once. Can
-               you get Jimmy through to the next porch?
+               you get Jimmy through to the next house?
     START
 
 
@@ -610,7 +610,7 @@ Best possible: 10 candies
 
             THE PUMPKIN PATCH
 Rows and rows of fat pumpkins, every one of them sitting in mud. Which
-                        way to the wagon?
+                       way to the biggest one?
                      START
 
 
@@ -688,7 +688,7 @@ Best possible: 9 candies
 
             KAZOOS AND BONES
 A skeleton band is playing on the bandstand, badly. Jimmy would like a
-                           much closer look.
+                    much closer look at that drum.
                              START
 
 
@@ -704,14 +704,14 @@ Best possible: 8 candies
 
 
                                                                 Maze 26
-                   THE DARK END OF THE STREET
+                    THE DARK END OF THE STREET
 
 
 
-                                27
+                                 27
 
-                 THE BAT ALLEY
-Bats swoop over the alley lights, squeaking away. They are only saying
+                  THE BAT ALLEY
+Bats swoop around the lamp at the end of the alley. They are only saying
                       hello to Jimmy. Probably.
                      START
 
@@ -766,7 +766,7 @@ Best possible: 8 candies
 
                          DRUMS!
 The costume parade has filled the whole street, and Jimmy is on the
-                        wrong side of it.
+             wrong side of it. Head for the big drum!
     START
 
 
@@ -814,15 +814,15 @@ Best possible: 9 candies
 
 
                                                         Maze 30
-                       THE HAUNTED HALF HOUR
+                    THE HAUNTED HALF HOUR
 
 
 
-                                   31
+                               31
 
-               THE OLD ORCHARD
-The apple trees lean right out over the grass, and Jimmy is looking for the
-                        stone wall on the far side.
+            THE OLD ORCHARD
+The apple trees lean right out over the grass. Jimmy has spotted one
+             shiny apple left, way over on the far side.
             START
 
 
@@ -898,9 +898,9 @@ Best possible: 10 candies
 
                                  34
 
-      THE CAT WILL NOT MOVE
-A black cat has sat down in the middle of the lane, started purring, and
-                      will not move for anybody.
+       THE CAT WILL NOT MOVE
+A black cat has sat down in the middle of the lane and will not move for
+         anybody. Can you get Jimmy round her to the house?
                    START
 
 
@@ -926,7 +926,7 @@ Best possible: 11 candies
 
 ALONG THE GRAVEYARD FENCE
 Old stones stand in rows behind the iron rails. Jimmy keeps close to the
-                     fence and does not look twice.
+        fence all the way to the gate, and does not look twice.
                    START
 
 
@@ -970,15 +970,15 @@ Best possible: 11 candies
 
 
                                                                 Maze 36
-                      THE HAUNTED HALF HOUR
+                        THE HAUNTED HALF HOUR
 
 
 
-                                  37
+                                    37
 
-      THE WHISPERING WILLOW
-The willow trails its branches right across the path. They only feel like
-                                 fingers.
+        THE WHISPERING WILLOW
+The old willow trails its branches right across the path. They only feel like
+                 fingers. Can you get Jimmy to its trunk?
                    START
 
 
@@ -1030,15 +1030,15 @@ Best possible: 11 candies
 
 
                                                         Maze 38
-                       THE HAUNTED HALF HOUR
+                      THE HAUNTED HALF HOUR
 
 
 
-                                  39
+                                 39
 
-                  TAP, TAP, CLACK
-The skeletons are dancing in the old barn and the fiddler shows no sign of
-                     stopping. Jimmy taps one foot.
+                 TAP, TAP, CLACK
+The skeletons are dancing in the old barn and the drummer shows no sign
+            of stopping. Jimmy taps his way over to the drum.
                           START
 
 
@@ -1190,15 +1190,15 @@ Best possible: 11 candies
 
 
                                                                 Maze 44
-                       THE LONG WAY HOME
+                         THE LONG WAY HOME
 
 
 
-                                45
+                                  45
 
-     DOWN THE CELLAR STEPS
-Jars of pickles line the wall, hundreds of them. Jimmy needs the light
-                  switch, and it is past all these crates.
+      DOWN THE CELLAR STEPS
+Jars of pickles line the wall, hundreds of them. Jimmy needs the lantern,
+                        and it is past all these crates.
                   START
 
 
@@ -1224,7 +1224,7 @@ Best possible: 11 candies
 
                UP AND UP AND UP
 The tower stairs curl around forever, and the bats do not mind sharing so
-                         long as Jimmy keeps left.
+            long as Jimmy keeps left. The bell is at the top.
                   START
 
 

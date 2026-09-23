@@ -198,15 +198,43 @@ def _printed_inches(context: "Context", page_vector_in: float) -> dict[str, floa
     return {
         "collectible": largest_cell * max(b.collectible_scale for b in bands),
         "dead-end": largest_cell * max(b.dead_end_scale for b in bands),
-        "start": max(marker, TITLE_FIGURE_IN),
-        "finish": max(marker, END_FIGURE_IN),
+        "start": max(marker, TITLE_FIGURE_IN, END_FIGURE_IN),
+        # Only ever the marker: the end page draws the *start* figure. Judging
+        # a finish asset at 2 in stored every one of them at 1200 px, which is
+        # 2700 dpi at the 0.44 in it prints -- the over-resolution the RIP
+        # averages back out as grey along every edge.
+        "finish": marker,
         "page-vector": page_vector_in,
     }
 
 
-#: The two places an endpoint asset is drawn larger than its marker.
+#: The two places the start figure is drawn larger than its marker: the Meet
+#: page and the end page. The finish asset is never drawn anywhere else.
 TITLE_FIGURE_IN = 2.4
 END_FIGURE_IN = 2.0
+
+
+def _check_end_page_fits(config, metrics) -> None:
+    """The end page's words, measured here rather than first at assembly.
+
+    Its line limit is enforced where the page is drawn, which is right for the
+    renderer and wrong for the author: a translated closing line that runs to
+    three lines should show up in validate beside the scenes, not halfway
+    through a build.
+    """
+    from .book.assemble import END_PAGE_MAX_LINES, end_page_lines
+
+    if not config.layout.insert_end_page or config.end_page is None:
+        return
+    lines = end_page_lines(config.end_page.text, width=metrics.live_width("left"))
+    if len(lines) > END_PAGE_MAX_LINES:
+        raise ConfigError(
+            "content.endPage.text does not fit the end page",
+            details=[
+                f"it needs {len(lines)} lines, the page fits {END_PAGE_MAX_LINES}: "
+                + " / ".join(lines)
+            ],
+        )
 
 
 def cmd_book_validate(context: Context) -> int:
@@ -230,6 +258,7 @@ def cmd_book_validate(context: Context) -> int:
     metrics = PageMetrics.from_print_spec(config.print)
     scenes = prepare_scenes(config, width=metrics.live_width("left"))
     _say(f"content     {len(scenes)} scene(s) fit the story page")
+    _check_end_page_fits(config, metrics)
 
     plan = context.plan()
     _say(
@@ -352,15 +381,17 @@ def _write_maze_pdf(context: Context, loaded: LoadedMaze, band) -> None:
         show_maze_number=context.config.layout.show_maze_number,
         outside_marker_fraction=band.outside_marker_fraction,
         decoration_count=context.config.layout.maze_page_decorations,
+        total_label=context.config.labels.total,
     )
     draw_maze_page(
         frame, loaded.maze, loaded.analysis, layout,
         catalog=context.catalog, band=band, cache=AssetGeometryCache(),
         show_best_possible=context.config.layout.show_best_possible_score,
         decoration_rng=seeds.rng(
-            context.config.book.seed, context.config.book.id,
+            context.config.book.seed, context.config.book.seed_id,
             loaded.maze.maze_index, 0, seeds.PURPOSE_PAGE_DECORATION,
         ),
+        labels=context.config.labels,
     )
     canvas.showPage()
     canvas.save()

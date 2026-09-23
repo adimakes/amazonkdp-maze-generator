@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+<style>
+  g * { fill:#fff; stroke:#000; stroke-width:3.2; stroke-linecap:round; stroke-linejoin:round; }
+  g .k { fill:#000; }
+  g .n { fill:none; }
+  g .w { fill:#fff; stroke:#fff; }
+</style>
+<g>
+<rect x="17" y="86" width="9" height="5" rx="1.5" class="k"/>
+<rect x="74" y="86" width="9" height="5" rx="1.5" class="k"/>
+<path class="k" d="M11 37 L89 42 L89 51 L11 51 Z"/>
+<rect x="11" y="49" width="78" height="38" rx="3"/>
+<rect x="15" y="49" width="8" height="38"/>
+<rect x="77" y="49" width="8" height="38"/>
+<path d="M11 37 L89 42 L89 31 Q89 11 50 10 Q11 10 11 28 Z"/>
+<path class="n" d="M19 36 L19 16 M81 41 L81 17"/>
+<path d="M29 42 L41 43 L41 72 L29 72 Z"/>
+<rect class="k" x="29" y="56" width="12" height="6"/>
+<path class="n" d="M31 72 L31 79 M35 72 L35 79 M39 72 L39 79"/>
+<rect x="45" y="49" width="14" height="16" rx="2"/>
+<path class="k" d="M52 53 a2.4 2.4 0 1 1 -0.01 0 Z M50.7 56.5 L53.3 56.5 L54 61 L50 61 Z" style="stroke-width:0.8"/>
+</g>
+</svg>

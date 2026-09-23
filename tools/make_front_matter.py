@@ -34,6 +34,7 @@ import argparse
 import json
 import re
 import sys
+import unicodedata
 from datetime import date
 from pathlib import Path
 
@@ -96,6 +97,35 @@ DEFAULT_HOW_TO_PLAY = [
 ]
 
 DEFAULT_DEDICATION = ["For everyone who likes a good puzzle."]
+
+#: The front matter's own furniture, overridable per book under
+#: ``content.labels`` like the engine's. English defaults are what the first
+#: book printed.
+DEFAULT_LABELS = {
+    "howToPlayTitle": "HOW TO PLAY",
+    "keyCollect": "COLLECT THESE",
+    "keyScenery": "THESE ARE JUST SPOOKY",
+    "keyNote": "The spooky ones are smaller, and they are worth nothing.",
+    "copyright": "Copyright \u00a9 {year} {holder}.",
+    "rightsReserved": "All rights reserved.",
+}
+
+
+def front_matter_labels(book: dict) -> dict[str, str]:
+    overrides = (book.get("content") or {}).get("labels") or {}
+    return {key: overrides.get(key, default) for key, default in DEFAULT_LABELS.items()}
+
+
+def _config(book_dir: Path):
+    """The book's config, without insisting on the file this script writes.
+
+    ``load_book_config`` checks that every referenced path exists, the front
+    matter PDF among them -- so a new book, which has none yet, could never
+    build its first one. Assets are still checked when the catalog loads them.
+    """
+    from maze_book.model.book_config import load_book_config
+
+    return load_book_config(book_dir, require_assets=False)
 
 
 def _humanize_origin_value(value: str | None) -> str:
@@ -185,15 +215,26 @@ class PageWriter:
     #: alternative is asking the font for metrics at every draw call.
     ASCENT_RATIO = 0.78
     DESCENT_RATIO = 0.25
+    #: An accent on a capital -- the Ó of a Spanish heading -- stands above the
+    #: cap height, and a heading placed by 0.78 put it in the top margin.
+    ACCENTED_ASCENT_RATIO = 1.0
 
-    def _check_y(self, y: float, size: float = 0.0) -> None:
+    @classmethod
+    def ascent_ratio(cls, text: str) -> float:
+        accented = any(
+            char.isupper() and unicodedata.decomposition(char).count(" ")
+            for char in text
+        )
+        return cls.ACCENTED_ASCENT_RATIO if accented else cls.ASCENT_RATIO
+
+    def _check_y(self, y: float, size: float = 0.0, text: str = "") -> None:
         """Bounds-check a *baseline*, allowing for the glyphs above and below it.
 
         Checking the baseline alone passes a heading whose capitals stand above
         the top margin, which is how the how-to-play page came to break the very
         margin this class exists to enforce.
         """
-        top = y + size * self.ASCENT_RATIO
+        top = y + size * self.ascent_ratio(text)
         bottom = y - size * self.DESCENT_RATIO
         if not (self.content_bottom - 1e-6 <= bottom and top <= self.content_top + 1e-6):
             raise ValueError(
@@ -203,7 +244,7 @@ class PageWriter:
             )
 
     def centred(self, y: float, text: str, font: str, size: float, gray: float = 0.0) -> None:
-        self._check_y(y, size)
+        self._check_y(y, size, text)
         width = pdfmetrics.stringWidth(text, font, size)
         if width > self.content_width + 1e-6:
             raise ValueError(
@@ -215,7 +256,7 @@ class PageWriter:
         self.c.drawCentredString(self.center_x, y, text)
 
     def left_aligned(self, y: float, text: str, font: str, size: float, gray: float = 0.0) -> None:
-        self._check_y(y, size)
+        self._check_y(y, size, text)
         width = pdfmetrics.stringWidth(text, font, size)
         if width > self.content_width + 1e-6:
             raise ValueError(
@@ -237,7 +278,7 @@ class PageWriter:
         self.c.setFont(font, size)
         self.c.drawRightString(self.content_left + gutter - 6.0, y, f"{index}.")
         for line in wrap_text(text, font, size, self.content_width - gutter):
-            self._check_y(y, size)
+            self._check_y(y, size, line)
             self.c.drawString(self.content_left + gutter, y, line)
             y -= leading
         return y
@@ -258,7 +299,11 @@ KEY_ROW_GAP_PT = 16.0
 
 
 def _draw_icon_key(
-    c: pdfcanvas.Canvas, pw: "PageWriter", book_dir: Path, y: float
+    c: pdfcanvas.Canvas,
+    pw: "PageWriter",
+    book_dir: Path,
+    y: float,
+    labels: dict[str, str],
 ) -> float:
     """Print what counts and what does not, using the book's own artwork.
 
@@ -268,25 +313,24 @@ def _draw_icon_key(
     actual icons, on a page that was two-thirds blank anyway.
     """
     from maze_book.assets.catalog import load_catalog
-    from maze_book.model.book_config import load_book_config
     from maze_book.model.profile import load_profile
     from maze_book.rendering.svg import AssetGeometryCache
     from maze_book.rendering.svg_to_pdf import PdfFrame, place_document
 
-    catalog = load_catalog(load_book_config(book_dir))
+    catalog = load_catalog(_config(book_dir))
     cache = AssetGeometryCache()
     frame = PdfFrame(c, PAGE_HEIGHT_PT)
 
     # Drawn at the ratio the maze pages actually use, because the key's job is
     # to teach that ratio. Printing both rows the same size would teach the
     # opposite of what the page then says.
-    profile = load_profile(REPO_ROOT / "profiles", load_book_config(book_dir).book.profile_id)
+    profile = load_profile(REPO_ROOT / "profiles", _config(book_dir).book.profile_id)
     band = profile.bands[0]
     ratio = band.dead_end_scale / band.collectible_scale
 
     rows = (
-        ("COLLECT THESE", sorted(catalog.collectibles, key=lambda a: a.asset_id), 1.0),
-        ("THESE ARE JUST SPOOKY", sorted(catalog.dead_ends, key=lambda a: a.asset_id), ratio),
+        (labels["keyCollect"], sorted(catalog.collectibles, key=lambda a: a.asset_id), 1.0),
+        (labels["keyScenery"], sorted(catalog.dead_ends, key=lambda a: a.asset_id), ratio),
     )
     for heading, assets, scale in rows:
         if not assets:
@@ -302,9 +346,7 @@ def _draw_icon_key(
                 frame, cache.get(asset.path), (x, top, x + icon, top + icon)
             )
         y -= KEY_ROW_GAP_PT
-    pw.left_aligned(
-        y, "The spooky ones are smaller, and they are worth nothing.", BODY_FONT, 11
-    )
+    pw.left_aligned(y, labels["keyNote"], BODY_FONT, 11)
     return y - 20.0
 
 
@@ -315,11 +357,10 @@ TITLE_FIGURE_IN = 2.4
 
 def _draw_title_figure(c: pdfcanvas.Canvas, book_dir: Path, y: float) -> None:
     from maze_book.assets.catalog import load_catalog
-    from maze_book.model.book_config import load_book_config
     from maze_book.rendering.svg import AssetGeometryCache
     from maze_book.rendering.svg_to_pdf import PdfFrame, place_document
 
-    catalog = load_catalog(load_book_config(book_dir))
+    catalog = load_catalog(_config(book_dir))
     size = TITLE_FIGURE_IN * 72.0
     x = (PAGE_WIDTH_PT - size) / 2.0
     place_document(
@@ -336,6 +377,7 @@ def build_front_matter(book_dir: Path, out_path: Path) -> None:
     title = meta["title"]
     subtitle = meta.get("subtitle") or ""
     content_origin = meta.get("contentOrigin") or {}
+    labels = front_matter_labels(book)
     year = date.today().year
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -368,8 +410,8 @@ def build_front_matter(book_dir: Path, out_path: Path) -> None:
     y = pw.content_top - 220
     holder = meta.get("author") or title
     copyright_lines = [
-        f"Copyright © {year} {holder}.",
-        "All rights reserved.",
+        labels["copyright"].format(year=year, holder=holder),
+        labels["rightsReserved"],
     ]
     # KDP's AI disclosure is made in the publishing form, and is required
     # whether or not this line is printed. Printing it as well is a choice the
@@ -383,8 +425,8 @@ def build_front_matter(book_dir: Path, out_path: Path) -> None:
 
     # ---- Page 2: how to play (verso) ----
     pw = PageWriter(c, 2)
-    y = pw.content_top - 20 * PageWriter.ASCENT_RATIO
-    pw.centred(y, "HOW TO PLAY", TITLE_FONT, 20)
+    y = pw.content_top - 20 * PageWriter.ascent_ratio(labels["howToPlayTitle"])
+    pw.centred(y, labels["howToPlayTitle"], TITLE_FONT, 20)
     y -= 38
 
     # Left-aligned, in a block. A centred numbered list is the clearest
@@ -395,7 +437,7 @@ def build_front_matter(book_dir: Path, out_path: Path) -> None:
         y = pw.numbered(y, index, step, BODY_FONT, 12.5, 20)
         y -= 6
 
-    y = _draw_icon_key(c, pw, book_dir, y - 26)
+    y = _draw_icon_key(c, pw, book_dir, y - 26, labels)
     c.showPage()
 
     # ---- Page 3: meet the character (recto) ----

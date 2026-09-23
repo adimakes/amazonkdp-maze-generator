@@ -104,11 +104,43 @@ STORAGE_DPI = 600.0
 MAX_SIDE = 2000
 
 
-def to_bitonal(path: Path, *, padding: float = PADDING_FRACTION, side_px: int = MAX_SIDE):
-    """Threshold, crop to the ink, pad to a centred square, return a 1-bit image."""
-    with Image.open(path) as source:
+#: An SVG source is drawn at this size before thresholding, the same order of
+#: size as the supplied 2K artwork, so both kinds go through one pipeline.
+SVG_RENDER_PX = 2048
+
+
+def _open_grey(path: Path) -> Image.Image:
+    """The source as greyscale; an SVG is rendered on white first.
+
+    Artwork drawn for the book rather than supplied as a picture arrives as SVG
+    with real strokes -- which the asset subset forbids, and which is why it is
+    rendered and thresholded here instead of shipped as a vector asset.
+    """
+    if path.suffix.lower() != ".svg":
+        with Image.open(path) as source:
+            grey = source.convert("L")
+            grey.load()
+        return grey
+    import io
+    import subprocess
+
+    try:
+        png = subprocess.run(
+            ["rsvg-convert", "-w", str(SVG_RENDER_PX), "-h", str(SVG_RENDER_PX),
+             "-b", "white", str(path)],
+            check=True, capture_output=True,
+        ).stdout
+    except FileNotFoundError as exc:
+        raise RuntimeError("rsvg-convert is needed for SVG sources (brew install librsvg)") from exc
+    with Image.open(io.BytesIO(png)) as source:
         grey = source.convert("L")
         grey.load()
+    return grey
+
+
+def to_bitonal(path: Path, *, padding: float = PADDING_FRACTION, side_px: int = MAX_SIDE):
+    """Threshold, crop to the ink, pad to a centred square, return a 1-bit image."""
+    grey = _open_grey(path)
 
     pixels = np.asarray(grey)
     ink = despeckle(pixels < otsu_threshold(pixels))
@@ -175,12 +207,13 @@ def import_assets(manifest_path: Path, package: Path, *, only: str | None = None
     return ok, bad
 
 
+#: The folder names the shipped book uses (CLAUDE.md, "SVG asset contract").
 ROLE_BY_FOLDER = {
-    "maze-vectors/collectibles": "collectible",
-    "maze-vectors/dead-end": "dead-end",
-    "beginning-vectors": "start",
-    "ending-vectors": "finish",
-    "page-vectors": "page-vector",
+    "collectibles": "collectible",
+    "dead-ends": "dead-end",
+    "start": "start",
+    "finish": "finish",
+    "decorations": "page-vector",
 }
 
 
@@ -205,8 +238,8 @@ def _printed_inches(book: dict) -> dict[str, float]:
     return {
         "collectible": largest_cell * max(b.collectible_scale for b in bands),
         "dead-end": largest_cell * max(b.dead_end_scale for b in bands),
-        "start": max(marker, 2.4),   # also the title page figure
-        "finish": max(marker, 2.0),  # also the end page figure
+        "start": max(marker, 2.4),   # also the meet page and end page figure
+        "finish": marker,            # never drawn anywhere but the marker
         "page-vector": VECTOR_SIZE_IN,
     }
 

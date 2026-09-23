@@ -1,0 +1,503 @@
+{
+  "bookId": "jims-halloween-maze-adventure_spanish",
+  "generatorVersion": "1.0.0",
+  "bookHash": "d5dbfebb7ab3a2726099e01819c27500ab5b2f2e5da9de932516b8a605a66bcd",
+  "profileHash": "42717f2619b4091bf452a5f2c234ae2eb5f4a265d42fa3a0cb23c24ca688a62a",
+  "assetsHash": "e0e396f9433d46093f3ebfa3288d62bc4743e3293251b0b5a3243b6cc307822a",
+  "profileId": "halloween_6_10",
+  "seed": 42001,
+  "mazeCount": 50,
+  "frontMatterPages": 3,
+  "book": {
+    "schemaVersion": "1.0",
+    "book": {
+      "id": "jims-halloween-maze-adventure_spanish",
+      "title": "Laberintos de Halloween para niños",
+      "subtitle": "50 laberintos y un cuento de Halloween. Para niños de 6 a 10 años.",
+      "locale": "es-ES",
+      "seed": 42001,
+      "seedId": "jims-halloween-maze-adventure",
+      "mazeCount": 50,
+      "profileId": "halloween_6_10",
+      "contentOrigin": {
+        "text": "ai-drafted-and-human-edited",
+        "images": "ai-generated-and-vector-cleaned",
+        "translations": "ai-generated"
+      },
+      "author": "Felicia Bauer",
+      "printContentOrigin": false
+    },
+    "print": {
+      "trimWidthIn": 8.5,
+      "trimHeightIn": 11.0,
+      "interiorBleed": false,
+      "colorMode": "black-and-white",
+      "paper": "white",
+      "safeMarginsIn": {
+        "inside": 0.625,
+        "outside": 0.5,
+        "top": 0.5,
+        "bottom": 0.5
+      },
+      "gutterIn": 0.625
+    },
+    "generation": {
+      "startRegion": {
+        "rowMin": 0,
+        "rowMax": 2,
+        "colMin": 0,
+        "colMax": 2
+      },
+      "finishRegion": {
+        "rowMin": -3,
+        "rowMax": -1,
+        "colMin": -3,
+        "colMax": -1
+      },
+      "maxAttemptsPerMaze": 500,
+      "baseGenerator": "mazelib_recursive_backtracker",
+      "exactRouteEnumeration": true,
+      "endpointsOnBorder": true
+    },
+    "layout": {
+      "frontMatterPdf": "front-matter.pdf",
+      "storyPageSide": "left",
+      "mazePageSide": "right",
+      "mazeSquareIn": 7.3,
+      "tallyPosition": "below",
+      "showMazeNumber": true,
+      "showBestPossibleScore": true,
+      "solutionsPerPage": 9,
+      "solutionsStartSide": "left",
+      "insertEndPage": true,
+      "insertBlankPagesForParity": true,
+      "expectedPageCount": null,
+      "mazePageDecorations": 0
+    },
+    "assets": {
+      "beginningVectorsDir": "assets/start",
+      "endingVectorsDir": "assets/finish",
+      "deadEndVectorsDir": "assets/dead-ends",
+      "collectibleVectorsDir": "assets/collectibles",
+      "pageVectorsDir": "assets/decorations",
+      "startAsset": "jim_start.png",
+      "finishAsset": "candy_bucket.png",
+      "deadEndAssetPolicy": "random-from-folder",
+      "collectibleAssetPolicy": "random-from-folder",
+      "mazeDecorations": []
+    },
+    "content": {
+      "scenes": [
+        {
+          "number": 1,
+          "title": "¿Dónde está el baúl?",
+          "text": "El baúl de los disfraces está en el desván, detrás de todo. ¿Llegas con Jimmy antes de que se haga de noche?",
+          "pageVector": "jim_with_bucket.png",
+          "finishVector": "costume_trunk.png"
+        },
+        {
+          "number": 2,
+          "title": "Cremallera rebelde",
+          "text": "El disfraz de fantasma de Jimmy está del revés y la cremallera no hay quien la mueva. ¡Al costurero, rápido!",
+          "pageVector": "jim_in_sheet.png",
+          "finishVector": "sewing_box.png"
+        },
+        {
+          "number": 3,
+          "title": "Dos remolinos blancos",
+          "text": "Jimmy se pinta un remolino blanco en cada moflete. ¿Dará miedo o dará risa? El espejo grande lo dirá.",
+          "pageVector": "jim_in_sheet.png",
+          "finishVector": "mirror.png"
+        },
+        {
+          "number": 4,
+          "title": "Primero, la sopa",
+          "text": "«Sin sopa no hay caramelos», dice mamá. Y mamá no dice las cosas dos veces.",
+          "pageVector": "jim_with_bucket.png",
+          "finishVector": "soup_bowl.png"
+        },
+        {
+          "number": 5,
+          "title": "Otra vez debajo del sofá",
+          "text": "Allí ha ido a parar la linterna de Jimmy. Cojines, zapatillas, un calcetín perdido... ¿Le ayudas a rescatarla?",
+          "pageVector": "jim_with_bucket.png",
+          "finishVector": "flashlight.png"
+        },
+        {
+          "number": 6,
+          "title": "En lo alto del armario",
+          "text": "El cubo de calabaza está en la balda de arriba del armario, y Jimmy solo lo ve de puntillas. ¿Llevas a Jimmy hasta él?",
+          "pageVector": "jim_with_bucket.png",
+          "finishVector": "candy_bucket.png"
+        },
+        {
+          "number": 7,
+          "title": "Una bota, dos botas",
+          "text": "Una espera junto a la puerta. La otra se ha escondido debajo de la escalera, y Jimmy va a la pata coja.",
+          "pageVector": "jim_with_bucket.png",
+          "finishVector": "boot.png"
+        },
+        {
+          "number": 8,
+          "title": "¡A la calle!",
+          "text": "La luz del porche ya está encendida y fuera huele a hojas mojadas. A Jimmy solo le queda llegar a la puerta.",
+          "pageVector": "jim_walking.png",
+          "finishVector": "door.png"
+        },
+        {
+          "number": 9,
+          "title": "Piedra a piedra",
+          "text": "Las hojas mojadas tapan casi todas las piedras del jardín. ¿Le encuentras a Jimmy un camino seco hasta el árbol viejo?",
+          "pageVector": "spooky_tree.png",
+          "finishVector": "tree.png"
+        },
+        {
+          "number": 10,
+          "title": "Ñiiiiic",
+          "text": "Así suena la verja del fondo del jardín, y las macetas de mamá están justo en medio del camino.",
+          "pageVector": "jim_walking.png",
+          "finishVector": "gate.png"
+        },
+        {
+          "number": 11,
+          "title": "Primera parada",
+          "text": "Una calabaza sonriente vigila los escalones. Jimmy los sube ensayando: «¿Truco o trato?».",
+          "pageVector": "jim_walking.png",
+          "finishVector": "pumpkin.png"
+        },
+        {
+          "number": 12,
+          "title": "Perro ladrador",
+          "text": "El perro de la valla ladra sin parar y mueve la cola a la vez. ¿Pasas con Jimmy sin hacer ruido hasta la casa de al lado?",
+          "pageVector": "jim_walking.png",
+          "finishVector": "house.png"
+        },
+        {
+          "number": 13,
+          "title": "¡Aspersores!",
+          "text": "Un fantasma empapado no asusta a nadie. Esquiva el agua y lleva a Jimmy, bien seco, hasta la calabaza del porche.",
+          "pageVector": "jim_in_sheet.png",
+          "finishVector": "pumpkin.png"
+        },
+        {
+          "number": 14,
+          "title": "Más altos que papá",
+          "text": "Así de altos son estos setos. Busca los huecos y lleva a Jimmy hasta el banco del centro.",
+          "pageVector": "spooky_tree.png",
+          "finishVector": "bench.png"
+        },
+        {
+          "number": 15,
+          "title": "Ropa tendida",
+          "text": "Por un momento, Jimmy cree que las sábanas del tendedero son otros fantasmas. La verja está justo detrás.",
+          "pageVector": "jim_in_sheet.png",
+          "finishVector": "gate.png"
+        },
+        {
+          "number": 16,
+          "title": "Tienda de chuches",
+          "text": "Luces naranjas en el escaparate. Jimmy quiere llegar al tarro del fondo, por un pasillo estrechísimo.",
+          "pageVector": "jim_walking.png",
+          "finishVector": "candy_jar.png"
+        },
+        {
+          "number": 17,
+          "title": "¡Cronch!",
+          "text": "Alguien ha juntado todas las hojas de la calle en un montón, y Jimmy piensa cruzarlo por el medio. ¡Que no se le caiga el cubo!",
+          "pageVector": "jim_walking.png",
+          "finishVector": "leaf.png"
+        },
+        {
+          "number": 18,
+          "title": "Piratas por todas partes",
+          "text": "Piratas, robots y un dragón muy pequeñito, todos gritando a la vez. ¿Llevas a Jimmy entre el jaleo hasta la casa siguiente?",
+          "pageVector": "jim_walking.png",
+          "finishVector": "house.png"
+        },
+        {
+          "number": 19,
+          "title": "El buzón de la araña",
+          "text": "Del buzón cuelga una araña de goma. Jimmy sabe que es de goma. Y aun así, se agacha.",
+          "pageVector": "web_corner.png",
+          "finishVector": "mailbox.png"
+        },
+        {
+          "number": 20,
+          "title": "Al fondo del todo",
+          "text": "La última casa de la calle está al final de un camino larguísimo. Mucho andar para un caramelo, pero Jimmy va de todas formas.",
+          "pageVector": "jim_walking.png",
+          "finishVector": "house.png"
+        },
+        {
+          "number": 21,
+          "title": "Rumbo al parque",
+          "text": "La puerta del parque está abierta, el cielo se ha puesto morado y esta mañana los árboles parecían mucho más bajitos.",
+          "pageVector": "spooky_tree.png",
+          "finishVector": "tree.png"
+        },
+        {
+          "number": 22,
+          "title": "El estanque de los patos",
+          "text": "Los patos flotan bajo las primeras estrellas. Jimmy quiere llegar al puentecito, pero entre medias hay un barrizal.",
+          "pageVector": "jim_walking.png",
+          "finishVector": "bridge.png"
+        },
+        {
+          "number": 23,
+          "title": "Calabazas y más calabazas",
+          "text": "Filas y filas de calabazas gordas, todas medio hundidas en el barro. ¿Por dónde llega Jimmy a la más grande?",
+          "pageVector": "jim_walking.png",
+          "finishVector": "pumpkin.png"
+        },
+        {
+          "number": 24,
+          "title": "Paredes de paja",
+          "text": "Las pacas de paja son más altas que Jimmy. En algún sitio, entre ellas, brilla un farol.",
+          "pageVector": "jim_walking.png",
+          "finishVector": "lantern.png"
+        },
+        {
+          "number": 25,
+          "title": "Columpios sin nadie",
+          "text": "Nadie se columpia, pero los columpios se mueven. Al otro lado del parque, alguien ha dejado la verja abierta.",
+          "pageVector": "jim_walking.png",
+          "finishVector": "gate.png"
+        },
+        {
+          "number": 26,
+          "title": "Música de huesos",
+          "text": "En el quiosco de música toca una banda de esqueletos, y toca fatal. A Jimmy le encantaría ver ese tambor de cerca.",
+          "pageVector": "jim_walking.png",
+          "finishVector": "drum.png"
+        },
+        {
+          "number": 27,
+          "title": "Callejón de murciélagos",
+          "text": "Los murciélagos revolotean alrededor de la farola del fondo. Solo quieren saludar a Jimmy. Casi seguro.",
+          "pageVector": "jim_walking.png",
+          "finishVector": "streetlight.png"
+        },
+        {
+          "number": 28,
+          "title": "La plaza de la fuente",
+          "text": "El agua salpica en la vieja fuente de piedra. ¿Llevas a Jimmy entre tanto banco hasta el puesto de caramelos?",
+          "pageVector": "jim_walking.png",
+          "finishVector": "candy_jar.png"
+        },
+        {
+          "number": 29,
+          "title": "¡Pom, pom, pom!",
+          "text": "El desfile de disfraces ocupa toda la calle, y Jimmy se ha quedado en la acera equivocada. ¡Rumbo al bombo!",
+          "pageVector": "jim_walking.png",
+          "finishVector": "drum.png"
+        },
+        {
+          "number": 30,
+          "title": "¡Que se acaban!",
+          "text": "Murciélagos de papel cuelgan sobre la escalera de la biblioteca. Jimmy ya ve el cuenco desde aquí. ¡Rápido!",
+          "pageVector": "jim_walking.png",
+          "finishVector": "treat_bowl.png"
+        },
+        {
+          "number": 31,
+          "title": "El huerto viejo",
+          "text": "Solo queda una manzana brillante, allá al fondo, bajo los manzanos torcidos. ¿Llegas con Jimmy antes que los gusanos?",
+          "pageVector": "spooky_tree.png",
+          "finishVector": "apple.png"
+        },
+        {
+          "number": 32,
+          "title": "Telarañas en la puerta",
+          "text": "Dentro de la caseta hay un farol, y en la puerta, una telaraña enorme. Por suerte, su dueña no está en casa.",
+          "pageVector": "web_wedge.png",
+          "finishVector": "lantern.png"
+        },
+        {
+          "number": 33,
+          "title": "¿Hay alguien ahí?",
+          "text": "La niebla está espesa como un puré. Sigue los postes de la valla con Jimmy y, tarde o temprano, aparecerá la farola.",
+          "pageVector": "jim_walking.png",
+          "finishVector": "streetlight.png"
+        },
+        {
+          "number": 34,
+          "title": "Una gata muy tozuda",
+          "text": "Se ha sentado en mitad del camino y no se aparta por nadie. Jimmy tendrá que rodearla para llegar a la casa.",
+          "pageVector": "jim_walking.png",
+          "finishVector": "house.png"
+        },
+        {
+          "number": 35,
+          "title": "Pegadito a la reja",
+          "text": "Al otro lado de la reja hay lápidas viejas, en fila. Jimmy camina pegadito hasta la puerta, sin mirar hacia dentro.",
+          "pageVector": "haunted_house.png",
+          "finishVector": "gate.png"
+        },
+        {
+          "number": 36,
+          "title": "El puente que cruje",
+          "text": "Cruje sobre un arroyo que parece reírse. Unas tablas están secas y otras no. ¿Sabrás elegir las secas?",
+          "pageVector": "jim_walking.png",
+          "finishVector": "bridge.png"
+        },
+        {
+          "number": 37,
+          "title": "El sauce que susurra",
+          "text": "Jimmy tiene que llegar hasta el sauce, y sus ramas cuelgan hasta rozar el camino. Parecen dedos. Solo lo parecen.",
+          "pageVector": "spooky_tree.png",
+          "finishVector": "tree.png"
+        },
+        {
+          "number": 38,
+          "title": "¡Cuántos escalones!",
+          "text": "La luz del faro barre las rocas. Arriba del todo, el farero guarda un cuenco de caramelos. ¡Ciento doce escalones!",
+          "pageVector": "jim_walking.png",
+          "finishVector": "treat_bowl.png"
+        },
+        {
+          "number": 39,
+          "title": "Clac, clac, clac",
+          "text": "Los esqueletos bailan en el granero y el del tambor no piensa parar. A Jimmy se le van los pies hacia el tambor.",
+          "pageVector": "jim_walking.png",
+          "finishVector": "drum.png"
+        },
+        {
+          "number": 40,
+          "title": "Un búho en el pajar",
+          "text": "Un búho muy redondo mira a Jimmy y parpadea. Jimmy parpadea también, y se va a buscar la puerta abierta.",
+          "pageVector": "jim_walking.png",
+          "finishVector": "door.png"
+        },
+        {
+          "number": 41,
+          "title": "La mansión de la colina",
+          "text": "Jimmy llega a lo alto de la colina: dos verjas de hierro, y solo una abierta. ¿Cuál será?",
+          "pageVector": "haunted_house.png",
+          "finishVector": "gate.png"
+        },
+        {
+          "number": 42,
+          "title": "El laberinto del jardín",
+          "text": "La mansión tiene su propio laberinto de setos, con un banco de piedra en el centro. ¿Llegas con Jimmy?",
+          "pageVector": "jim_walking.png",
+          "finishVector": "bench.png"
+        },
+        {
+          "number": 43,
+          "title": "Din, don",
+          "text": "Telarañas de lado a lado del porche. Detrás, en algún sitio, hay una campana tan grande como la cabeza de Jimmy.",
+          "pageVector": "web_corner.png",
+          "finishVector": "bell.png"
+        },
+        {
+          "number": 44,
+          "title": "El gran salón",
+          "text": "Las velas tiemblan de punta a punta del salón, y el fantasma que pasa bailando un vals ni siquiera mira a Jimmy.",
+          "pageVector": "jim_walking.png",
+          "finishVector": "candle.png"
+        },
+        {
+          "number": 45,
+          "title": "Bajando al sótano",
+          "text": "Cientos de botes de conserva cubren las paredes. El farol que busca Jimmy está detrás de un montón de cajas.",
+          "pageVector": "jim_with_bucket.png",
+          "finishVector": "lantern.png"
+        },
+        {
+          "number": 46,
+          "title": "Vueltas y más vueltas",
+          "text": "La escalera de la torre sube sin fin hasta la campana. Pasa un murciélago y Jimmy se agacha. Otra vez.",
+          "pageVector": "jim_walking.png",
+          "finishVector": "bell.png"
+        },
+        {
+          "number": 47,
+          "title": "La sala de música",
+          "text": "Hace años que nadie toca este piano, pero la música sigue sonando. Jimmy cruza de puntillas hasta la puerta de cristal.",
+          "pageVector": "jim_walking.png",
+          "finishVector": "door.png"
+        },
+        {
+          "number": 48,
+          "title": "Otro desván",
+          "text": "Baúles, sombreros viejos y olor a cerrado. Al fondo, Jimmy ve una ventana redonda.",
+          "pageVector": "haunted_house.png",
+          "finishVector": "round_window.png"
+        },
+        {
+          "number": 49,
+          "title": "La última puerta",
+          "text": "Timbre, «¿Truco o trato?», cubo en alto y «¡Gracias!». Toda la noche ensayando, y esta vez a Jimmy le sale perfecto.",
+          "pageVector": "jim_walking.png",
+          "finishVector": "door.png"
+        },
+        {
+          "number": 50,
+          "title": "Por fin en casa",
+          "text": "La luz del porche de Jimmy brilla amarilla y calentita. Llévalo hasta los escalones: ¡hay que vaciar el cubo y contar!",
+          "pageVector": "jim_with_bucket.png",
+          "finishVector": "house.png"
+        }
+      ],
+      "endPage": {
+        "title": "Fin",
+        "text": "Jimmy vuelca el cubo en la alfombra y se pone a contar. Este primer Halloween no lo olvidará jamás."
+      },
+      "howToPlay": [
+        "Busca un camino desde Jimmy hasta la meta: lo que Jimmy busca en cada cuento.",
+        "No se puede atravesar una pared.",
+        "Recoge todos los caramelos que puedas por el camino.",
+        "Colorea una casilla por cada caramelo que recojas.",
+        "Escribe cuántos has recogido en la casilla del total.",
+        "¿Has llegado a la cifra de «Como máximo»?",
+        "¿Te has atascado? Las soluciones están al final del libro.",
+        "Los laberintos se van poniendo más difíciles: del 1 al 20, para 6 y 7 años; del 21 al 40, para 8 y 9; y del 41 al 50, a partir de 10 años."
+      ],
+      "meetPage": {
+        "title": "Este es Jimmy",
+        "lines": [
+          "Es el primer Halloween de Jimmy, y nunca ha ido de casa en casa disfrazado.",
+          "Todavía no sabe muy bien cómo va esto, pero piensa ir por el camino largo,",
+          "porque por el camino largo es donde están los mejores caramelos.",
+          "Solo le falta alguien que le diga por dónde ir. Y ese alguien eres tú.",
+          "Para los que siempre eligen el camino largo."
+        ]
+      },
+      "labels": {
+        "start": "SALIDA",
+        "finish": "META",
+        "tallyPrompt": "Colorea una casilla por cada caramelo que recojas",
+        "total": "Total",
+        "bestPossible": {
+          "one": "Como máximo: {n} caramelo",
+          "other": "Como máximo: {n} caramelos"
+        },
+        "mazeNumber": "Laberinto {n}",
+        "actNames": {
+          "Getting Ready": "Preparativos",
+          "The Neighborhood": "Por el barrio",
+          "The Dark End of the Street": "Cae la noche",
+          "The Haunted Half Hour": "La hora de los fantasmas",
+          "The Long Way Home": "Por el camino más largo",
+          "Finale": "Gran final"
+        },
+        "howToPlayTitle": "CÓMO SE JUEGA",
+        "keyCollect": "RECOGE ESTOS",
+        "keyScenery": "ESTOS SOLO DAN MIEDO",
+        "keyNote": "Los que dan miedo son más pequeños y no cuentan.",
+        "copyright": "© {year} {holder}.",
+        "rightsReserved": "Todos los derechos reservados."
+      }
+    },
+    "outputs": {
+      "writeMazeJson": true,
+      "writeAnalysisJson": true,
+      "writeMazeSvg": true,
+      "writeStandaloneMazePdf": true,
+      "writeBookPdf": true,
+      "writeContactSheet": true,
+      "writePreflightReport": true,
+      "writeEditableProofPdf": true
+    }
+  }
+}
