@@ -7,10 +7,13 @@ page count is read out of the built interior rather than typed in, because a
 spine measured against a stale number is a cover that arrives folded in the
 wrong place and cannot be fixed in the file.
 
-Art is supplied per face as a full-bleed image. Each face is scaled to *cover*
-its panel, which crops a little off the long edge rather than leaving a band of
-background; the crop lands inside the bleed, which is the part that gets
-trimmed away.
+Art is supplied per face as a full-bleed image, one per folder:
+``input/artwork/cover-front/`` and ``input/artwork/cover-back/``. Whatever
+single image is in each folder is used, whatever it is called, so replacing a
+cover is dropping a file in and deleting the old one. Each face is scaled to
+*cover* its panel, which crops a little off the long edge rather than leaving a
+band of background; the crop lands inside the bleed, which is the part that
+gets trimmed away.
 
 The barcode area is cleared to white. Amazon prints its own barcode over the
 lower outer corner of the back cover and only asks that the area be free of
@@ -57,9 +60,29 @@ BARCODE_INSET_IN = 0.25
 #: Spine text needs this much clear on each side of the spine fold.
 SPINE_TEXT_CLEARANCE_IN = 0.0625
 
+#: KDP allows spine text from this many pages. The rule is the page count, not
+#: the spine width: 0.1875 in of spine is 83 pages on white paper, and text on
+#: an 83-page spine is text KDP rejects.
+SPINE_TEXT_MIN_PAGES = 100
+
 #: How far the flat spine colour runs onto each cover, so a small bind shift
 #: shows spine colour at a cover's edge rather than cover art on the spine.
 SPINE_OVERLAP_IN = 0.06
+
+#: One folder per face, under the book's artwork folder. The folder is the
+#: contract, not the file name.
+FACE_DIRS = {"front": "cover-front", "back": "cover-back"}
+IMAGE_SUFFIXES = (".png", ".jpg", ".jpeg", ".webp", ".tif", ".tiff")
+
+#: KDP asks for 300 dpi. Below the floor a cover prints visibly soft, which is
+#: what a 1K image stretched over 8.6 in does (about 100 dpi).
+TARGET_DPI = 300
+MIN_DPI = 150
+
+#: How much of a sample card the real maze fills, as a share of the card's
+#: shorter side. The card is whited out first, so the artwork's own invented
+#: maze cannot show around the edges of the real one.
+CARD_MAZE_FILL = 0.94
 
 
 def load_book(book_dir: Path) -> dict:
@@ -79,34 +102,73 @@ def interior_page_count(pdf_path: Path) -> int:
     return len(PdfReader(str(pdf_path)).pages)
 
 
+def face_image(artwork: Path, face: str) -> Path:
+    """The one image in this face's folder, whatever it is called.
+
+    Exactly one, and an error otherwise: picking the newest of two would make
+    the cover depend on file timestamps, which a fresh clone does not keep.
+    """
+    folder = artwork / FACE_DIRS[face]
+    images = sorted(
+        path for path in (folder.iterdir() if folder.is_dir() else ())
+        if path.is_file() and not path.name.startswith(".")
+        and path.suffix.lower() in IMAGE_SUFFIXES
+    )
+    if len(images) == 1:
+        return images[0]
+    found = ", ".join(path.name for path in images) or "nothing"
+    raise SystemExit(
+        f"{folder}: expected exactly one {face} cover image, found {found}.\n"
+        f"Drop the {face} artwork into that folder and remove any older version."
+    )
+
+
+def fitted(
+    image_size: tuple[int, int], box: tuple[float, float, float, float]
+) -> tuple[float, float, float, float]:
+    """Where an image scaled to cover ``box`` lands: (x, y, width, height), PDF points.
+
+    One function for drawing the art and for finding things on it, so the
+    sample cards are located on the image as drawn -- cropped top and bottom
+    for 3:4 art -- rather than on the panel it was fitted into.
+    """
+    x0, y0, x1, y1 = box
+    width, height = x1 - x0, y1 - y0
+    source_w, source_h = image_size
+    scale = max(width / source_w, height / source_h)
+    drawn_w, drawn_h = source_w * scale, source_h * scale
+    return x0 - (drawn_w - width) / 2.0, y0 - (drawn_h - height) / 2.0, drawn_w, drawn_h
+
+
 def draw_cover_image(
     canvas: pdfcanvas.Canvas,
     image_path: Path,
     *,
     box: tuple[float, float, float, float],
-) -> None:
-    """Draw ``image_path`` scaled to cover ``box``, centred, cropping the excess."""
+) -> tuple[float, float, float, float]:
+    """Draw ``image_path`` scaled to cover ``box``, centred, cropping the excess.
+
+    Returns where the whole image landed, as :func:`fitted` computes it.
+    """
     x0, y0, x1, y1 = box
-    width, height = x1 - x0, y1 - y0
     with Image.open(image_path) as image:
-        source_w, source_h = image.size
-    scale = max(width / source_w, height / source_h)
-    drawn_w, drawn_h = source_w * scale, source_h * scale
+        placement = fitted(image.size, box)
+    px, py, drawn_w, drawn_h = placement
 
     canvas.saveState()
-    canvas.rect(x0, y0, width, height, stroke=0, fill=0)
     path = canvas.beginPath()
-    path.rect(x0, y0, width, height)
+    path.rect(x0, y0, x1 - x0, y1 - y0)
     canvas.clipPath(path, stroke=0, fill=0)
     canvas.drawImage(
-        ImageReader(str(image_path)),
-        x0 - (drawn_w - width) / 2.0,
-        y0 - (drawn_h - height) / 2.0,
-        width=drawn_w,
-        height=drawn_h,
-        mask=None,
+        ImageReader(str(image_path)), px, py, width=drawn_w, height=drawn_h, mask=None
     )
     canvas.restoreState()
+    return placement
+
+
+def effective_dpi(image_path: Path, placement: tuple[float, float, float, float]) -> float:
+    with Image.open(image_path) as image:
+        return image.width / (placement[2] / PT_PER_IN)
 
 
 def build_cover(book_dir: Path, out_path: Path, *, paper: str = "white") -> dict:
@@ -134,15 +196,29 @@ def build_cover(book_dir: Path, out_path: Path, *, paper: str = "white") -> dict
     )
     canvas.setTitle(f"{meta['title']} -- cover")
 
+    front_art = face_image(artwork, "front")
+    back_art = face_image(artwork, "back")
+
     # Back cover: the left panel, running into the left and outer bleed.
     back_box = (0.0, 0.0, bleed + face, wrap_h)
-    draw_cover_image(canvas, artwork / cover["back"], box=back_box)
+    back_placement = draw_cover_image(canvas, back_art, box=back_box)
 
     # Front cover: the right panel.
     front_x = bleed + face + spine
-    draw_cover_image(
-        canvas, artwork / cover["front"], box=(front_x, 0.0, wrap_w, wrap_h)
+    front_placement = draw_cover_image(
+        canvas, front_art, box=(front_x, 0.0, wrap_w, wrap_h)
     )
+
+    dpi = {
+        "front": effective_dpi(front_art, front_placement),
+        "back": effective_dpi(back_art, back_placement),
+    }
+    soft = [f"{name} {value:.0f} dpi" for name, value in dpi.items() if value < MIN_DPI]
+    if soft:
+        raise SystemExit(
+            f"cover art too small to print: {', '.join(soft)} (minimum {MIN_DPI}, "
+            f"KDP asks for {TARGET_DPI}). Upscale the image and drop it in again."
+        )
 
     # Spine: a flat colour taken from the artwork rather than guessed, so the
     # fold does not show as a seam against either face. It runs a little wide on
@@ -153,15 +229,18 @@ def build_cover(book_dir: Path, out_path: Path, *, paper: str = "white") -> dict
     canvas.setFillColor(spine_colour)
     canvas.rect(bleed + face - overlap, 0.0, spine + 2 * overlap, wrap_h, stroke=0, fill=1)
 
-    if spine_in >= 0.1875:
+    if pages >= SPINE_TEXT_MIN_PAGES:
         _draw_spine_text(canvas, meta, x=bleed + face, spine=spine, wrap_h=wrap_h)
 
-    _place_real_mazes(canvas, book_dir, cover, box=back_box)
-    _clear_barcode(canvas, back_box, trim_h=trim_h)
+    _place_real_mazes(canvas, book_dir, cover, placement=back_placement, clip=back_box)
+    _clear_barcode(canvas, back_box)
 
     canvas.showPage()
     canvas.save()
     return {
+        "front": front_art.name,
+        "back": back_art.name,
+        "dpi": {name: round(value) for name, value in dpi.items()},
         "pages": pages,
         "spineIn": round(spine_in, 4),
         "wrapIn": (round(wrap_w / PT_PER_IN, 4), round(wrap_h / PT_PER_IN, 4)),
@@ -169,17 +248,13 @@ def build_cover(book_dir: Path, out_path: Path, *, paper: str = "white") -> dict
     }
 
 
-#: Where each sample card's maze sits inside the card, as fractions of the
-#: card. Measured off the supplied artwork, and identical for all four cards.
-CARD_MAZE_INSET = (0.177, 0.115, 0.668)  # x, y, side -- all of the card's width
-
-
 def _place_real_mazes(
     canvas: pdfcanvas.Canvas,
     book_dir: Path,
     cover: dict,
     *,
-    box: tuple[float, float, float, float],
+    placement: tuple[float, float, float, float],
+    clip: tuple[float, float, float, float],
 ) -> None:
     """Paste real pages from this book over the back cover's sample cards.
 
@@ -191,30 +266,47 @@ def _place_real_mazes(
 
     It also makes the EASY / MEDIUM / HARD / EXPERT labels true, since the four
     samples are drawn from four different bands.
+
+    Each card is the paper area of one sample card, as fractions of the image
+    (y downward). The card is whited out and the real maze centred on it, so
+    the artwork's invented maze -- which fills the card -- never shows at the
+    edges of the real one.
     """
     samples = cover.get("samples")
     cards = cover.get("cards")
-    if not samples or not cards:
+    if not samples and not cards:
         return
+    if len(samples or ()) != len(cards or ()):
+        raise SystemExit(
+            f"cover.cards has {len(cards or ())} card(s) but cover.samples names "
+            f"{len(samples or ())} maze(s); they pair up one to one"
+        )
 
-    x0, y0, x1, y1 = box
-    width, height = x1 - x0, y1 - y0
-    inset_x, inset_y, side = CARD_MAZE_INSET
-
+    ix, iy, iw, ih = placement
+    canvas.saveState()
+    path = canvas.beginPath()
+    path.rect(clip[0], clip[1], clip[2] - clip[0], clip[3] - clip[1])
+    canvas.clipPath(path, stroke=0, fill=0)
     for card, maze_index in zip(cards, samples):
         image = _maze_sample(book_dir, int(maze_index))
         if image is None:
-            continue
-        # Card rectangles are fractions of the artwork, which fills the panel.
-        cx0 = x0 + card[0] * width
-        cy0 = y0 + (1.0 - card[3]) * height        # artwork y runs downward
-        cw, ch = (card[2] - card[0]) * width, (card[3] - card[1]) * height
-        size = side * cw
-        px = cx0 + inset_x * cw
-        py = cy0 + ch - inset_y * ch - size
+            # Skipping would ship the artwork's invented maze on that card,
+            # which is the exact complaint the real samples are there to stop.
+            raise SystemExit(
+                f"maze {maze_index} for a back-cover card is not in the built "
+                f"interior; run `uv run maze-book book build {book_dir}` first"
+            )
+        left, right = ix + card[0] * iw, ix + card[2] * iw
+        top, bottom = iy + (1.0 - card[1]) * ih, iy + (1.0 - card[3]) * ih
+        canvas.setFillColorRGB(1, 1, 1)
+        canvas.rect(left, bottom, right - left, top - bottom, stroke=0, fill=1)
+        size = min(right - left, top - bottom) * CARD_MAZE_FILL
         canvas.drawImage(
-            ImageReader(image), px, py, width=size, height=size, mask=None
+            ImageReader(image),
+            (left + right - size) / 2.0, (bottom + top - size) / 2.0,
+            width=size, height=size, mask=None,
         )
+    canvas.restoreState()
 
 
 def _maze_sample(book_dir: Path, maze_index: int):
@@ -276,20 +368,25 @@ def _maze_sample(book_dir: Path, maze_index: int):
 def _draw_spine_text(
     canvas: pdfcanvas.Canvas, meta: dict, *, x: float, spine: float, wrap_h: float
 ) -> None:
-    """Title up the spine, sized to the clearance the fold leaves."""
+    """Title down the spine, sized to the clearance the fold leaves.
+
+    Top to bottom, the US and UK convention: with the book lying face up the
+    title reads the right way round. Rotating +90 read bottom to top, the
+    continental European direction.
+    """
     usable = spine - 2 * SPINE_TEXT_CLEARANCE_IN * PT_PER_IN
     size = max(6.0, min(11.0, usable * 0.8))
     canvas.saveState()
     canvas.setFillColorRGB(1, 1, 1)
     canvas.translate(x + spine / 2.0, wrap_h / 2.0)
-    canvas.rotate(90)
+    canvas.rotate(-90)
     canvas.setFont(TITLE_FONT, size)
     canvas.drawCentredString(0, -size / 3.0, meta["title"])
     canvas.restoreState()
 
 
 def _clear_barcode(
-    canvas: pdfcanvas.Canvas, back_box: tuple[float, float, float, float], *, trim_h: float
+    canvas: pdfcanvas.Canvas, back_box: tuple[float, float, float, float]
 ) -> None:
     """White out Amazon's barcode block in the back cover's lower spine-side corner.
 
@@ -320,6 +417,10 @@ def main(argv: list[str] | None = None) -> int:
         f"{result['pages']} pages -> spine {result['spineIn']} in; "
         f"wrap {result['wrapIn'][0]} x {result['wrapIn'][1]} in"
     )
+    for face in ("front", "back"):
+        dpi = result["dpi"][face]
+        note = "" if dpi >= TARGET_DPI else f"  (below the {TARGET_DPI} dpi KDP asks for)"
+        print(f"{face:<6} {result[face]}  {dpi} dpi{note}")
     print(f"wrote {result['path']}")
     return 0
 

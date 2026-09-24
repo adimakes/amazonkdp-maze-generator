@@ -618,32 +618,20 @@
       }
     },
     "cover": {
-      "description": "Supplied cover artwork for the KDP wrap. Optional: a package without it still builds an interior.",
+      "description": "Settings for the KDP wrap built by tools/make_cover.py. The artwork itself is not named here: the tool uses the single image in <sourceDir>/cover-front/ and <sourceDir>/cover-back/, whatever it is called. Optional: a package without it still builds an interior.",
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "front",
-        "back"
-      ],
       "properties": {
         "sourceDir": {
           "type": "string",
-          "description": "Repo-relative folder holding the artwork."
-        },
-        "front": {
-          "type": "string",
-          "minLength": 1
-        },
-        "back": {
-          "type": "string",
-          "minLength": 1
+          "description": "Folder under input/ holding cover-front/ and cover-back/. Default: artwork."
         },
         "spineColor": {
           "type": "string",
           "pattern": "^#[0-9A-Fa-f]{6}$"
         },
         "cards": {
-          "description": "Sample-card rectangles on the back-cover artwork, as [x0, y0, x1, y1] fractions of the image.",
+          "description": "The paper area of each sample card on the back-cover artwork, as [x0, y0, x1, y1] fractions of the image (y downward). Each card is whited out and a real maze from the book centred on it.",
           "type": "array",
           "items": {
             "type": "array",

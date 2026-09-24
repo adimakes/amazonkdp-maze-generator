@@ -8,8 +8,8 @@
     "SVGs under finish/, rendered with rsvg-convert before thresholding.",
     "'mode' is a leftover of the retired tracing importer and is not read.",
     "",
-    "'cover' entries are not assets at all: a KDP cover is a separate colour PDF,",
-    "and the interior pipeline never reads them."
+    "Cover art is not listed here: tools/make_cover.py uses whatever single",
+    "image is in cover-front/ and cover-back/."
   ],
   "assets": [
     {
@@ -258,16 +258,6 @@
       "source": "Spooky_tree_vector_icon_2K_20260918000406.jpeg",
       "target": "finish/tree.svg",
       "mode": "outline"
-    }
-  ],
-  "covers": [
-    {
-      "source": "Boy_running_from_Halloween_maze_2K_20260917223746.jpeg",
-      "face": "front"
-    },
-    {
-      "source": "BACK_COVER_–__HALLOWEEN_MAZES_2K_20260917235030 (1).jpeg",
-      "face": "back"
     }
   ]
 }

@@ -224,10 +224,21 @@ built PDF's page count:
 uv run python tools/make_cover.py --book books/<book-id>
 ```
 
+- **The art goes in folders, not in config.** One image in
+  `input/artwork/cover-front/`, one in `cover-back/`, any name. The tool
+  reports each face's dpi; a 1K download stretched over 8.6 in is 100 dpi and
+  is refused.
 - **Show the real mazes.** If the back-cover artwork has sample cards, measure
-  them once and record them as `cover.cards` with `cover.samples`; the tool
-  pastes real pages in. Invented samples that look nothing like the interior are
-  the "the inside doesn't look like the cover" complaint that costs stars.
+  each card's paper area and record them as `cover.cards` with `cover.samples`;
+  the tool whites each card out and centres a real page on it. Invented samples
+  that look nothing like the interior are the "the inside doesn't look like the
+  cover" complaint that costs stars. Re-measure whenever the back art changes:
+  an AI edit moves the cards even when told not to.
+- **Tell an image editor what to leave empty, not what to paint.** Asked to
+  "keep the edge next to the spine plain purple", one painted a flat strip
+  that read as a second spine; asked to keep the barcode corner clear, the other
+  drew its own white box that the tool's box did not quite cover. Ask for the
+  scene to continue to every edge, with nothing important in the margin.
 - The barcode block is 2.0 × 1.2 in, inset 0.25 in from the trimmed corner.
   Artwork usually reserves less; the larger clearing wins, and say so, because
   it may cover part of the design.

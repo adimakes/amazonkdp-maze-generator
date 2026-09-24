@@ -209,7 +209,10 @@ def test_editions_ship_byte_identical_assets(repo_root: Path) -> None:
     for paths in _editions(repo_root):
         reference = paths[0].parent / "assets"
         for path in paths[1:]:
-            comparison = filecmp.dircmp(reference, path.parent / "assets")
+            # Finder litters .DS_Store into any folder it opens; it is not art.
+            comparison = filecmp.dircmp(
+                reference, path.parent / "assets", ignore=[".DS_Store"]
+            )
             problems = _dircmp_problems(comparison)
             assert not problems, f"{path.parent.parent.name}: {problems[:5]}"
 

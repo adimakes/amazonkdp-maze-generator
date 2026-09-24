@@ -181,6 +181,8 @@ books/<book-id>/
 │   ├── book.json           the whole book: print, layout, generation, assets, content
 │   ├── front-matter.pdf    optional; built by tools/make_front_matter.py
 │   ├── artwork/            your pictures + artwork.json saying which is which
+│   │   ├── cover-front/    drop the front cover image here (any name, just one)
+│   │   └── cover-back/     drop the back cover image here (any name, just one)
 │   └── assets/             print-ready, generated from artwork/
 │       ├── start/          the start marker
 │       ├── finish/         the finish marker
@@ -302,6 +304,17 @@ uv run python tools/make_cover.py --book books/my-new-book
 It reads that count out of the built PDF rather than out of `book.json`. A spine
 measured against a stale number is a cover that arrives folded in the wrong
 place, and no amount of care in the file fixes it afterwards.
+
+The art comes from two folders, `input/artwork/cover-front/` and
+`input/artwork/cover-back/`. Drop one image in each, named anything; to replace
+a cover, drop the new file in and delete the old one. Two images in one folder
+is an error rather than a guess. Each image should be 3:4 portrait or 23:30,
+full bleed, with text at least 5% in from every edge; the tool reports each
+face's print resolution and refuses anything under 150 dpi (KDP asks for 300).
+
+If the back cover has sample cards, `cover.cards` records each card's paper
+area as fractions of the image, and the tool whites the card out and centres a
+real maze from the book on it. New back art means measuring the cards again.
 
 The **contact sheet** is the one to look at first. Constraints catch per-maze
 defects; they cannot see that five mazes in a row look alike, that a solution
