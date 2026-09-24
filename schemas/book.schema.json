@@ -630,6 +630,13 @@
           "type": "string",
           "pattern": "^#[0-9A-Fa-f]{6}$"
         },
+        "spineTextDirection": {
+          "description": "Which way the spine title reads. top-to-bottom is the US/UK convention; bottom-to-top is the continental European one (Spain, Germany, France).",
+          "enum": [
+            "top-to-bottom",
+            "bottom-to-top"
+          ]
+        },
         "cards": {
           "description": "The paper area of each sample card on the back-cover artwork, as [x0, y0, x1, y1] fractions of the image (y downward). Each card is whited out and a real maze from the book centred on it.",
           "type": "array",

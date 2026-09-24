@@ -230,7 +230,10 @@ def build_cover(book_dir: Path, out_path: Path, *, paper: str = "white") -> dict
     canvas.rect(bleed + face - overlap, 0.0, spine + 2 * overlap, wrap_h, stroke=0, fill=1)
 
     if pages >= SPINE_TEXT_MIN_PAGES:
-        _draw_spine_text(canvas, meta, x=bleed + face, spine=spine, wrap_h=wrap_h)
+        _draw_spine_text(
+            canvas, meta, x=bleed + face, spine=spine, wrap_h=wrap_h,
+            downward=cover.get("spineTextDirection", "top-to-bottom") == "top-to-bottom",
+        )
 
     _place_real_mazes(canvas, book_dir, cover, placement=back_placement, clip=back_box)
     _clear_barcode(canvas, back_box)
@@ -366,20 +369,27 @@ def _maze_sample(book_dir: Path, maze_index: int):
 
 
 def _draw_spine_text(
-    canvas: pdfcanvas.Canvas, meta: dict, *, x: float, spine: float, wrap_h: float
+    canvas: pdfcanvas.Canvas,
+    meta: dict,
+    *,
+    x: float,
+    spine: float,
+    wrap_h: float,
+    downward: bool = True,
 ) -> None:
-    """Title down the spine, sized to the clearance the fold leaves.
+    """Title along the spine, sized to the clearance the fold leaves.
 
-    Top to bottom, the US and UK convention: with the book lying face up the
-    title reads the right way round. Rotating +90 read bottom to top, the
-    continental European direction.
+    Top to bottom by default, the US and UK convention: with the book lying face
+    up the title reads the right way round. Bottom to top is the continental
+    European one -- Spain, Germany, France -- and a book for those shelves sets
+    ``cover.spineTextDirection`` to say so.
     """
     usable = spine - 2 * SPINE_TEXT_CLEARANCE_IN * PT_PER_IN
     size = max(6.0, min(11.0, usable * 0.8))
     canvas.saveState()
     canvas.setFillColorRGB(1, 1, 1)
     canvas.translate(x + spine / 2.0, wrap_h / 2.0)
-    canvas.rotate(-90)
+    canvas.rotate(-90 if downward else 90)
     canvas.setFont(TITLE_FONT, size)
     canvas.drawCentredString(0, -size / 3.0, meta["title"])
     canvas.restoreState()
